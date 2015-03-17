@@ -31,6 +31,16 @@ uses pSCADA_types, ctypes, sysctl;
 uses pSCADA_types, pthreads, ctypes;
 {$IFEND}
 
+
+{$IFDEF PORTUGUES}
+{:
+Retorna o número de processadores instalados.
+}
+{$ELSE}
+{:
+Return the number of processor threads installed.
+}
+{$ENDIF}
 function GetSystemThreadCount: LongInt;
 
 {$IFDEF PORTUGUES}
@@ -45,6 +55,15 @@ More efficient thread switch, checking the OS/number of processors.
 {$ENDIF}
 procedure CrossThreadSwitch;
 
+{$IFDEF PORTUGUES}
+{:
+Configura a afinidade de uma thread com um ou mais processadores processador especifico.
+}
+{$ELSE}
+{:
+Sets the thread affinity with one or more processors.
+}
+{$ENDIF}
 function SetThreadCPUAffinityMask(ThreadID:TpSCADAThreadID; CPUAffinity:TpSCADA_CPUs):Boolean;
 
 implementation
