@@ -2,7 +2,7 @@
 {$I ../common/pscada_compiler_versions.inc}
 {$IFDEF PORTUGUES}
 {:
-    @author(Fabio Luis Gi rardi <fabio@pascalscada.com>)
+    @author(Fabio Luis Girardi <fabio@pascalscada.com>)
     @abstract(Unit de sincronização de threads por eventos.)
 
     Esta unit foi criada por motivos de compatibilidade
