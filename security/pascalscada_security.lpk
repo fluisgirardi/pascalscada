@@ -9,6 +9,7 @@
         <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
+    <Version Major="1"/>
     <Files Count="2">
       <Item1>
         <Filename Value="pascalscada.security.controls.control_security_manager.pas"/>
