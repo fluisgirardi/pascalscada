@@ -63,10 +63,10 @@ type
     function    Login:Boolean; virtual; abstract; overload;
     function    Login(Userlogin, userpassword: String; var UID: Integer):Boolean; virtual;
     procedure   Logout; virtual;
-    procedure   Manage; virtual;
+    procedure   Manage; virtual; abstract;
 
     //Security codes management
-    procedure   ValidateSecurityCode(sc:String); virtual;
+    procedure   ValidateSecurityCode(sc:String); virtual; abstract;
     function    SecurityCodeExists(sc:String):Boolean; virtual;
     procedure   RegisterSecurityCode(sc:String); virtual;
     procedure   UnregisterSecurityCode(sc:String); virtual;
@@ -137,16 +137,6 @@ begin
   FUID:=-1;
   FLoggedSince:=Now;
   GetPascalSCADAControlSecurityManager.UpdateControls;
-end;
-
-procedure   TpSCADABasicUserManagement.Manage;
-begin
-  //has nothing to do here!
-end;
-
-procedure   TpSCADABasicUserManagement.ValidateSecurityCode(sc:String);
-begin
-  //raise a exception if the security code is invalid.
 end;
 
 function    TpSCADABasicUserManagement.SecurityCodeExists(sc:String):Boolean;
