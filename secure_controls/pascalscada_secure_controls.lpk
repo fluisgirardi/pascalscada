@@ -6,11 +6,11 @@
     <CompilerOptions>
       <Version Value="11"/>
       <SearchPaths>
-        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)/"/>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
     <Version Major="1"/>
-    <Files Count="2">
+    <Files Count="7">
       <Item1>
         <Filename Value="pascalscada.secure_controls.stdctrls.secure_label.pas"/>
         <UnitName Value="pascalscada.secure_controls.stdctrls.secure_label"/>
@@ -19,6 +19,26 @@
         <Filename Value="pascalscada.secure_controls.stdctrls.secure_edit.pas"/>
         <UnitName Value="pascalscada.secure_controls.stdctrls.secure_edit"/>
       </Item2>
+      <Item3>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_memo.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_memo"/>
+      </Item3>
+      <Item4>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_custom_checkbox.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_custom_checkbox"/>
+      </Item4>
+      <Item5>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_togglebox.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_togglebox"/>
+      </Item5>
+      <Item6>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_checkbox.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_checkbox"/>
+      </Item6>
+      <Item7>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_radiobutton.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_radiobutton"/>
+      </Item7>
     </Files>
     <RequiredPkgs Count="3">
       <Item1>

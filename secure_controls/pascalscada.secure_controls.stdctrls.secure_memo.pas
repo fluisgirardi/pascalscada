@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.stdctrls.secure_edit;
+unit pascalscada.secure_controls.stdctrls.secure_memo;
 
 {$mode objfpc}{$H+}
 
@@ -11,9 +11,9 @@ uses
 
 type
 
-  { TSecureCustomLabel }
+  { TSecureCustomMemo }
 
-  TSecureCustomEdit = class(TCustomEdit, ISecureControlInterface)
+  TSecureCustomMemo = class(TCustomMemo, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -46,16 +46,11 @@ type
     constructor Create(TheOwner: TComponent); override;
   end;
 
-  TSecureEdit = class(TSecureCustomEdit)
-  public
-    property AutoSelected;
+  TSecureMemo = class(TSecureCustomMemo)
   published
-    property Action;
     property Align;
     property Alignment;
     property Anchors;
-    property AutoSize;
-    property AutoSelect;
     property BidiMode;
     property BorderSpacing;
     property BorderStyle;
@@ -65,15 +60,12 @@ type
     property DragCursor;
     property DragKind;
     property DragMode;
-    property EchoMode;
     property Enabled;
     property Font;
     property HideSelection;
+    property Lines;
     property MaxLength;
-    property NumbersOnly;
-    property ParentBidiMode;
     property OnChange;
-    property OnChangeBounds;
     property OnClick;
     property OnContextPopup;
     property OnDblClick;
@@ -94,31 +86,29 @@ type
     property OnMouseWheel;
     property OnMouseWheelDown;
     property OnMouseWheelUp;
-    property OnResize;
     property OnStartDrag;
     property OnUTF8KeyPress;
+    property ParentBidiMode;
     property ParentColor;
     property ParentFont;
-    property ParentShowHint;
-    property PasswordChar;
     property PopupMenu;
+    property ParentShowHint;
     property ReadOnly;
-    property SecurityCode;
+    property ScrollBars;
     property ShowHint;
-    property TabStop;
     property TabOrder;
-    property Text;
-    property TextHint;
-    property TextHintFontColor;
-    property TextHintFontStyle;
+    property TabStop;
     property Visible;
+    property WantReturns;
+    property WantTabs;
+    property WordWrap;
   end;
 
 implementation
 
-{ TSecureCustomEdit }
+{ TSecureCustomLabel }
 
-constructor TSecureCustomEdit.Create(TheOwner: TComponent);
+constructor TSecureCustomMemo.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
@@ -127,30 +117,30 @@ begin
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-procedure TSecureCustomEdit.SetSecurityCode(AValue: String);
+procedure TSecureCustomMemo.SetSecurityCode(AValue: String);
 begin
   if FSecurityCode=AValue then Exit;
   FSecurityCode:=AValue;
 end;
 
-function TSecureCustomEdit.GetControlSecurityCode: String;
+function TSecureCustomMemo.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TSecureCustomEdit.MakeUnsecure;
+procedure TSecureCustomMemo.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TSecureCustomEdit.CanBeAccessed(a: Boolean);
+procedure TSecureCustomMemo.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TSecureCustomEdit.SetEnabled(Value: Boolean);
+procedure TSecureCustomMemo.SetEnabled(Value: Boolean);
 begin
   inherited SetEnabled(Value);
 end;

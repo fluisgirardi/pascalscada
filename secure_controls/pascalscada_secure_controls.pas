@@ -7,7 +7,12 @@ unit pascalscada_secure_controls;
 interface
 
 uses
-  pascalscada.secure_controls.stdctrls.secure_label, LazarusPackageIntf;
+  pascalscada.secure_controls.stdctrls.secure_label, 
+  pascalscada.secure_controls.stdctrls.secure_edit, 
+  pascalscada.secure_controls.stdctrls.secure_memo, 
+  pascalscada.secure_controls.stdctrls.secure_custom_checkbox, 
+  pascalscada.secure_controls.stdctrls.secure_togglebox, 
+  pascalscada.secure_controls.stdctrls.secure_checkbox, LazarusPackageIntf;
 
 implementation
 
