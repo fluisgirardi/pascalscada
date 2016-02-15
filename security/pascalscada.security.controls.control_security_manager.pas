@@ -70,6 +70,7 @@ type
   end;
 
   function GetPascalSCADAControlSecurityManager:TpSCADAControlSecurityManager;
+  procedure SetControlSecurityCode(var CurrentSecurityCode:String; const NewSecurityCode:String; ControlSecurityIntf:ISecureControlInterface);
 
 implementation
 
@@ -237,6 +238,25 @@ var
 function GetPascalSCADAControlSecurityManager: TpSCADAControlSecurityManager;
 begin
   Result:=QPascalSCADAControlSecurityManager;
+end;
+
+procedure SetControlSecurityCode(var CurrentSecurityCode: String;
+  const NewSecurityCode: String; ControlSecurityIntf: ISecureControlInterface);
+begin
+  if CurrentSecurityCode=NewSecurityCode then Exit;
+
+  if Trim(NewSecurityCode)='' then
+    ControlSecurityIntf.CanBeAccessed(true)
+  else
+    with GetPascalSCADAControlSecurityManager do begin
+      ValidateSecurityCode(NewSecurityCode);
+      if not SecurityCodeExists(NewSecurityCode) then
+        RegisterSecurityCode(NewSecurityCode);
+
+      ControlSecurityIntf.CanBeAccessed(CanAccess(NewSecurityCode));
+    end;
+
+  CurrentSecurityCode:=NewSecurityCode;
 end;
 
 initialization
