@@ -7,6 +7,7 @@ interface
 uses
   StdCtrls,
   Classes,
+  sysutils,
   pascalscada.security.controls.control_security_manager;
 
 type
@@ -110,8 +111,7 @@ end;
 
 procedure TSecureCustomLabel.SetSecurityCode(AValue: String);
 begin
-  if FSecurityCode=AValue then Exit;
-  FSecurityCode:=AValue;
+  SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
 function TSecureCustomLabel.GetControlSecurityCode: String;
@@ -133,8 +133,8 @@ end;
 
 procedure TSecureCustomLabel.SetEnabled(Value: Boolean);
 begin
-  inherited SetEnabled(Value);
+  FIsEnabled:=Value;
+  inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
 end;
 
 end.
-

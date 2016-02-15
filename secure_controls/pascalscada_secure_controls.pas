@@ -12,7 +12,9 @@ uses
   pascalscada.secure_controls.stdctrls.secure_memo, 
   pascalscada.secure_controls.stdctrls.secure_custom_checkbox, 
   pascalscada.secure_controls.stdctrls.secure_togglebox, 
-  pascalscada.secure_controls.stdctrls.secure_checkbox, LazarusPackageIntf;
+  pascalscada.secure_controls.stdctrls.secure_checkbox, 
+  pascalscada.secure_controls.stdctrls.secure_radiobutton, 
+  pascalscada.secure_controls.stdctrls.secure_listbox, LazarusPackageIntf;
 
 implementation
 

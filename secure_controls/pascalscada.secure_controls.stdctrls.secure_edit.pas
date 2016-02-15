@@ -129,8 +129,7 @@ end;
 
 procedure TSecureCustomEdit.SetSecurityCode(AValue: String);
 begin
-  if FSecurityCode=AValue then Exit;
-  FSecurityCode:=AValue;
+  SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
 function TSecureCustomEdit.GetControlSecurityCode: String;
@@ -152,7 +151,8 @@ end;
 
 procedure TSecureCustomEdit.SetEnabled(Value: Boolean);
 begin
-  inherited SetEnabled(Value);
+  FIsEnabled:=Value;
+  inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
 end;
 
 end.

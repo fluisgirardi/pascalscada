@@ -10,7 +10,7 @@
       </SearchPaths>
     </CompilerOptions>
     <Version Major="1"/>
-    <Files Count="7">
+    <Files Count="8">
       <Item1>
         <Filename Value="pascalscada.secure_controls.stdctrls.secure_label.pas"/>
         <UnitName Value="pascalscada.secure_controls.stdctrls.secure_label"/>
@@ -39,6 +39,10 @@
         <Filename Value="pascalscada.secure_controls.stdctrls.secure_radiobutton.pas"/>
         <UnitName Value="pascalscada.secure_controls.stdctrls.secure_radiobutton"/>
       </Item7>
+      <Item8>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_listbox.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_listbox"/>
+      </Item8>
     </Files>
     <RequiredPkgs Count="3">
       <Item1>

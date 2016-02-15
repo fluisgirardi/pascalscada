@@ -8,6 +8,9 @@ uses
   Classes,
   LCLType,
   WSStdCtrls,
+  LMessages,
+  Controls,
+  StdCtrls,
   pascalscada.secure_controls.stdctrls.secure_custom_checkbox;
 
 type
@@ -79,6 +82,11 @@ type
 
 implementation
 
+uses Forms;
+
+//type
+//  TCustomCheckBoxAccessor = class(TCustomCheckBox);
+
 { TSecureCustomRadioButton }
 
 class procedure TSecureCustomRadioButton.WSRegisterClass;
@@ -95,14 +103,14 @@ begin
   inherited ApplyChanges;
   //the siblings are unchecked by the widgetset. When the handle is not allocated,
   //the widgetset is not notified so it cannot update the siblings
-  if not HandleAllocated and (FState = cbChecked) and
+  if not HandleAllocated and (RetrieveState = cbChecked) and
    (Parent <> nil) and (not (csLoading in ComponentState)) then
   begin
     for i := 0 to Parent.ControlCount - 1 do
     begin
       Sibling := Parent.Controls[i];
-      if (Sibling is TRadioButton) and (Sibling <> Self) then
-        TRadioButton(Sibling).Checked := False;
+      if (Sibling is TSecureRadioButton) and (Sibling <> Self) then
+        TSecureRadioButton(Sibling).Checked := False;
     end;
   end;
 end;
@@ -128,9 +136,9 @@ end;
 
 procedure TSecureCustomRadioButton.DoClickOnChange;
 begin
-  TabStop := FState = cbChecked;
+  TabStop := RetrieveState = cbChecked;
   //inherited calls DoOnChange
-  if FState = cbChecked then
+  if RetrieveState = cbChecked then
     inherited DoClickOnChange
   else
     DoOnChange;

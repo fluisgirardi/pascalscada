@@ -61,8 +61,7 @@ end;
 
 procedure TSecureCustomCheckBoxBase.SetSecurityCode(AValue: String);
 begin
-  if FSecurityCode=AValue then Exit;
-  FSecurityCode:=AValue;
+  SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
 function TSecureCustomCheckBoxBase.GetControlSecurityCode: String;
@@ -84,7 +83,8 @@ end;
 
 procedure TSecureCustomCheckBoxBase.SetEnabled(Value: Boolean);
 begin
-  inherited SetEnabled(Value);
+  FIsEnabled:=Value;
+  inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
 end;
 
 end.

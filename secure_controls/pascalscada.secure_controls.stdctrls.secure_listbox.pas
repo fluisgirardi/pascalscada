@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.stdctrls.secure_memo;
+unit pascalscada.secure_controls.stdctrls.secure_listbox;
 
 {$mode objfpc}{$H+}
 
@@ -11,9 +11,9 @@ uses
 
 type
 
-  { TSecureCustomMemo }
+  { TSecureCustomListBox }
 
-  TSecureCustomMemo = class(TCustomMemo, ISecureControlInterface)
+  TSecureCustomListBox = class(TCustomListBox, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -46,38 +46,42 @@ type
     constructor Create(TheOwner: TComponent); override;
   end;
 
-  TSecureMemo = class(TSecureCustomMemo)
+  TSecureListBox = class(TSecureCustomListBox)
   published
     property Align;
-    property Alignment;
     property Anchors;
     property BidiMode;
     property BorderSpacing;
     property BorderStyle;
-    property CharCase;
+    property ClickOnSelChange;
     property Color;
+    property Columns;
     property Constraints;
     property DragCursor;
     property DragKind;
     property DragMode;
+    property ExtendedSelect;
     property Enabled;
     property Font;
-    property HideSelection;
-    property Lines;
-    property MaxLength;
-    property OnChange;
+    property IntegralHeight;
+    property Items;
+    property ItemHeight;
+    property ItemIndex;
+    property MultiSelect;
+    property OnChangeBounds;
     property OnClick;
     property OnContextPopup;
     property OnDblClick;
     property OnDragDrop;
     property OnDragOver;
-    property OnEditingDone;
-    property OnEndDrag;
+    property OnDrawItem;
     property OnEnter;
+    property OnEndDrag;
     property OnExit;
-    property OnKeyDown;
     property OnKeyPress;
+    property OnKeyDown;
     property OnKeyUp;
+    property OnMeasureItem;
     property OnMouseDown;
     property OnMouseEnter;
     property OnMouseLeave;
@@ -86,29 +90,59 @@ type
     property OnMouseWheel;
     property OnMouseWheelDown;
     property OnMouseWheelUp;
+    property OnResize;
+    property OnSelectionChange;
+    property OnShowHint;
     property OnStartDrag;
     property OnUTF8KeyPress;
     property ParentBidiMode;
     property ParentColor;
+    property ParentShowHint;
     property ParentFont;
     property PopupMenu;
-    property ParentShowHint;
-    property ReadOnly;
-    property ScrollBars;
+    property ScrollWidth;
     property ShowHint;
+    property Sorted;
+    property Style;
     property TabOrder;
     property TabStop;
+    property TopIndex;
     property Visible;
-    property WantReturns;
-    property WantTabs;
-    property WordWrap;
   end;
 
 implementation
 
-{ TSecureCustomLabel }
+{ TSecureCustomListBox }
 
-constructor TSecureCustomMemo.Create(TheOwner: TComponent);
+procedure TSecureCustomListBox.SetSecurityCode(AValue: String);
+begin
+  SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
+end;
+
+function TSecureCustomListBox.GetControlSecurityCode: String;
+begin
+  Result:=FSecurityCode;
+end;
+
+procedure TSecureCustomListBox.MakeUnsecure;
+begin
+  FSecurityCode:='';
+  CanBeAccessed(true);
+end;
+
+procedure TSecureCustomListBox.CanBeAccessed(a: Boolean);
+begin
+  FIsEnabledBySecurity:=a;
+  SetEnabled(FIsEnabled);
+end;
+
+procedure TSecureCustomListBox.SetEnabled(Value: Boolean);
+begin
+  FIsEnabled:=Value;
+  inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
+end;
+
+constructor TSecureCustomListBox.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
@@ -117,32 +151,5 @@ begin
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-procedure TSecureCustomMemo.SetSecurityCode(AValue: String);
-begin
-  SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
-end;
-
-function TSecureCustomMemo.GetControlSecurityCode: String;
-begin
-  Result:=FSecurityCode;
-end;
-
-procedure TSecureCustomMemo.MakeUnsecure;
-begin
-  FSecurityCode:='';
-  CanBeAccessed(true);
-end;
-
-procedure TSecureCustomMemo.CanBeAccessed(a: Boolean);
-begin
-  FIsEnabledBySecurity := a;
-  SetEnabled(FIsEnabled);
-end;
-
-procedure TSecureCustomMemo.SetEnabled(Value: Boolean);
-begin
-  FIsEnabled:=Value;
-  inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
-end;
-
 end.
+
