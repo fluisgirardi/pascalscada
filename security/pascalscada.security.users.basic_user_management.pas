@@ -10,7 +10,7 @@ uses
 type
   TUserChangedEvent = procedure(Sender:TObject; const OldUsername, NewUserName:String) of object;
 
-  { TBasicUserManagement }
+  { TpSCADABasicUserManagement }
 
   TpSCADABasicUserManagement = class(TComponent)
   protected
@@ -30,7 +30,7 @@ type
     FRegisteredSecurityCodes:TStringList;
 
     function  GetLoginTime:TDateTime;
-    procedure SetInactiveTimeOut(t:Cardinal);
+    procedure SetInactiveTimeOut(AValue: Cardinal); virtual;
     function  GetUID: Integer;
   protected
     procedure DoUserChanged; virtual;
@@ -38,7 +38,7 @@ type
     procedure DoSuccessfulLogin; virtual;
     procedure DoFailureLogin; virtual;
 
-    function CheckUserAndPassword(User, Pass:String; var UserID:Integer; LoginAction:Boolean):Boolean; virtual;
+    function CheckUserAndPassword(User, Pass:String; var UserID:Integer; LoginAction:Boolean):Boolean; virtual; abstract;
 
     function GetLoggedUser:Boolean; virtual;
     function GetCurrentUserName:String; virtual;
@@ -56,7 +56,7 @@ type
     property SuccessfulLogin:TNotifyEvent read FSuccessfulLogin write FSuccessfulLogin;
     property FailureLogin:TNotifyEvent read FFailureLogin write FFailureLogin;
     property UserChanged:TUserChangedEvent read FUserChanged write FUserChanged;
-    function CanAccess(sc:String; aUID:Integer):Boolean; virtual; overload;
+    function CanAccess(sc:String; aUID:Integer):Boolean; virtual; abstract; overload;
   public
     constructor Create(AOwner:TComponent); override;
     destructor  Destroy; override;
@@ -71,7 +71,7 @@ type
     procedure   RegisterSecurityCode(sc:String); virtual;
     procedure   UnregisterSecurityCode(sc:String); virtual;
 
-    function    CanAccess(sc:String):Boolean; virtual;
+    function    CanAccess(sc:String):Boolean; virtual; abstract;
     function    GetRegisteredAccessCodes:TStringList; virtual;
 
     function    CheckIfUserIsAllowed(sc: String; RequireUserLogin: Boolean; var userlogin: String): Boolean; virtual; abstract;
@@ -156,11 +156,6 @@ begin
     FRegisteredSecurityCodes.Delete(FRegisteredSecurityCodes.IndexOf(sc));
 end;
 
-function    TpSCADABasicUserManagement.CanAccess(sc:String):Boolean;
-begin
-  Result:=false;
-end;
-
 function    TpSCADABasicUserManagement.GetRegisteredAccessCodes:TStringList;
 begin
   Result:=TStringList.Create;
@@ -180,15 +175,9 @@ begin
     Result:=Now;
 end;
 
-procedure   TpSCADABasicUserManagement.SetInactiveTimeOut(t:Cardinal);
+procedure TpSCADABasicUserManagement.SetInactiveTimeOut(AValue: Cardinal);
 begin
-  //
-end;
-
-function TpSCADABasicUserManagement.CheckUserAndPassword(User, Pass: String;
-  var UserID: Integer; LoginAction: Boolean): Boolean;
-begin
-  Result:=false;
+  FInactiveTimeOut:=AValue;
 end;
 
 function TpSCADABasicUserManagement.GetLoggedUser:Boolean;
@@ -204,11 +193,6 @@ end;
 function TpSCADABasicUserManagement.GetCurrentUserLogin:String;
 begin
   Result:=FCurrentUserLogin;
-end;
-
-function TpSCADABasicUserManagement.CanAccess(sc: String; aUID: Integer): Boolean;
-begin
-  Result:=false;
 end;
 
 procedure TpSCADABasicUserManagement.DoSuccessfulLogin;

@@ -144,8 +144,6 @@ begin
 end;
 
 procedure  TpSCADAControlSecurityManager.RegisterControl(control:ISecureControlInterface);
-var
-  h:LongInt;
 begin
   FSecureControls.Add(control);
   control.CanBeAccessed(CanAccess(control.GetControlSecurityCode));
