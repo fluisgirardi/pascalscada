@@ -101,6 +101,7 @@ type
     property ParentFont;
     property PopupMenu;
     property ScrollWidth;
+    property SecurityCode;
     property ShowHint;
     property Sorted;
     property Style;

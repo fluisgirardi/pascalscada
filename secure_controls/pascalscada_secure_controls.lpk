@@ -10,7 +10,7 @@
       </SearchPaths>
     </CompilerOptions>
     <Version Major="1"/>
-    <Files Count="8">
+    <Files Count="15">
       <Item1>
         <Filename Value="pascalscada.secure_controls.stdctrls.secure_label.pas"/>
         <UnitName Value="pascalscada.secure_controls.stdctrls.secure_label"/>
@@ -43,7 +43,39 @@
         <Filename Value="pascalscada.secure_controls.stdctrls.secure_listbox.pas"/>
         <UnitName Value="pascalscada.secure_controls.stdctrls.secure_listbox"/>
       </Item8>
+      <Item9>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_combobox.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_combobox"/>
+      </Item9>
+      <Item10>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_scrollbar.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_scrollbar"/>
+      </Item10>
+      <Item11>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_groupbox.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_groupbox"/>
+      </Item11>
+      <Item12>
+        <Filename Value="pascalscada.secure_controls.extctrls.secure_radiogroup.pas"/>
+        <UnitName Value="pascalscada.secure_controls.extctrls.secure_radiogroup"/>
+      </Item12>
+      <Item13>
+        <Filename Value="pascalscada.secure_controls.extctrls.secure_checkgroup.pas"/>
+        <UnitName Value="pascalscada.secure_controls.extctrls.secure_checkgroup"/>
+      </Item13>
+      <Item14>
+        <Filename Value="pascalscada.secure_controls.extctrls.secure_panel.pas"/>
+        <UnitName Value="pascalscada.secure_controls.extctrls.secure_panel"/>
+      </Item14>
+      <Item15>
+        <Filename Value="pascalscada.secure_forms.forms.secure_form.pas"/>
+        <UnitName Value="pascalscada.secure_forms.forms.secure_form"/>
+      </Item15>
     </Files>
+    <i18n>
+      <EnableI18N Value="True"/>
+      <OutDir Value="po"/>
+    </i18n>
     <RequiredPkgs Count="3">
       <Item1>
         <PackageName Value="pascalscada_security"/>

@@ -63,6 +63,7 @@ type
     property ParentFont;
     property ParentShowHint;
     property PopupMenu;
+    property SecurityCode;
     property ShowHint;
     property State;
     property TabOrder;

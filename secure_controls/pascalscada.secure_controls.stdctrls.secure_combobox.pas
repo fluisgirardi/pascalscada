@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.stdctrls.secure_memo;
+unit pascalscada.secure_controls.stdctrls.secure_combobox;
 
 {$mode objfpc}{$H+}
 
@@ -11,9 +11,9 @@ uses
 
 type
 
-  { TSecureCustomMemo }
+  { TSecureCustomComboBox }
 
-  TSecureCustomMemo = class(TCustomMemo, ISecureControlInterface)
+  TSecureCustomComboBox = class(TCustomComboBox, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -46,11 +46,16 @@ type
     constructor Create(TheOwner: TComponent); override;
   end;
 
-  TSecureMemo = class(TSecureCustomMemo)
+  TSecureComboBox = class(TSecureCustomComboBox)
   published
     property Align;
-    property Alignment;
     property Anchors;
+    property ArrowKeysTraverseList;
+    property AutoComplete;
+    property AutoCompleteText;
+    property AutoDropDown;
+    property AutoSelect;
+    property AutoSize;// Note: windows has a fixed height in some styles
     property BidiMode;
     property BorderSpacing;
     property BorderStyle;
@@ -60,24 +65,33 @@ type
     property DragCursor;
     property DragKind;
     property DragMode;
+    property DropDownCount;
     property Enabled;
     property Font;
-    property HideSelection;
-    property Lines;
+    property ItemHeight;
+    property ItemIndex;
+    property Items;
+    property ItemWidth;
     property MaxLength;
     property OnChange;
+    property OnChangeBounds;
     property OnClick;
+    property OnCloseUp;
     property OnContextPopup;
     property OnDblClick;
     property OnDragDrop;
     property OnDragOver;
-    property OnEditingDone;
+    property OnDrawItem;
     property OnEndDrag;
+    property OnDropDown;
+    property OnEditingDone;
     property OnEnter;
     property OnExit;
+    property OnGetItems;
     property OnKeyDown;
     property OnKeyPress;
     property OnKeyUp;
+    property OnMeasureItem;
     property OnMouseDown;
     property OnMouseEnter;
     property OnMouseLeave;
@@ -86,30 +100,30 @@ type
     property OnMouseWheel;
     property OnMouseWheelDown;
     property OnMouseWheelUp;
+    property OnSelect;
     property OnStartDrag;
     property OnUTF8KeyPress;
     property ParentBidiMode;
     property ParentColor;
     property ParentFont;
-    property PopupMenu;
     property ParentShowHint;
+    property PopupMenu;
     property ReadOnly;
-    property ScrollBars;
     property SecurityCode;
     property ShowHint;
+    property Sorted;
+    property Style;
     property TabOrder;
     property TabStop;
+    property Text;
     property Visible;
-    property WantReturns;
-    property WantTabs;
-    property WordWrap;
   end;
 
 implementation
 
-{ TSecureCustomLabel }
+{ TSecureCustomComboBox }
 
-constructor TSecureCustomMemo.Create(TheOwner: TComponent);
+constructor TSecureCustomComboBox.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
@@ -118,32 +132,33 @@ begin
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-procedure TSecureCustomMemo.SetSecurityCode(AValue: String);
+procedure TSecureCustomComboBox.SetSecurityCode(AValue: String);
 begin
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
-function TSecureCustomMemo.GetControlSecurityCode: String;
+function TSecureCustomComboBox.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TSecureCustomMemo.MakeUnsecure;
+procedure TSecureCustomComboBox.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TSecureCustomMemo.CanBeAccessed(a: Boolean);
+procedure TSecureCustomComboBox.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TSecureCustomMemo.SetEnabled(Value: Boolean);
+procedure TSecureCustomComboBox.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
 end;
 
 end.
+

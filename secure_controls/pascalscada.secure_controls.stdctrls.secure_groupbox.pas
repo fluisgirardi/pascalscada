@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.stdctrls.secure_memo;
+unit pascalscada.secure_controls.stdctrls.secure_groupbox;
 
 {$mode objfpc}{$H+}
 
@@ -11,9 +11,9 @@ uses
 
 type
 
-  { TSecureCustomMemo }
+  { TSecureCustomGroupBox }
 
-  TSecureCustomMemo = class(TCustomMemo, ISecureControlInterface)
+  TSecureCustomGroupBox = class(TCustomGroupBox, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -46,35 +46,48 @@ type
     constructor Create(TheOwner: TComponent); override;
   end;
 
-  TSecureMemo = class(TSecureCustomMemo)
+  TSecureGroupBox = class(TSecureCustomGroupBox)
   published
     property Align;
-    property Alignment;
     property Anchors;
+    property AutoSize;
     property BidiMode;
     property BorderSpacing;
-    property BorderStyle;
-    property CharCase;
+    property Caption;
+    property ChildSizing;
+    property ClientHeight;
+    property ClientWidth;
     property Color;
     property Constraints;
+    property DockSite;
     property DragCursor;
     property DragKind;
     property DragMode;
     property Enabled;
     property Font;
-    property HideSelection;
-    property Lines;
-    property MaxLength;
-    property OnChange;
+    property ParentBidiMode;
+    property ParentColor;
+    property ParentFont;
+    property ParentShowHint;
+    property PopupMenu;
+    property SecurityCode;
+    property ShowHint;
+    property TabOrder;
+    property TabStop;
+    property Visible;
+    property OnChangeBounds;
     property OnClick;
     property OnContextPopup;
     property OnDblClick;
     property OnDragDrop;
+    property OnDockDrop;
+    property OnDockOver;
     property OnDragOver;
-    property OnEditingDone;
+    property OnEndDock;
     property OnEndDrag;
     property OnEnter;
     property OnExit;
+    property OnGetSiteInfo;
     property OnKeyDown;
     property OnKeyPress;
     property OnKeyUp;
@@ -86,30 +99,18 @@ type
     property OnMouseWheel;
     property OnMouseWheelDown;
     property OnMouseWheelUp;
+    property OnResize;
+    property OnStartDock;
     property OnStartDrag;
+    property OnUnDock;
     property OnUTF8KeyPress;
-    property ParentBidiMode;
-    property ParentColor;
-    property ParentFont;
-    property PopupMenu;
-    property ParentShowHint;
-    property ReadOnly;
-    property ScrollBars;
-    property SecurityCode;
-    property ShowHint;
-    property TabOrder;
-    property TabStop;
-    property Visible;
-    property WantReturns;
-    property WantTabs;
-    property WordWrap;
   end;
 
 implementation
 
-{ TSecureCustomLabel }
+{ TSecureCustomGroupBox }
 
-constructor TSecureCustomMemo.Create(TheOwner: TComponent);
+constructor TSecureCustomGroupBox.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
@@ -118,32 +119,33 @@ begin
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-procedure TSecureCustomMemo.SetSecurityCode(AValue: String);
+procedure TSecureCustomGroupBox.SetSecurityCode(AValue: String);
 begin
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
-function TSecureCustomMemo.GetControlSecurityCode: String;
+function TSecureCustomGroupBox.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TSecureCustomMemo.MakeUnsecure;
+procedure TSecureCustomGroupBox.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TSecureCustomMemo.CanBeAccessed(a: Boolean);
+procedure TSecureCustomGroupBox.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TSecureCustomMemo.SetEnabled(Value: Boolean);
+procedure TSecureCustomGroupBox.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
 end;
 
 end.
+

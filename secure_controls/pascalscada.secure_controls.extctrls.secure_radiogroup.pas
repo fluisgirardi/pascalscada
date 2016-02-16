@@ -1,19 +1,19 @@
-unit pascalscada.secure_controls.stdctrls.secure_memo;
+unit pascalscada.secure_controls.extctrls.secure_radiogroup;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  StdCtrls,
+  ExtCtrls,
   Classes,
   pascalscada.security.controls.control_security_manager;
 
 type
 
-  { TSecureCustomMemo }
+  { TSecureCustomRadioGroup }
 
-  TSecureCustomMemo = class(TCustomMemo, ISecureControlInterface)
+  TSecureCustomRadioGroup = class(TCustomRadioGroup, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -46,32 +46,33 @@ type
     constructor Create(TheOwner: TComponent); override;
   end;
 
-  TSecureMemo = class(TSecureCustomMemo)
+  TSecureRadioGroup = class(TSecureCustomRadioGroup)
   published
     property Align;
-    property Alignment;
     property Anchors;
+    property AutoFill;
+    property AutoSize;
     property BidiMode;
     property BorderSpacing;
-    property BorderStyle;
-    property CharCase;
+    property Caption;
+    property ChildSizing;
+    property ClientHeight;
+    property ClientWidth;
     property Color;
+    property ColumnLayout;
+    property Columns;
     property Constraints;
     property DragCursor;
-    property DragKind;
     property DragMode;
     property Enabled;
     property Font;
-    property HideSelection;
-    property Lines;
-    property MaxLength;
-    property OnChange;
+    property ItemIndex;
+    property Items;
+    property OnChangeBounds;
     property OnClick;
-    property OnContextPopup;
     property OnDblClick;
     property OnDragDrop;
     property OnDragOver;
-    property OnEditingDone;
     property OnEndDrag;
     property OnEnter;
     property OnExit;
@@ -86,30 +87,27 @@ type
     property OnMouseWheel;
     property OnMouseWheelDown;
     property OnMouseWheelUp;
+    property OnResize;
+    property OnSelectionChanged;
     property OnStartDrag;
     property OnUTF8KeyPress;
     property ParentBidiMode;
-    property ParentColor;
     property ParentFont;
-    property PopupMenu;
+    property ParentColor;
     property ParentShowHint;
-    property ReadOnly;
-    property ScrollBars;
+    property PopupMenu;
     property SecurityCode;
     property ShowHint;
     property TabOrder;
     property TabStop;
     property Visible;
-    property WantReturns;
-    property WantTabs;
-    property WordWrap;
   end;
 
 implementation
 
-{ TSecureCustomLabel }
+{ TSecureCustomRadioGroup }
 
-constructor TSecureCustomMemo.Create(TheOwner: TComponent);
+constructor TSecureCustomRadioGroup.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
@@ -118,32 +116,33 @@ begin
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-procedure TSecureCustomMemo.SetSecurityCode(AValue: String);
+procedure TSecureCustomRadioGroup.SetSecurityCode(AValue: String);
 begin
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
-function TSecureCustomMemo.GetControlSecurityCode: String;
+function TSecureCustomRadioGroup.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TSecureCustomMemo.MakeUnsecure;
+procedure TSecureCustomRadioGroup.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TSecureCustomMemo.CanBeAccessed(a: Boolean);
+procedure TSecureCustomRadioGroup.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TSecureCustomMemo.SetEnabled(Value: Boolean);
+procedure TSecureCustomRadioGroup.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
 end;
 
 end.
+

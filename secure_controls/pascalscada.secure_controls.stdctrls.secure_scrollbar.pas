@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.stdctrls.secure_memo;
+unit pascalscada.secure_controls.stdctrls.secure_scrollbar;
 
 {$mode objfpc}{$H+}
 
@@ -11,9 +11,9 @@ uses
 
 type
 
-  { TSecureCustomMemo }
+  { TSecureCustomScrollBar }
 
-  TSecureCustomMemo = class(TCustomMemo, ISecureControlInterface)
+  TSecureCustomScrollBar = class(TCustomScrollBar, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -46,70 +46,52 @@ type
     constructor Create(TheOwner: TComponent); override;
   end;
 
-  TSecureMemo = class(TSecureCustomMemo)
+  TSecureScrollBar = class(TSecureCustomScrollBar)
   published
     property Align;
-    property Alignment;
     property Anchors;
     property BidiMode;
     property BorderSpacing;
-    property BorderStyle;
-    property CharCase;
-    property Color;
     property Constraints;
     property DragCursor;
     property DragKind;
     property DragMode;
     property Enabled;
-    property Font;
-    property HideSelection;
-    property Lines;
-    property MaxLength;
+    property Kind;
+    property LargeChange;
+    property Max;
+    property Min;
+    property PageSize;
+    property ParentBidiMode;
+    property ParentShowHint;
+    property PopupMenu;
+    property Position;
+    property SecurityCode;
+    property ShowHint;
+    property SmallChange;
+    property TabOrder;
+    property TabStop;
+    property Visible;
     property OnChange;
-    property OnClick;
     property OnContextPopup;
-    property OnDblClick;
     property OnDragDrop;
     property OnDragOver;
-    property OnEditingDone;
     property OnEndDrag;
     property OnEnter;
     property OnExit;
     property OnKeyDown;
     property OnKeyPress;
     property OnKeyUp;
-    property OnMouseDown;
-    property OnMouseEnter;
-    property OnMouseLeave;
-    property OnMouseMove;
-    property OnMouseUp;
-    property OnMouseWheel;
-    property OnMouseWheelDown;
-    property OnMouseWheelUp;
+    property OnScroll;
     property OnStartDrag;
     property OnUTF8KeyPress;
-    property ParentBidiMode;
-    property ParentColor;
-    property ParentFont;
-    property PopupMenu;
-    property ParentShowHint;
-    property ReadOnly;
-    property ScrollBars;
-    property SecurityCode;
-    property ShowHint;
-    property TabOrder;
-    property TabStop;
-    property Visible;
-    property WantReturns;
-    property WantTabs;
-    property WordWrap;
   end;
 
 implementation
 
-{ TSecureCustomLabel }
+{ TSecureCustomScrollBar }
 
-constructor TSecureCustomMemo.Create(TheOwner: TComponent);
+constructor TSecureCustomScrollBar.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
@@ -118,32 +100,33 @@ begin
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-procedure TSecureCustomMemo.SetSecurityCode(AValue: String);
+procedure TSecureCustomScrollBar.SetSecurityCode(AValue: String);
 begin
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
-function TSecureCustomMemo.GetControlSecurityCode: String;
+function TSecureCustomScrollBar.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TSecureCustomMemo.MakeUnsecure;
+procedure TSecureCustomScrollBar.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TSecureCustomMemo.CanBeAccessed(a: Boolean);
+procedure TSecureCustomScrollBar.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TSecureCustomMemo.SetEnabled(Value: Boolean);
+procedure TSecureCustomScrollBar.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
 end;
 
 end.
+

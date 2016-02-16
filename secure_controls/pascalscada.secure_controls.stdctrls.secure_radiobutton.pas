@@ -74,6 +74,7 @@ type
     property ParentFont;
     property ParentShowHint;
     property PopupMenu;
+    property SecurityCode;
     property ShowHint;
     property TabOrder;
     property TabStop default False;

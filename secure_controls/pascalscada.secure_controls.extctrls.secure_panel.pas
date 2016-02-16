@@ -1,19 +1,19 @@
-unit pascalscada.secure_controls.stdctrls.secure_memo;
+unit pascalscada.secure_controls.extctrls.secure_panel;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  StdCtrls,
+  ExtCtrls,
   Classes,
   pascalscada.security.controls.control_security_manager;
 
 type
 
-  { TSecureCustomMemo }
+  { TSecureCustomPanel }
 
-  TSecureCustomMemo = class(TCustomMemo, ISecureControlInterface)
+  TSecureCustomPanel = class(TCustomPanel, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -46,38 +46,56 @@ type
     constructor Create(TheOwner: TComponent); override;
   end;
 
-  TSecureMemo = class(TSecureCustomMemo)
+  TSecurePanel = class(TSecureCustomPanel)
   published
     property Align;
     property Alignment;
     property Anchors;
-    property BidiMode;
+    property AutoSize;
     property BorderSpacing;
+    property BevelInner;
+    property BevelOuter;
+    property BevelWidth;
+    property BidiMode;
+    property BorderWidth;
     property BorderStyle;
-    property CharCase;
+    property Caption;
+    property ChildSizing;
+    property ClientHeight;
+    property ClientWidth;
     property Color;
     property Constraints;
+    property DockSite;
     property DragCursor;
     property DragKind;
     property DragMode;
     property Enabled;
     property Font;
-    property HideSelection;
-    property Lines;
-    property MaxLength;
-    property OnChange;
+    property FullRepaint;
+    property ParentBidiMode;
+    property ParentColor;
+    property ParentFont;
+    property ParentShowHint;
+    property PopupMenu;
+    property SecurityCode;
+    property ShowHint;
+    property TabOrder;
+    property TabStop;
+    property UseDockManager default True;
+    property Visible;
     property OnClick;
     property OnContextPopup;
+    property OnDockDrop;
+    property OnDockOver;
     property OnDblClick;
     property OnDragDrop;
     property OnDragOver;
-    property OnEditingDone;
+    property OnEndDock;
     property OnEndDrag;
     property OnEnter;
     property OnExit;
-    property OnKeyDown;
-    property OnKeyPress;
-    property OnKeyUp;
+    property OnGetSiteInfo;
+    property OnGetDockCaption;
     property OnMouseDown;
     property OnMouseEnter;
     property OnMouseLeave;
@@ -86,30 +104,18 @@ type
     property OnMouseWheel;
     property OnMouseWheelDown;
     property OnMouseWheelUp;
+    property OnPaint;
+    property OnResize;
+    property OnStartDock;
     property OnStartDrag;
-    property OnUTF8KeyPress;
-    property ParentBidiMode;
-    property ParentColor;
-    property ParentFont;
-    property PopupMenu;
-    property ParentShowHint;
-    property ReadOnly;
-    property ScrollBars;
-    property SecurityCode;
-    property ShowHint;
-    property TabOrder;
-    property TabStop;
-    property Visible;
-    property WantReturns;
-    property WantTabs;
-    property WordWrap;
+    property OnUnDock;
   end;
 
 implementation
 
-{ TSecureCustomLabel }
+{ TSecureCustomPanel }
 
-constructor TSecureCustomMemo.Create(TheOwner: TComponent);
+constructor TSecureCustomPanel.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
@@ -118,32 +124,33 @@ begin
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-procedure TSecureCustomMemo.SetSecurityCode(AValue: String);
+procedure TSecureCustomPanel.SetSecurityCode(AValue: String);
 begin
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
-function TSecureCustomMemo.GetControlSecurityCode: String;
+function TSecureCustomPanel.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TSecureCustomMemo.MakeUnsecure;
+procedure TSecureCustomPanel.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TSecureCustomMemo.CanBeAccessed(a: Boolean);
+procedure TSecureCustomPanel.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TSecureCustomMemo.SetEnabled(Value: Boolean);
+procedure TSecureCustomPanel.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
 end;
 
 end.
+

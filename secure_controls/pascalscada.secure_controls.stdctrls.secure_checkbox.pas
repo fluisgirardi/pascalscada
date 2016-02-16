@@ -67,6 +67,7 @@ type
     property ParentShowHint;
     property ParentBidiMode;
     property PopupMenu;
+    property SecurityCode;
     property ShowHint;
     property State;
     property TabOrder;

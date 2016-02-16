@@ -14,7 +14,14 @@ uses
   pascalscada.secure_controls.stdctrls.secure_togglebox, 
   pascalscada.secure_controls.stdctrls.secure_checkbox, 
   pascalscada.secure_controls.stdctrls.secure_radiobutton, 
-  pascalscada.secure_controls.stdctrls.secure_listbox, LazarusPackageIntf;
+  pascalscada.secure_controls.stdctrls.secure_listbox, 
+  pascalscada.secure_controls.stdctrls.secure_combobox, 
+  pascalscada.secure_controls.stdctrls.secure_scrollbar, 
+  pascalscada.secure_controls.stdctrls.secure_groupbox, 
+  pascalscada.secure_controls.extctrls.secure_radiogroup, 
+  pascalscada.secure_controls.extctrls.secure_checkgroup, 
+  pascalscada.secure_controls.extctrls.secure_panel, 
+  pascalscada.secure_forms.forms.secure_form, LazarusPackageIntf;
 
 implementation
 
