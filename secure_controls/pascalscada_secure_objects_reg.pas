@@ -12,6 +12,7 @@ uses
   pascalscada.secure_controls.extctrls.secure_checkgroup,
   pascalscada.secure_controls.extctrls.secure_panel,
   pascalscada.secure_controls.extctrls.secure_radiogroup,
+  pascalscada.secure_controls.stdctrls.secure_button,
   pascalscada.secure_controls.stdctrls.secure_checkbox,
   pascalscada.secure_controls.stdctrls.secure_combobox,
   pascalscada.secure_controls.stdctrls.secure_edit,
@@ -50,6 +51,7 @@ procedure Register;
 begin
   RegisterComponents(SPascalSCADA_HCL_Std_Controls, [TSecureCheckBox,
                                                      TSecureComboBox,
+                                                     TSecureButton,
                                                      TSecureEdit,
                                                      TSecureGroupBox,
                                                      TSecureLabel,
