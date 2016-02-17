@@ -172,6 +172,8 @@ end;
 
 procedure TSecureForm.CreateWnd;
 begin
+  if (Application<>nil) then
+    Application.UpdateMainForm(TForm(Self));
   inherited CreateWnd;
 end;
 
