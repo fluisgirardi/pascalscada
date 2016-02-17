@@ -10,6 +10,7 @@ uses
   pascalscada.secure_controls.extctrls.secure_checkgroup, 
   pascalscada.secure_controls.extctrls.secure_panel, 
   pascalscada.secure_controls.extctrls.secure_radiogroup, 
+  pascalscada.secure_controls.stdctrls.secure_button, 
   pascalscada.secure_controls.stdctrls.secure_checkbox, 
   pascalscada.secure_controls.stdctrls.secure_combobox, 
   pascalscada.secure_controls.stdctrls.secure_custom_checkbox, 
