@@ -44,6 +44,7 @@ type
     property SecurityCode:String read FSecurityCode write SetSecurityCode;
   public
     constructor Create(TheOwner: TComponent); override;
+    destructor Destroy; override;
   end;
 
   TSecureComboBox = class(TSecureCustomComboBox)
@@ -130,6 +131,12 @@ begin
   FIsEnabledBySecurity:=true;
   FSecurityCode:='';
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
+end;
+
+destructor TSecureCustomComboBox.Destroy;
+begin
+  GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
+  inherited Destroy;
 end;
 
 procedure TSecureCustomComboBox.SetSecurityCode(AValue: String);

@@ -47,6 +47,7 @@ type
     property SecurityCode:String read FSecurityCode write SetSecurityCode;
   public
     constructor Create(TheOwner: TComponent); override;
+    destructor Destroy; override;
   end;
 
   { TSecureForm }
@@ -171,8 +172,6 @@ end;
 
 procedure TSecureForm.CreateWnd;
 begin
-  if (Application<>nil) then
-    Application.UpdateMainForm(TForm(Self));
   inherited CreateWnd;
 end;
 
@@ -229,6 +228,12 @@ begin
   FIsEnabledBySecurity:=true;
   FSecurityCode:='';
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
+end;
+
+destructor TSecureCustomForm.Destroy;
+begin
+  GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
+  inherited Destroy;
 end;
 
 procedure TSecureCustomForm.SetSecurityCode(AValue: String);

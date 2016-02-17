@@ -13,6 +13,8 @@ type
 
   { TSecureCustomLabel }
 
+  { TSecureCustomEdit }
+
   TSecureCustomEdit = class(TCustomEdit, ISecureControlInterface)
   protected
     FSecurityCode: String;
@@ -44,6 +46,7 @@ type
     property SecurityCode:String read FSecurityCode write SetSecurityCode;
   public
     constructor Create(TheOwner: TComponent); override;
+    destructor Destroy; override;
   end;
 
   TSecureEdit = class(TSecureCustomEdit)
@@ -125,6 +128,12 @@ begin
   FIsEnabledBySecurity:=true;
   FSecurityCode:='';
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
+end;
+
+destructor TSecureCustomEdit.Destroy;
+begin
+  GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
+  inherited Destroy;
 end;
 
 procedure TSecureCustomEdit.SetSecurityCode(AValue: String);

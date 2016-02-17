@@ -44,6 +44,7 @@ type
     property SecurityCode:String read FSecurityCode write SetSecurityCode;
   public
     constructor Create(TheOwner: TComponent); override;
+    destructor Destroy; override;
   end;
 
   TSecureListBox = class(TSecureCustomListBox)
@@ -115,6 +116,21 @@ implementation
 
 { TSecureCustomListBox }
 
+constructor TSecureCustomListBox.Create(TheOwner: TComponent);
+begin
+  inherited Create(TheOwner);
+  FIsEnabled:=true;
+  FIsEnabledBySecurity:=true;
+  FSecurityCode:='';
+  GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
+end;
+
+destructor TSecureCustomListBox.Destroy;
+begin
+  GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
+  inherited Destroy;
+end;
+
 procedure TSecureCustomListBox.SetSecurityCode(AValue: String);
 begin
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
@@ -141,15 +157,6 @@ procedure TSecureCustomListBox.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
-end;
-
-constructor TSecureCustomListBox.Create(TheOwner: TComponent);
-begin
-  inherited Create(TheOwner);
-  FIsEnabled:=true;
-  FIsEnabledBySecurity:=true;
-  FSecurityCode:='';
-  GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
 end.

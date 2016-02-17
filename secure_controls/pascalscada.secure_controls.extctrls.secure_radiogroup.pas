@@ -44,6 +44,7 @@ type
     property SecurityCode:String read FSecurityCode write SetSecurityCode;
   public
     constructor Create(TheOwner: TComponent); override;
+    destructor Destroy; override;
   end;
 
   TSecureRadioGroup = class(TSecureCustomRadioGroup)
@@ -114,6 +115,12 @@ begin
   FIsEnabledBySecurity:=true;
   FSecurityCode:='';
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
+end;
+
+destructor TSecureCustomRadioGroup.Destroy;
+begin
+  GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
+  inherited Destroy;
 end;
 
 procedure TSecureCustomRadioGroup.SetSecurityCode(AValue: String);

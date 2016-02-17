@@ -44,6 +44,7 @@ type
     property SecurityCode:String read FSecurityCode write SetSecurityCode;
   public
     constructor Create(TheOwner: TComponent); override;
+    destructor Destroy; override;
   end;
 
   TSecureMemo = class(TSecureCustomMemo)
@@ -116,6 +117,12 @@ begin
   FIsEnabledBySecurity:=true;
   FSecurityCode:='';
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
+end;
+
+destructor TSecureCustomMemo.Destroy;
+begin
+  GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
+  inherited Destroy;
 end;
 
 procedure TSecureCustomMemo.SetSecurityCode(AValue: String);

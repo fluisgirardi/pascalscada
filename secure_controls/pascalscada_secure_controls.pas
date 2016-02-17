@@ -7,26 +7,29 @@ unit pascalscada_secure_controls;
 interface
 
 uses
-  pascalscada.secure_controls.stdctrls.secure_label, 
-  pascalscada.secure_controls.stdctrls.secure_edit, 
-  pascalscada.secure_controls.stdctrls.secure_memo, 
-  pascalscada.secure_controls.stdctrls.secure_custom_checkbox, 
-  pascalscada.secure_controls.stdctrls.secure_togglebox, 
-  pascalscada.secure_controls.stdctrls.secure_checkbox, 
-  pascalscada.secure_controls.stdctrls.secure_radiobutton, 
-  pascalscada.secure_controls.stdctrls.secure_listbox, 
-  pascalscada.secure_controls.stdctrls.secure_combobox, 
-  pascalscada.secure_controls.stdctrls.secure_scrollbar, 
-  pascalscada.secure_controls.stdctrls.secure_groupbox, 
-  pascalscada.secure_controls.extctrls.secure_radiogroup, 
   pascalscada.secure_controls.extctrls.secure_checkgroup, 
   pascalscada.secure_controls.extctrls.secure_panel, 
-  pascalscada.secure_forms.forms.secure_form, LazarusPackageIntf;
+  pascalscada.secure_controls.extctrls.secure_radiogroup, 
+  pascalscada.secure_controls.stdctrls.secure_checkbox, 
+  pascalscada.secure_controls.stdctrls.secure_combobox, 
+  pascalscada.secure_controls.stdctrls.secure_custom_checkbox, 
+  pascalscada.secure_controls.stdctrls.secure_edit, 
+  pascalscada.secure_controls.stdctrls.secure_groupbox, 
+  pascalscada.secure_controls.stdctrls.secure_label, 
+  pascalscada.secure_controls.stdctrls.secure_listbox, 
+  pascalscada.secure_controls.stdctrls.secure_memo, 
+  pascalscada.secure_controls.stdctrls.secure_radiobutton, 
+  pascalscada.secure_controls.stdctrls.secure_scrollbar, 
+  pascalscada.secure_controls.stdctrls.secure_togglebox, 
+  pascalscada.secure_forms.forms.secure_form, pascalscada_secure_objects_reg, 
+  LazarusPackageIntf;
 
 implementation
 
 procedure Register;
 begin
+  RegisterUnit('pascalscada_secure_objects_reg', 
+    @pascalscada_secure_objects_reg.Register);
 end;
 
 initialization
