@@ -1,4 +1,4 @@
-unit pascalscada.security.users.basic_user_management;
+unit pascalscada.security.basic_user_management;
 
 {$mode objfpc}{$H+}
 
@@ -85,7 +85,7 @@ type
 
 implementation
 
-uses pascalscada.security.controls.control_security_manager;
+uses pascalscada.security.control_security_manager;
 
 constructor TpSCADABasicUserManagement.Create(AOwner:TComponent);
 begin

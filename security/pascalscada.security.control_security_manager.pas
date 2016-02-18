@@ -1,4 +1,4 @@
-unit pascalscada.security.controls.control_security_manager;
+unit pascalscada.security.control_security_manager;
 
 {$mode objfpc}{$H+}
 
@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils,
-  pascalscada.security.users.basic_user_management;
+  pascalscada.security.basic_user_management;
 
 type
 

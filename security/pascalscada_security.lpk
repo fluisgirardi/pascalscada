@@ -12,12 +12,12 @@
     <Version Major="1"/>
     <Files Count="2">
       <Item1>
-        <Filename Value="pascalscada.security.controls.control_security_manager.pas"/>
-        <UnitName Value="pascalscada.security.controls.control_security_manager"/>
+        <Filename Value="pascalscada.security.control_security_manager.pas"/>
+        <UnitName Value="pascalscada.security.control_security_manager"/>
       </Item1>
       <Item2>
-        <Filename Value="pascalscada.security.users.basic_user_management.pas"/>
-        <UnitName Value="pascalscada.security.users.basic_user_management"/>
+        <Filename Value="pascalscada.security.basic_user_management.pas"/>
+        <UnitName Value="pascalscada.security.basic_user_management"/>
       </Item2>
     </Files>
     <RequiredPkgs Count="1">

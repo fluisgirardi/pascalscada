@@ -7,8 +7,8 @@ unit pascalscada_security;
 interface
 
 uses
-  pascalscada.security.controls.control_security_manager, 
-  pascalscada.security.users.basic_user_management, LazarusPackageIntf;
+  pascalscada.security.control_security_manager, 
+  pascalscada.security.basic_user_management, LazarusPackageIntf;
 
 implementation
 
