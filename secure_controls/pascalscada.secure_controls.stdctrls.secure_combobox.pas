@@ -7,7 +7,7 @@ interface
 uses
   StdCtrls,
   Classes,
-  pascalscada.security.controls.control_security_manager;
+  pascalscada.security.control_security_manager;
 
 type
 
