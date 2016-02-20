@@ -72,6 +72,13 @@ type
   function GetPascalSCADAControlSecurityManager:TpSCADAControlSecurityManager;
   procedure SetControlSecurityCode(var CurrentSecurityCode:String; const NewSecurityCode:String; ControlSecurityIntf:ISecureControlInterface);
 
+resourcestring
+    SAccessDenied                         = 'Access denied!';
+    SSecurityCodeIsInUseYet               = 'Security code still being used!';
+    SInvalidUserManagementComponent       = 'Invalid user manager component';
+    SUserManagementIsSet                  = 'User management component already set!';
+    SControlSecurityManagerStillBeingUsed = 'Control security manager still being used. Maybe some control forget the unregister on their destructor?';
+
 implementation
 
 constructor TpSCADAControlSecurityManager.Create(AOwner: TComponent);
@@ -84,7 +91,7 @@ end;
 destructor TpSCADAControlSecurityManager.Destroy;
 begin
   if FSecureControls.Count>0 then
-    raise Exception.Create('@@ Control security manager is in use yet.');
+    raise Exception.Create(SControlSecurityManagerStillBeingUsed);
   FreeAndNil(FSecureControls);
   inherited Destroy;
 end;
@@ -128,16 +135,16 @@ procedure  TpSCADAControlSecurityManager.TryAccess(sc:String);
 begin
   if FUserManagement<>nil then
     if not TpSCADABasicUserManagement(FUserManagement).CanAccess(sc) then
-      raise Exception.Create('@@ Access denied!');
+      raise Exception.Create(SAccessDenied);
 end;
 
 procedure TpSCADAControlSecurityManager.SetUserManagement(um:TpSCADABasicUserManagement);
 begin
   if (um<>nil) and (not (um is TpSCADABasicUserManagement)) then
-    raise Exception.Create('@@ Invalid user manager component');
+    raise Exception.Create(SInvalidUserManagementComponent);
 
   if (um<>nil) and (FUserManagement<>nil) then
-    raise Exception.Create('@@ User management component already set!');
+    raise Exception.Create(SUserManagementIsSet);
 
   FUserManagement:=um;
   UpdateControls;
@@ -201,7 +208,7 @@ begin
     being_used:=being_used or (ISecureControlInterface(FSecureControls.Items[c]).GetControlSecurityCode=sc);
 
   if being_used then
-    raise Exception.Create('@@ Security code still in use!');
+    raise Exception.Create(SSecurityCodeIsInUseYet);
 
   if FUserManagement<>nil then
     TpSCADABasicUserManagement(FUserManagement).UnregisterSecurityCode(sc);

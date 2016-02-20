@@ -32,7 +32,6 @@ type
     function  GetLoginTime:TDateTime;
     procedure SetInactiveTimeOut(AValue: Cardinal); virtual;
     function  GetUID: Integer;
-  protected
     procedure DoUserChanged; virtual;
 
     procedure DoSuccessfulLogin; virtual;
@@ -83,6 +82,9 @@ type
     property CurrentUserLogin:String read GetCurrentUserLogin;
   end;
 
+Resourcestring
+  SUserManagementIsSet = 'User management component already set!';
+
 implementation
 
 uses pascalscada.security.control_security_manager;
@@ -94,7 +96,7 @@ begin
   if GetPascalSCADAControlSecurityManager.UserManagement=nil then
     GetPascalSCADAControlSecurityManager.UserManagement:=Self
   else
-    raise Exception.Create('@@ User management component already set!');
+    raise Exception.Create(SUserManagementIsSet);
 
   FLoggedUser:=false;
   FCurrentUserName:='';
