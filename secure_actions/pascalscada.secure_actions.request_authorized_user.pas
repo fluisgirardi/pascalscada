@@ -54,6 +54,7 @@ end;
 
 function TpSCADARequestAuthorizedUserAction.HandlesTarget(Target: TObject): Boolean;
 begin
+  inherited HandlesTarget(Target);
   Result:=true;
 end;
 
