@@ -5,7 +5,7 @@ unit pascalscada.security.control_security_manager;
 interface
 
 uses
-  Classes, SysUtils,
+  Classes, SysUtils, fgl,
   pascalscada.security.basic_user_management;
 
 type
@@ -40,9 +40,11 @@ type
     procedure CanBeAccessed(a:Boolean);
   end;
 
+  { TpSCADAControlSecurityManager }
+
   TpSCADAControlSecurityManager = class(TComponent)
   private
-    FSecureControls:TList;
+    FSecureControls:specialize TFPGList<ISecureControlInterface>;
     FUserManagement:TpSCADABasicUserManagement;
     procedure SetUserManagement(um:TpSCADABasicUserManagement);
   public
@@ -63,7 +65,7 @@ type
     procedure  RegisterSecurityCode(sc:String);
     procedure  UnregisterSecurityCode(sc:String);
     function   SecurityCodeExists(sc:String):Boolean;
-    function   GetRegisteredAccessCodes:TStringList;
+    function   GetRegisteredAccessCodes:TFPGStringList;
     function   CheckIfUserIsAllowed(sc:String; RequireUserLogin:Boolean; var userlogin:String):Boolean;
   published
     property UserManagement:TpSCADABasicUserManagement read FUserManagement write SetUserManagement;
@@ -85,7 +87,7 @@ constructor TpSCADAControlSecurityManager.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FUserManagement:=nil;
-  FSecureControls:=TList.Create;
+  FSecureControls:=TFPGList.Create;
 end;
 
 destructor TpSCADAControlSecurityManager.Destroy;
@@ -221,10 +223,10 @@ begin
     Result:=TpSCADABasicUserManagement(FUserManagement).SecurityCodeExists(sc);
 end;
 
-function   TpSCADAControlSecurityManager.GetRegisteredAccessCodes:TStringList;
+function TpSCADAControlSecurityManager.GetRegisteredAccessCodes: TFPGStringList;
 begin
   if FUserManagement=nil then begin
-    Result:=TStringList.Create
+    Result:=TFPGStringList.Create
   end else
     Result:=TpSCADABasicUserManagement(FUserManagement).GetRegisteredAccessCodes;
 end;

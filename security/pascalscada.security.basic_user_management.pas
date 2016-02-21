@@ -5,10 +5,12 @@ unit pascalscada.security.basic_user_management;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils, fgl;
 
 type
   TUserChangedEvent = procedure(Sender:TObject; const OldUsername, NewUserName:String) of object;
+
+  TFPGStringList = specialize TFPGList<String>;
 
   { TpSCADABasicUserManagement }
 
@@ -27,7 +29,7 @@ type
     FFailureLogin:TNotifyEvent;
     FUserChanged:TUserChangedEvent;
 
-    FRegisteredSecurityCodes:TStringList;
+    FRegisteredSecurityCodes:TFPGStringList;
 
     function  GetLoginTime:TDateTime;
     procedure SetInactiveTimeOut(AValue: Cardinal); virtual;
@@ -71,7 +73,7 @@ type
     procedure   UnregisterSecurityCode(sc:String); virtual;
 
     function    CanAccess(sc:String):Boolean; virtual; abstract;
-    function    GetRegisteredAccessCodes:TStringList; virtual;
+    function    GetRegisteredAccessCodes:TFPGStringList; virtual;
 
     function    CheckIfUserIsAllowed(sc: String; RequireUserLogin: Boolean; var userlogin: String): Boolean; virtual; abstract;
 
@@ -104,7 +106,7 @@ begin
   FUID:=-1;
   FLoggedSince:=Now;
 
-  FRegisteredSecurityCodes:=TStringList.Create;
+  FRegisteredSecurityCodes:=TFPGList.Create;
 end;
 
 destructor  TpSCADABasicUserManagement.Destroy;
@@ -158,9 +160,9 @@ begin
     FRegisteredSecurityCodes.Delete(FRegisteredSecurityCodes.IndexOf(sc));
 end;
 
-function    TpSCADABasicUserManagement.GetRegisteredAccessCodes:TStringList;
+function TpSCADABasicUserManagement.GetRegisteredAccessCodes: TFPGStringList;
 begin
-  Result:=TStringList.Create;
+  Result:=TFPGStringList.Create;
   Result.Assign(FRegisteredSecurityCodes);
 end;
 
