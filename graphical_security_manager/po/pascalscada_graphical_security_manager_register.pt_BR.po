@@ -1,7 +1,0 @@
-msgid ""
-msgstr "Content-Type: text/plain; charset=UTF-8"
-
-#: pascalscada_graphical_security_manager_register.spascalscadasecuritypalette
-msgid "PascalSCADA User management"
-msgstr "PascalSCADA - Gerenciamento de usuários"
-
