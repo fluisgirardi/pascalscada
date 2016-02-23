@@ -191,7 +191,7 @@ begin
     while (not loggedin) and (not aborted) do begin
       frmLogin.edtPassword.Text:='';
       if frmLogin.ShowModal=mrOk then begin
-        if CheckUserAndPassword(frmLogin.UserLogin, frmLogin.UserPassword, aUserID, true) then begin
+        if CheckUserAndPassword(frmLogin.UserLogin, frmLogin.UserPassword, {%H-}aUserID, true) then begin
           FLoggedUser:=true;
           FUID:=aUserID;
           loggedin:=true;
@@ -260,7 +260,7 @@ begin
     frmLogin.UserLogin:='';
     frmLogin.UserPassword:='';
     if frmLogin.ShowModal=mrOk then begin
-      if CheckUserAndPassword(frmLogin.UserLogin, frmLogin.UserPassword, aUserID, false) then begin
+      if CheckUserAndPassword(frmLogin.UserLogin, frmLogin.UserPassword, {%H-}aUserID, false) then begin
         if CanAccess(sc,aUserID) then begin
           Result:=true;
           userlogin:=frmLogin.UserLogin;
