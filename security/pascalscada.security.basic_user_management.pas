@@ -106,7 +106,7 @@ begin
   FUID:=-1;
   FLoggedSince:=Now;
 
-  FRegisteredSecurityCodes:=TFPGList.Create;
+  FRegisteredSecurityCodes:=TFPGStringList.Create;
 end;
 
 destructor  TpSCADABasicUserManagement.Destroy;

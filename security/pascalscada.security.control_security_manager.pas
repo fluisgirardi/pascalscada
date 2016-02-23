@@ -40,11 +40,13 @@ type
     procedure CanBeAccessed(a:Boolean);
   end;
 
+  TFPGSecureControlsList = specialize TFPGList<ISecureControlInterface>;
+
   { TpSCADAControlSecurityManager }
 
   TpSCADAControlSecurityManager = class(TComponent)
   private
-    FSecureControls:specialize TFPGList<ISecureControlInterface>;
+    FSecureControls:TFPGSecureControlsList;
     FUserManagement:TpSCADABasicUserManagement;
     procedure SetUserManagement(um:TpSCADABasicUserManagement);
   public
@@ -87,7 +89,7 @@ constructor TpSCADAControlSecurityManager.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FUserManagement:=nil;
-  FSecureControls:=TFPGList.Create;
+  FSecureControls:=TFPGSecureControlsList.Create;
 end;
 
 destructor TpSCADAControlSecurityManager.Destroy;
