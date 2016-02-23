@@ -13,12 +13,15 @@ uses
   pascalscada.secure_actions.logout_action, 
   pascalscada.secure_actions.manage_users_and_groups_action, 
   pascalscada.secure_actions.secure_action, 
-  pascalscada.secure_actions.login_logout_action, LazarusPackageIntf;
+  pascalscada.secure_actions.login_logout_action, 
+  pascalscada_secure_actions_register, LazarusPackageIntf;
 
 implementation
 
 procedure Register;
 begin
+  RegisterUnit('pascalscada_secure_actions_register', 
+    @pascalscada_secure_actions_register.Register);
 end;
 
 initialization

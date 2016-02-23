@@ -1,0 +1,15 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: pascalscada.security.basic_graphical_user_management.sspeciallogincaption
+msgid "Enter a user that can access the \"%s\" token."
+msgstr ""
+
+#: pascalscada.security.basic_graphical_user_management.struserlogin
+msgid "&Login"
+msgstr ""
+
+#: pascalscada.security.basic_graphical_user_management.struserpass
+msgid "&Password"
+msgstr ""
+

@@ -5,7 +5,8 @@ unit pascalscada_secure_actions_register;
 interface
 
 uses
-  Classes, SysUtils, pascalscada.secure_actions.request_authorized_user,
+  Classes, SysUtils, ActnList,
+  pascalscada.secure_actions.request_authorized_user,
   pascalscada.secure_actions.login_action,
   pascalscada.secure_actions.logout_action,
   pascalscada.secure_actions.login_logout_action,

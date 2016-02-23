@@ -6,7 +6,7 @@
     <CompilerOptions>
       <Version Value="11"/>
       <SearchPaths>
-        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)/"/>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
     <Version Major="1"/>
@@ -18,7 +18,8 @@
     </Files>
     <i18n>
       <EnableI18N Value="True"/>
-      <OutDir Value="po"/>
+      <OutDir Value="../languages"/>
+      <EnableI18NForLFM Value="True"/>
     </i18n>
     <RequiredPkgs Count="1">
       <Item1>
