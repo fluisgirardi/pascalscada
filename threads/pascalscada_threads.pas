@@ -8,7 +8,8 @@ interface
 
 uses
   pascalscada.multithreading.core_affinity_threads, 
-  pascalscada.multithreading.event_synchronization, LazarusPackageIntf;
+  pascalscada.multithreading.event_synchronization, 
+  pascalscada.multithreading.message_queue, LazarusPackageIntf;
 
 implementation
 

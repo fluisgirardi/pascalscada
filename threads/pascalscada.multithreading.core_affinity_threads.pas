@@ -20,7 +20,7 @@ type
 
   TpSCADACoreAffinityThread = class(TThread)
   public
-    procedure GotoNextCore;
+    procedure MoveThreadToTheNextCore;
     class function GetSystemThreadCount: cint32;
   end;
 
@@ -98,7 +98,7 @@ end;
 
 var
   CurrentCore:cint32 = 0;
-procedure TpSCADACoreAffinityThread.GotoNextCore;
+procedure TpSCADACoreAffinityThread.MoveThreadToTheNextCore;
 var
   CPUSet,
   CurCore:cint32;
@@ -108,19 +108,27 @@ begin
   CPUSet:=1 shl CurCore;
   CurCore+=1;
   if (CurCore>=32) OR (CurCore>=GetSystemThreadCount) then InterLockedExchange(CurrentCore, 0);
+  {$IFDEF UNIX}
   pthread_setaffinity_np(ThreadID,SizeOf(cint32),@CPUSet);
+  {$ELSE}
+  {$ERROR Implementation missing for Windows!}
+  {$ENDIF}
 end;
 
 var
-  AllCoresSet, aux, i:cint32;
+  //AllCoresSet , aux, i :cint32;
+  AllCoresSet:cuint32 = $ffffffff;
 initialization
+  //AllCoresSet:=0;
+  //for i:=0 to TpSCADACoreAffinityThread.GetSystemThreadCount-1 do begin
+  //  aux:=1 shl i;
+  //  AllCoresSet:=allCoresSet or aux;
+  //end;
 
-  AllCoresSet:=0;
-  for i:=0 to TpSCADACoreAffinityThread.GetSystemThreadCount-1 do begin
-    aux:=1 shl i;
-    AllCoresSet+=aux;
-  end;
-
+  {$IFDEF UNIX}
   sched_setaffinity(GetProcessID,SizeOf(AllCoresSet), @AllCoresSet);
+  {$ELSE}
+  {$ERROR Implementation missing for Windows!}
+  {$ENDIF}
 end.
 
