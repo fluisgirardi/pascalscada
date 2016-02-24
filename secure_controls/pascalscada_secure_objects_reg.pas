@@ -29,7 +29,7 @@ type
 
   { TPascalSCADASecureFormFileDescriptor }
 
-  TPascalSCADASecureFormFileDescriptor = Class(TFileDescPascalUnitWithResource)
+  TpSCADASecureFormFileDescriptor = Class(TFileDescPascalUnitWithResource)
   Public
     Constructor Create; override;
     Function GetLocalizedName : String; override;
@@ -65,34 +65,34 @@ begin
                                                      TSecurePanel,
                                                      TSecureRadioGroup]);
 
-    RegisterProjectFileDescriptor(TPascalSCADASecureFormFileDescriptor.Create);
-    FormEditingHook.RegisterDesignerBaseClass(TSecureForm);
+    RegisterProjectFileDescriptor(TpSCADASecureFormFileDescriptor.Create);
+    FormEditingHook.RegisterDesignerBaseClass(TpSCADASecureForm);
 
 
 end;
 
 { TPascalSCADASecureFormFileDescriptor }
 
-constructor TPascalSCADASecureFormFileDescriptor.Create;
+constructor TpSCADASecureFormFileDescriptor.Create;
 begin
   inherited Create;
-  ResourceClass:=TSecureForm;
+  ResourceClass:=TpSCADASecureForm;
   Name:=SPascalSCADA_Secure_Form;
   UseCreateFormStatements:=true;
   RequiredPackages:=RequiredPackages+'LCL;pascalscada_secure_controls';
 end;
 
-function TPascalSCADASecureFormFileDescriptor.GetLocalizedName: String;
+function TpSCADASecureFormFileDescriptor.GetLocalizedName: String;
 begin
   Result:=SPascalSCADA_Secure_Form;
 end;
 
-function TPascalSCADASecureFormFileDescriptor.GetLocalizedDescription: String;
+function TpSCADASecureFormFileDescriptor.GetLocalizedDescription: String;
 begin
   Result:=SPascalSCADA_Secure_Form_Desc;
 end;
 
-function TPascalSCADASecureFormFileDescriptor.GetInterfaceUsesSection: String;
+function TpSCADASecureFormFileDescriptor.GetInterfaceUsesSection: String;
 begin
   Result:=inherited GetInterfaceUsesSection+', pascalscada.secure_forms.forms.secure_form';
 end;

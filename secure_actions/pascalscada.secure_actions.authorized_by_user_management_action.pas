@@ -25,6 +25,7 @@ type
     function  GetControlSecurityCode:String; virtual;
     procedure MakeUnsecure; virtual;
     procedure CanBeAccessed(a:Boolean); virtual;
+    property DisableIfNotAuthorized:Boolean read FDisableIfNotAuthorized write SetDisableIfNotAuthorized default false;
   public
     function HandlesTarget(Target: TObject): Boolean; override;
     constructor Create(AOwner: TComponent); override;
@@ -34,7 +35,6 @@ type
     property Caption;
     property Checked;
     property DisableIfNoHandler default False;
-    property DisableIfNotAuthorized:Boolean read FDisableIfNotAuthorized write SetDisableIfNotAuthorized default false;
     property Enabled:Boolean read FEnabled write SetEnabled default true;
     property GroupIndex;
     property HelpContext;

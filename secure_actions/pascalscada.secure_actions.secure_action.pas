@@ -19,6 +19,7 @@ type
     procedure UpdateTarget(Target: TObject); override;
     function Execute: Boolean; override;
   published
+    property DisableIfNotAuthorized;
     {$IFDEF PORTUGUES}
     //: Codigo de segurança que libera acesso ao controle
     {$ELSE}

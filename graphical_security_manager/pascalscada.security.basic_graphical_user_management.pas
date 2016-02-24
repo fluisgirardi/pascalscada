@@ -36,7 +36,7 @@ type
   protected
     procedure DoShow; override;
   public
-    constructor Create(AOwner: TComponent); override;
+    constructor CreateNew(AOwner: TComponent; Num: Integer=0); override;
     procedure DisableEntry;
     procedure EnableEntry;
     property FocusedControl:TFocusedControl read FFocusedControl write FFocusedControl;
@@ -95,9 +95,9 @@ begin
   end;
 end;
 
-constructor TFrmLogin.Create(AOwner: TComponent);
+constructor TFrmLogin.CreateNew(AOwner: TComponent; Num: Integer);
 begin
-  inherited Create(AOwner);
+  inherited CreateNew(AOwner,Num);
   BorderStyle:=bsDialog;
   SetBounds(0,0,300,150);
   Position:=poScreenCenter;
@@ -132,6 +132,7 @@ begin
 
   btnButtons:=TButtonPanel.Create(Self);
   btnButtons.ShowButtons:=[pbOK, pbCancel];
+  btnButtons.Parent:=Self;
 end;
 
 procedure TFrmLogin.EnableEntry;
@@ -180,7 +181,7 @@ begin
   frozenTimer.Interval:=LoginFrozenTime;
   frozenTimer.Tag:=1; //login
   frozenTimer.OnTimer:=@UnfreezeLogin;
-  frmLogin:=TFrmLogin.Create(nil);
+  frmLogin:=TFrmLogin.CreateNew(nil);
   retries:=0;
   aborted:=false;
   loggedin:=False;
@@ -251,7 +252,7 @@ begin
   frozenTimer.Interval:=LoginFrozenTime;
   frozenTimer.Tag:=2; //Check
   frozenTimer.OnTimer:=@UnfreezeLogin;
-  frmLogin:=TFrmLogin.Create(nil);
+  frmLogin:=TFrmLogin.CreateNew(nil);
 
   frmLogin.Caption:=Format(SSpecialLoginCaption, [sc]);
   Result:=false;

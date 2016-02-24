@@ -156,8 +156,10 @@ end;
 
 procedure  TpSCADAControlSecurityManager.RegisterControl(control:ISecureControlInterface);
 begin
-  FSecureControls.Add(control);
-  control.CanBeAccessed(CanAccess(control.GetControlSecurityCode));
+  if FSecureControls.IndexOf(control)=-1 then begin;
+    FSecureControls.Add(control);
+    control.CanBeAccessed(CanAccess(control.GetControlSecurityCode));
+  end;
 end;
 
 procedure  TpSCADAControlSecurityManager.UnRegisterControl(control:ISecureControlInterface);
