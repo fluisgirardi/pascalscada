@@ -10,18 +10,18 @@
       </SearchPaths>
     </CompilerOptions>
     <Version Major="1"/>
-    <Files Count="8">
+    <Files Count="10">
       <Item1>
-        <Filename Value="pascalscada.secure_actions.request_authorized_user.pas"/>
-        <UnitName Value="pascalscada.secure_actions.request_authorized_user"/>
-      </Item1>
-      <Item2>
         <Filename Value="pascalscada.secure_actions.authorized_by_user_management_action.pas"/>
         <UnitName Value="pascalscada.secure_actions.authorized_by_user_management_action"/>
-      </Item2>
-      <Item3>
+      </Item1>
+      <Item2>
         <Filename Value="pascalscada.secure_actions.login_action.pas"/>
         <UnitName Value="pascalscada.secure_actions.login_action"/>
+      </Item2>
+      <Item3>
+        <Filename Value="pascalscada.secure_actions.login_logout_action.pas"/>
+        <UnitName Value="pascalscada.secure_actions.login_logout_action"/>
       </Item3>
       <Item4>
         <Filename Value="pascalscada.secure_actions.logout_action.pas"/>
@@ -32,18 +32,26 @@
         <UnitName Value="pascalscada.secure_actions.manage_users_and_groups_action"/>
       </Item5>
       <Item6>
-        <Filename Value="pascalscada.secure_actions.secure_action.pas"/>
-        <UnitName Value="pascalscada.secure_actions.secure_action"/>
+        <Filename Value="pascalscada.secure_actions.request_authorized_user.pas"/>
+        <UnitName Value="pascalscada.secure_actions.request_authorized_user"/>
       </Item6>
       <Item7>
-        <Filename Value="pascalscada.secure_actions.login_logout_action.pas"/>
-        <UnitName Value="pascalscada.secure_actions.login_logout_action"/>
+        <Filename Value="pascalscada.secure_actions.secure_action.pas"/>
+        <UnitName Value="pascalscada.secure_actions.secure_action"/>
       </Item7>
       <Item8>
+        <Filename Value="pascalscada.secure_actions.tag_value_actions.pas"/>
+        <UnitName Value="pascalscada.secure_actions.tag_value_actions"/>
+      </Item8>
+      <Item9>
+        <Filename Value="pascalscada.secure_actions.texts.pas"/>
+        <UnitName Value="pascalscada.secure_actions.texts"/>
+      </Item9>
+      <Item10>
         <Filename Value="pascalscada_secure_actions_register.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="pascalscada_secure_actions_register"/>
-      </Item8>
+      </Item10>
     </Files>
     <i18n>
       <EnableI18N Value="True"/>

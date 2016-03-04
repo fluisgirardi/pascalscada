@@ -28,10 +28,9 @@ type
     property SecurityCode:String read FSecurityCode write SetSecurityCode;
   end;
 
-resourcestring
-  SAccessDenied = 'Access denied!';
-
 implementation
+
+uses pascalscada.secure_actions.texts;
 
 { TpSCADASecureAction }
 
