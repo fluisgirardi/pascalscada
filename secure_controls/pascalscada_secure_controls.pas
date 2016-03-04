@@ -7,6 +7,8 @@ unit pascalscada_secure_controls;
 interface
 
 uses
+  pascalscada.secure_controls.buttons.secure_bitbtn, 
+  pascalscada.secure_controls.buttons.secure_speedbutton, 
   pascalscada.secure_controls.extctrls.secure_checkgroup, 
   pascalscada.secure_controls.extctrls.secure_panel, 
   pascalscada.secure_controls.extctrls.secure_radiogroup, 
@@ -21,8 +23,10 @@ uses
   pascalscada.secure_controls.stdctrls.secure_memo, 
   pascalscada.secure_controls.stdctrls.secure_radiobutton, 
   pascalscada.secure_controls.stdctrls.secure_scrollbar, 
+  pascalscada.secure_controls.stdctrls.secure_statictext, 
   pascalscada.secure_controls.stdctrls.secure_togglebox, 
-  pascalscada.secure_forms.forms.secure_form, pascalscada_secure_objects_reg, 
+  pascalscada.secure_forms.forms.secure_form, 
+  pascalscada.secure_frame.frame.secure_frame, pascalscada_secure_objects_reg, 
   LazarusPackageIntf;
 
 implementation

@@ -42,6 +42,9 @@ type
 
     //: @exclude
     procedure Loaded; override;
+
+    //:@excluee
+    procedure SetVisible(Value: boolean); override;
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
@@ -121,6 +124,12 @@ begin
   AValue:=FSecurityCode;
   FSecurityCode:='';
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
+end;
+
+procedure TpSCADASecureForm.SetVisible(Value: boolean);
+begin
+  //if FAllowUnauthorizedShowForm ;
+  //inherited SetVisible(Value);
 end;
 
 procedure TpSCADASecureForm.SetAllowUnauthorizedShowForm(AValue: Boolean);

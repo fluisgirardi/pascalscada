@@ -23,7 +23,8 @@ uses
   pascalscada.secure_controls.stdctrls.secure_radiobutton,
   pascalscada.secure_controls.stdctrls.secure_scrollbar,
   pascalscada.secure_controls.stdctrls.secure_togglebox,
-  pascalscada.secure_forms.forms.secure_form;
+  pascalscada.secure_forms.forms.secure_form,
+  pascalscada.secure_frame.frame.secure_frame;
 
 type
 
@@ -37,10 +38,22 @@ type
     Function GetInterfaceUsesSection : String; override;
   end;
 
+  { TpSCADASecureFrameFileDescriptor }
+
+  TpSCADASecureFrameFileDescriptor = Class(TFileDescPascalUnitWithResource)
+  Public
+    Constructor Create; override;
+    Function GetLocalizedName : String; override;
+    Function GetLocalizedDescription : String; override;
+    Function GetInterfaceUsesSection : String; override;
+  end;
+
 
 Resourcestring
   SPascalSCADA_Secure_Form = 'PascalSCADA Secure Form';
   SPascalSCADA_Secure_Form_Desc = 'Create a new unit with a LCL form, with security features.';
+  SPascalSCADA_Secure_Frame = 'PascalSCADA Secure Frame';
+  SPascalSCADA_Secure_Frame_Desc = 'Create a new unit with a frame, with security features.';
   SPascalSCADA_HCL_Std_Controls = 'PascalSCADA HCL - Std. Controls';
 
 procedure Register;
@@ -66,9 +79,36 @@ begin
                                                      TSecureRadioGroup]);
 
     RegisterProjectFileDescriptor(TpSCADASecureFormFileDescriptor.Create);
+    RegisterProjectFileDescriptor(TpSCADASecureFrameFileDescriptor.Create);
     FormEditingHook.RegisterDesignerBaseClass(TpSCADASecureForm);
 
 
+end;
+
+{ TpSCADASecureFrameFileDescriptor }
+
+constructor TpSCADASecureFrameFileDescriptor.Create;
+begin
+  inherited Create;
+  ResourceClass:=TpSCADASecureFrame;
+  Name:=SPascalSCADA_Secure_Frame;
+  UseCreateFormStatements:=true;
+  RequiredPackages:=RequiredPackages+'LCL;pascalscada_secure_controls';
+end;
+
+function TpSCADASecureFrameFileDescriptor.GetLocalizedName: String;
+begin
+  Result:=SPascalSCADA_Secure_Frame;
+end;
+
+function TpSCADASecureFrameFileDescriptor.GetLocalizedDescription: String;
+begin
+  Result:=SPascalSCADA_Secure_Frame_Desc;
+end;
+
+function TpSCADASecureFrameFileDescriptor.GetInterfaceUsesSection: String;
+begin
+  Result:=inherited GetInterfaceUsesSection+', pascalscada.secure_frame.frame.secure_frame';
 end;
 
 { TPascalSCADASecureFormFileDescriptor }

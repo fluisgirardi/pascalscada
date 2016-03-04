@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.stdctrls.secure_edit;
+unit pascalscada.secure_controls.buttons.secure_bitbtn;
 
 {$mode objfpc}{$H+}
 
@@ -7,13 +7,14 @@ interface
 uses
   StdCtrls,
   Classes,
+  Buttons,
   pascalscada.security.control_security_manager;
 
 type
 
-  { TSecureCustomEdit }
+  { TSecureCustomBitBtn }
 
-  TSecureCustomEdit = class(TCustomEdit, ISecureControlInterface)
+  TSecureCustomBitBtn = class(TCustomBitBtn, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -47,40 +48,34 @@ type
     destructor Destroy; override;
   end;
 
-  TSecureEdit = class(TSecureCustomEdit)
-  public
-    property AutoSelected;
+  TSecureBitBtn = class(TSecureCustomBitBtn)
   published
     property Action;
     property Align;
-    property Alignment;
     property Anchors;
     property AutoSize;
-    property AutoSelect;
     property BidiMode;
     property BorderSpacing;
-    property BorderStyle;
-    property CharCase;
+    property Cancel;
+    property Caption;
     property Color;
     property Constraints;
-    property DragCursor;
-    property DragKind;
-    property DragMode;
-    property EchoMode;
+    property Default;
+    property DefaultCaption;
     property Enabled;
     property Font;
-    property HideSelection;
-    property MaxLength;
-    property NumbersOnly;
-    property ParentBidiMode;
-    property OnChange;
+    property Glyph;
+    property GlyphShowMode;
+    property Kind;
+    property Layout;
+    property Margin;
+    property ModalResult;
+    property NumGlyphs;
     property OnChangeBounds;
     property OnClick;
     property OnContextPopup;
-    property OnDblClick;
     property OnDragDrop;
     property OnDragOver;
-    property OnEditingDone;
     property OnEndDrag;
     property OnEnter;
     property OnExit;
@@ -98,28 +93,24 @@ type
     property OnResize;
     property OnStartDrag;
     property OnUTF8KeyPress;
-    property ParentColor;
+    property ParentBidiMode;
     property ParentFont;
     property ParentShowHint;
-    property PasswordChar;
     property PopupMenu;
-    property ReadOnly;
     property SecurityCode;
     property ShowHint;
-    property TabStop;
+    property Spacing;
     property TabOrder;
-    property Text;
-    property TextHint;
-    property TextHintFontColor;
-    property TextHintFontStyle;
+    property TabStop;
     property Visible;
   end;
 
+
 implementation
 
-{ TSecureCustomEdit }
+{ TSecureCustomBitBtn }
 
-constructor TSecureCustomEdit.Create(TheOwner: TComponent);
+constructor TSecureCustomBitBtn.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
@@ -128,38 +119,39 @@ begin
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-destructor TSecureCustomEdit.Destroy;
+destructor TSecureCustomBitBtn.Destroy;
 begin
   GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
   inherited Destroy;
 end;
 
-procedure TSecureCustomEdit.SetSecurityCode(AValue: String);
+procedure TSecureCustomBitBtn.SetSecurityCode(AValue: String);
 begin
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
-function TSecureCustomEdit.GetControlSecurityCode: String;
+function TSecureCustomBitBtn.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TSecureCustomEdit.MakeUnsecure;
+procedure TSecureCustomBitBtn.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TSecureCustomEdit.CanBeAccessed(a: Boolean);
+procedure TSecureCustomBitBtn.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TSecureCustomEdit.SetEnabled(Value: Boolean);
+procedure TSecureCustomBitBtn.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
 end;
 
 end.
+

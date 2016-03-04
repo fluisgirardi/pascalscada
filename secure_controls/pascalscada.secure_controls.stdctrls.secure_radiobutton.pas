@@ -85,9 +85,6 @@ implementation
 
 uses Forms;
 
-//type
-//  TCustomCheckBoxAccessor = class(TCustomCheckBox);
-
 { TSecureCustomRadioButton }
 
 class procedure TSecureCustomRadioButton.WSRegisterClass;

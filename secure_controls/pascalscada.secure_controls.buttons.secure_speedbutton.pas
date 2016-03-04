@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.stdctrls.secure_custom_checkbox;
+unit pascalscada.secure_controls.buttons.secure_speedbutton;
 
 {$mode objfpc}{$H+}
 
@@ -7,13 +7,14 @@ interface
 uses
   StdCtrls,
   Classes,
+  Buttons,
   pascalscada.security.control_security_manager;
 
 type
 
-  { TSecureCustomCheckBoxBase }
+  { TSecureCustomSpeedButton }
 
-  TSecureCustomCheckBoxBase = class(TCustomCheckBox, ISecureControlInterface)
+  TSecureCustomSpeedButton = class(TCustomSpeedButton, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -47,11 +48,58 @@ type
     destructor Destroy; override;
   end;
 
+  TSecureSpeedButton = class(TSecureCustomSpeedButton)
+  published
+    property Action;
+    property Align;
+    property AllowAllUp;
+    property Anchors;
+    property AutoSize;
+    property BidiMode;
+    property BorderSpacing;
+    property Constraints;
+    property Caption;
+    property Color;
+    property Down;
+    property Enabled;
+    property Flat;
+    property Font;
+    property Glyph;
+    property GroupIndex;
+    property Layout;
+    property Margin;
+    property NumGlyphs;
+    property SecurityCode;
+    property Spacing;
+    property Transparent;
+    property Visible;
+    property OnClick;
+    property OnDblClick;
+    property OnMouseDown;
+    property OnMouseEnter;
+    property OnMouseLeave;
+    property OnMouseMove;
+    property OnMouseUp;
+    property OnMouseWheel;
+    property OnMouseWheelDown;
+    property OnMouseWheelUp;
+    property OnPaint;
+    property OnResize;
+    property OnChangeBounds;
+    property ShowCaption;
+    property ShowHint;
+    property ParentBidiMode;
+    property ParentFont;
+    property ParentShowHint;
+    property PopupMenu;
+  end;
+
+
 implementation
 
-{ TSecureCustomCheckBox }
+{ TSecureCustomSpeedButton }
 
-constructor TSecureCustomCheckBoxBase.Create(TheOwner: TComponent);
+constructor TSecureCustomSpeedButton.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
@@ -60,38 +108,39 @@ begin
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-destructor TSecureCustomCheckBoxBase.Destroy;
+destructor TSecureCustomSpeedButton.Destroy;
 begin
   GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
   inherited Destroy;
 end;
 
-procedure TSecureCustomCheckBoxBase.SetSecurityCode(AValue: String);
+procedure TSecureCustomSpeedButton.SetSecurityCode(AValue: String);
 begin
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
-function TSecureCustomCheckBoxBase.GetControlSecurityCode: String;
+function TSecureCustomSpeedButton.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TSecureCustomCheckBoxBase.MakeUnsecure;
+procedure TSecureCustomSpeedButton.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TSecureCustomCheckBoxBase.CanBeAccessed(a: Boolean);
+procedure TSecureCustomSpeedButton.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TSecureCustomCheckBoxBase.SetEnabled(Value: Boolean);
+procedure TSecureCustomSpeedButton.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
 end;
 
 end.
+
