@@ -13,3 +13,11 @@ msgstr ""
 msgid "Create a new unit with a LCL form, with security features."
 msgstr ""
 
+#: pascalscada_secure_objects_reg.spascalscada_secure_frame
+msgid "PascalSCADA Secure Frame"
+msgstr ""
+
+#: pascalscada_secure_objects_reg.spascalscada_secure_frame_desc
+msgid "Create a new unit with a frame, with security features."
+msgstr ""
+
