@@ -14,6 +14,8 @@ uses
   pascalscada.secure_controls.comctrls.secure_progressbar, 
   pascalscada.secure_controls.comctrls.secure_trackbar, 
   pascalscada.secure_controls.comctrls.secure_updown, 
+  pascalscada.secure_controls.dbctrls.secure_dbedit, 
+  pascalscada.secure_controls.dbctrls.secure_dbmemo, 
   pascalscada.secure_controls.dbctrls.secure_dbnavigator, 
   pascalscada.secure_controls.dbctrls.secure_dbtext, 
   pascalscada.secure_controls.extctrls.secure_checkgroup, 
@@ -37,7 +39,7 @@ uses
   pascalscada.secure_controls.stdctrls.secure_togglebox, 
   pascalscada.secure_forms.forms.secure_form, 
   pascalscada.secure_frame.frame.secure_frame, pascalscada_secure_objects_reg, 
-  pascalscada.secure_controls.dbctrls.secure_dbedit, LazarusPackageIntf;
+  LazarusPackageIntf;
 
 implementation
 

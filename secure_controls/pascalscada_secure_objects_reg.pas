@@ -14,6 +14,7 @@ uses
   pascalscada.secure_controls.comctrls.secure_updown,
   pascalscada.secure_controls.comctrls.secure_progressbar,
   pascalscada.secure_controls.dbctrls.secure_dbedit,
+  pascalscada.secure_controls.dbctrls.secure_dbmemo,
   pascalscada.secure_controls.dbctrls.secure_dbnavigator,
   pascalscada.secure_controls.dbctrls.secure_dbtext,
   pascalscada.secure_controls.extctrls.secure_checkgroup,
@@ -96,6 +97,7 @@ begin
                                                      TSecureUpDown]);
 
   RegisterComponents(SPascalSCADA_HCL_DB_Controls, [TSecureDBEdit,
+                                                    TSecureDBMemo,
                                                     TSecureDBNavigator,
                                                     TSecureDBText]);
 
