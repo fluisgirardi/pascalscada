@@ -1,20 +1,21 @@
-unit pascalscada.secure_controls.buttons.secure_bitbtn;
+unit pascalscada.secure_controls.dbctrls.secure_dbnavigator;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  StdCtrls,
   Classes,
-  Buttons,
+  Controls,
+  DbCtrls,
+  Graphics,
   pascalscada.security.control_security_manager;
 
 type
 
-  { TSecureCustomBitBtn }
+  { TSecureCustomDBNavigator }
 
-  TSecureCustomBitBtn = class(TCustomBitBtn, ISecureControlInterface)
+  TSecureCustomDBNavigator = class(TDBCustomNavigator, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -48,40 +49,41 @@ type
     destructor Destroy; override;
   end;
 
-  TSecureBitBtn = class(TSecureCustomBitBtn)
+  TSecureDBNavigator = class(TSecureCustomDBNavigator)
   published
-    property Action;
-    property Align;
+    property Align default alNone;
+    property Alignment;
     property Anchors;
     property AutoSize;
     property BidiMode;
+    property BeforeAction;
+    property BevelInner;
+    property BevelOuter;
+    property BevelWidth;
     property BorderSpacing;
-    property Cancel;
+    property BorderStyle;
+    property BorderWidth;
     property Caption;
-    property Color;
-    property Constraints;
-    property Default;
-    property DefaultCaption;
+    property ChildSizing;
+    property ClientHeight;
+    property ClientWidth;
+    property Color default clBackground;
+    property ConfirmDelete;
+    property DataSource;
+    property Direction;
+    property DragCursor;
+    property DragMode;
     property Enabled;
+    property Flat;
     property Font;
-    property Glyph;
-    property GlyphShowMode;
-    property Kind;
-    property Layout;
-    property Margin;
-    property ModalResult;
-    property NumGlyphs;
-    property OnChangeBounds;
+    property Hints;
     property OnClick;
-    property OnContextPopup;
+    property OnDblClick;
     property OnDragDrop;
     property OnDragOver;
     property OnEndDrag;
     property OnEnter;
     property OnExit;
-    property OnKeyDown;
-    property OnKeyPress;
-    property OnKeyUp;
     property OnMouseDown;
     property OnMouseEnter;
     property OnMouseLeave;
@@ -92,24 +94,26 @@ type
     property OnMouseWheelUp;
     property OnResize;
     property OnStartDrag;
-    property OnUTF8KeyPress;
+    property Options;
     property ParentBidiMode;
+    property ParentColor;
     property ParentFont;
     property ParentShowHint;
     property PopupMenu;
     property SecurityCode;
     property ShowHint;
-    property Spacing;
     property TabOrder;
-    property TabStop;
+    property TabStop default False;
     property Visible;
+    property VisibleButtons;
+    property Images;
   end;
 
 implementation
 
-{ TSecureCustomBitBtn }
+{ TSecureCustomDBNavigator }
 
-constructor TSecureCustomBitBtn.Create(TheOwner: TComponent);
+constructor TSecureCustomDBNavigator.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
@@ -118,35 +122,35 @@ begin
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-destructor TSecureCustomBitBtn.Destroy;
+destructor TSecureCustomDBNavigator.Destroy;
 begin
   GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
   inherited Destroy;
 end;
 
-procedure TSecureCustomBitBtn.SetSecurityCode(AValue: String);
+procedure TSecureCustomDBNavigator.SetSecurityCode(AValue: String);
 begin
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
-function TSecureCustomBitBtn.GetControlSecurityCode: String;
+function TSecureCustomDBNavigator.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TSecureCustomBitBtn.MakeUnsecure;
+procedure TSecureCustomDBNavigator.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TSecureCustomBitBtn.CanBeAccessed(a: Boolean);
+procedure TSecureCustomDBNavigator.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TSecureCustomBitBtn.SetEnabled(Value: Boolean);
+procedure TSecureCustomDBNavigator.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);

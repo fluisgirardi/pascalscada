@@ -10,7 +10,7 @@
       </SearchPaths>
     </CompilerOptions>
     <Version Major="1"/>
-    <Files Count="21">
+    <Files Count="31">
       <Item1>
         <Filename Value="pascalscada.secure_controls.buttons.secure_bitbtn.pas"/>
         <UnitName Value="pascalscada.secure_controls.buttons.secure_bitbtn"/>
@@ -20,82 +20,122 @@
         <UnitName Value="pascalscada.secure_controls.buttons.secure_speedbutton"/>
       </Item2>
       <Item3>
-        <Filename Value="pascalscada.secure_controls.extctrls.secure_checkgroup.pas"/>
-        <UnitName Value="pascalscada.secure_controls.extctrls.secure_checkgroup"/>
+        <Filename Value="pascalscada.secure_controls.checklst.secure_checklistbox.pas"/>
+        <UnitName Value="pascalscada.secure_controls.checklst.secure_checklistbox"/>
       </Item3>
       <Item4>
-        <Filename Value="pascalscada.secure_controls.extctrls.secure_panel.pas"/>
-        <UnitName Value="pascalscada.secure_controls.extctrls.secure_panel"/>
+        <Filename Value="pascalscada.secure_controls.comctrls.secure_progressbar.pas"/>
+        <UnitName Value="pascalscada.secure_controls.comctrls.secure_progressbar"/>
       </Item4>
       <Item5>
-        <Filename Value="pascalscada.secure_controls.extctrls.secure_radiogroup.pas"/>
-        <UnitName Value="pascalscada.secure_controls.extctrls.secure_radiogroup"/>
+        <Filename Value="pascalscada.secure_controls.comctrls.secure_trackbar.pas"/>
+        <UnitName Value="pascalscada.secure_controls.comctrls.secure_trackbar"/>
       </Item5>
       <Item6>
-        <Filename Value="pascalscada.secure_controls.stdctrls.secure_button.pas"/>
-        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_button"/>
+        <Filename Value="pascalscada.secure_controls.comctrls.secure_updown.pas"/>
+        <UnitName Value="pascalscada.secure_controls.comctrls.secure_updown"/>
       </Item6>
       <Item7>
-        <Filename Value="pascalscada.secure_controls.stdctrls.secure_checkbox.pas"/>
-        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_checkbox"/>
+        <Filename Value="pascalscada.secure_controls.dbctrls.secure_dbnavigator.pas"/>
+        <UnitName Value="pascalscada.secure_controls.dbctrls.secure_dbnavigator"/>
       </Item7>
       <Item8>
-        <Filename Value="pascalscada.secure_controls.stdctrls.secure_combobox.pas"/>
-        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_combobox"/>
+        <Filename Value="pascalscada.secure_controls.dbctrls.secure_dbtext.pas"/>
+        <UnitName Value="pascalscada.secure_controls.dbctrls.secure_dbtext"/>
       </Item8>
       <Item9>
-        <Filename Value="pascalscada.secure_controls.stdctrls.secure_custom_checkbox.pas"/>
-        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_custom_checkbox"/>
+        <Filename Value="pascalscada.secure_controls.extctrls.secure_checkgroup.pas"/>
+        <UnitName Value="pascalscada.secure_controls.extctrls.secure_checkgroup"/>
       </Item9>
       <Item10>
-        <Filename Value="pascalscada.secure_controls.stdctrls.secure_edit.pas"/>
-        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_edit"/>
+        <Filename Value="pascalscada.secure_controls.extctrls.secure_image.pas"/>
+        <UnitName Value="pascalscada.secure_controls.extctrls.secure_image"/>
       </Item10>
       <Item11>
-        <Filename Value="pascalscada.secure_controls.stdctrls.secure_groupbox.pas"/>
-        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_groupbox"/>
+        <Filename Value="pascalscada.secure_controls.extctrls.secure_panel.pas"/>
+        <UnitName Value="pascalscada.secure_controls.extctrls.secure_panel"/>
       </Item11>
       <Item12>
-        <Filename Value="pascalscada.secure_controls.stdctrls.secure_label.pas"/>
-        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_label"/>
+        <Filename Value="pascalscada.secure_controls.extctrls.secure_radiogroup.pas"/>
+        <UnitName Value="pascalscada.secure_controls.extctrls.secure_radiogroup"/>
       </Item12>
       <Item13>
-        <Filename Value="pascalscada.secure_controls.stdctrls.secure_listbox.pas"/>
-        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_listbox"/>
+        <Filename Value="pascalscada.secure_controls.forms.secure_scrollbox.pas"/>
+        <UnitName Value="pascalscada.secure_controls.forms.secure_scrollbox"/>
       </Item13>
       <Item14>
-        <Filename Value="pascalscada.secure_controls.stdctrls.secure_memo.pas"/>
-        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_memo"/>
+        <Filename Value="pascalscada.secure_controls.maskedit.secure_maskedit.pas"/>
+        <UnitName Value="pascalscada.secure_controls.maskedit.secure_maskedit"/>
       </Item14>
       <Item15>
-        <Filename Value="pascalscada.secure_controls.stdctrls.secure_radiobutton.pas"/>
-        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_radiobutton"/>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_button.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_button"/>
       </Item15>
       <Item16>
-        <Filename Value="pascalscada.secure_controls.stdctrls.secure_scrollbar.pas"/>
-        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_scrollbar"/>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_checkbox.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_checkbox"/>
       </Item16>
       <Item17>
-        <Filename Value="pascalscada.secure_controls.stdctrls.secure_statictext.pas"/>
-        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_statictext"/>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_combobox.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_combobox"/>
       </Item17>
       <Item18>
-        <Filename Value="pascalscada.secure_controls.stdctrls.secure_togglebox.pas"/>
-        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_togglebox"/>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_custom_checkbox.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_custom_checkbox"/>
       </Item18>
       <Item19>
-        <Filename Value="pascalscada.secure_forms.forms.secure_form.pas"/>
-        <UnitName Value="pascalscada.secure_forms.forms.secure_form"/>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_edit.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_edit"/>
       </Item19>
       <Item20>
-        <Filename Value="pascalscada.secure_frame.frame.secure_frame.pas"/>
-        <UnitName Value="pascalscada.secure_frame.frame.secure_frame"/>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_groupbox.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_groupbox"/>
       </Item20>
       <Item21>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_label.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_label"/>
+      </Item21>
+      <Item22>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_listbox.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_listbox"/>
+      </Item22>
+      <Item23>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_memo.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_memo"/>
+      </Item23>
+      <Item24>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_radiobutton.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_radiobutton"/>
+      </Item24>
+      <Item25>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_scrollbar.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_scrollbar"/>
+      </Item25>
+      <Item26>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_statictext.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_statictext"/>
+      </Item26>
+      <Item27>
+        <Filename Value="pascalscada.secure_controls.stdctrls.secure_togglebox.pas"/>
+        <UnitName Value="pascalscada.secure_controls.stdctrls.secure_togglebox"/>
+      </Item27>
+      <Item28>
+        <Filename Value="pascalscada.secure_forms.forms.secure_form.pas"/>
+        <UnitName Value="pascalscada.secure_forms.forms.secure_form"/>
+      </Item28>
+      <Item29>
+        <Filename Value="pascalscada.secure_frame.frame.secure_frame.pas"/>
+        <UnitName Value="pascalscada.secure_frame.frame.secure_frame"/>
+      </Item29>
+      <Item30>
         <Filename Value="pascalscada_secure_objects_reg.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="pascalscada_secure_objects_reg"/>
-      </Item21>
+      </Item30>
+      <Item31>
+        <Filename Value="pascalscada.secure_controls.dbctrls.secure_dbedit.pas"/>
+        <UnitName Value="pascalscada.secure_controls.dbctrls.secure_dbedit"/>
+      </Item31>
     </Files>
     <i18n>
       <EnableI18N Value="True"/>

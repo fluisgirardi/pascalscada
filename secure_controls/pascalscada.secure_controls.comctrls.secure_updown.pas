@@ -1,20 +1,19 @@
-unit pascalscada.secure_controls.buttons.secure_bitbtn;
+unit pascalscada.secure_controls.comctrls.secure_updown;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  StdCtrls,
   Classes,
-  Buttons,
+  ComCtrls,
   pascalscada.security.control_security_manager;
 
 type
 
-  { TSecureCustomBitBtn }
+  { TSecureCustomUpDown }
 
-  TSecureCustomBitBtn = class(TCustomBitBtn, ISecureControlInterface)
+  TSecureCustomUpDown = class(TCustomUpDown, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -34,6 +33,7 @@ type
 
     //: @exclude
     procedure SetEnabled(Value: Boolean); override;
+
     //: @exclude
     property Enabled read FIsEnabled write SetEnabled default true;
 
@@ -48,40 +48,26 @@ type
     destructor Destroy; override;
   end;
 
-  TSecureBitBtn = class(TSecureCustomBitBtn)
+  TSecureUpDown = class(TSecureCustomUpDown)
   published
-    property Action;
-    property Align;
+    property AlignButton;
     property Anchors;
-    property AutoSize;
-    property BidiMode;
+    property ArrowKeys;
+    property Associate;
     property BorderSpacing;
-    property Cancel;
-    property Caption;
-    property Color;
     property Constraints;
-    property Default;
-    property DefaultCaption;
     property Enabled;
-    property Font;
-    property Glyph;
-    property GlyphShowMode;
-    property Kind;
-    property Layout;
-    property Margin;
-    property ModalResult;
-    property NumGlyphs;
-    property OnChangeBounds;
+    property Hint;
+    property Increment;
+    property Max;
+    property Min;
+    property MinRepeatInterval;
+    property OnChanging;
+    property OnChangingEx;
     property OnClick;
     property OnContextPopup;
-    property OnDragDrop;
-    property OnDragOver;
-    property OnEndDrag;
     property OnEnter;
     property OnExit;
-    property OnKeyDown;
-    property OnKeyPress;
-    property OnKeyUp;
     property OnMouseDown;
     property OnMouseEnter;
     property OnMouseLeave;
@@ -90,26 +76,25 @@ type
     property OnMouseWheel;
     property OnMouseWheelDown;
     property OnMouseWheelUp;
-    property OnResize;
-    property OnStartDrag;
-    property OnUTF8KeyPress;
-    property ParentBidiMode;
-    property ParentFont;
+    property Orientation;
     property ParentShowHint;
     property PopupMenu;
+    property Position;
     property SecurityCode;
     property ShowHint;
-    property Spacing;
     property TabOrder;
     property TabStop;
+    property Thousands;
+    property Flat;
     property Visible;
+    property Wrap;
   end;
 
 implementation
 
-{ TSecureCustomBitBtn }
+{ TSecureCustomUpDown }
 
-constructor TSecureCustomBitBtn.Create(TheOwner: TComponent);
+constructor TSecureCustomUpDown.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
@@ -118,35 +103,35 @@ begin
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-destructor TSecureCustomBitBtn.Destroy;
+destructor TSecureCustomUpDown.Destroy;
 begin
   GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
   inherited Destroy;
 end;
 
-procedure TSecureCustomBitBtn.SetSecurityCode(AValue: String);
+procedure TSecureCustomUpDown.SetSecurityCode(AValue: String);
 begin
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
-function TSecureCustomBitBtn.GetControlSecurityCode: String;
+function TSecureCustomUpDown.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TSecureCustomBitBtn.MakeUnsecure;
+procedure TSecureCustomUpDown.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TSecureCustomBitBtn.CanBeAccessed(a: Boolean);
+procedure TSecureCustomUpDown.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TSecureCustomBitBtn.SetEnabled(Value: Boolean);
+procedure TSecureCustomUpDown.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);

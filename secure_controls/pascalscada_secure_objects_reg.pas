@@ -9,9 +9,19 @@ uses
   FormEditingIntf,
   ProjectIntf,
   LazIDEIntf,
+  pascalscada.secure_controls.checklst.secure_checklistbox,
+  pascalscada.secure_controls.comctrls.secure_trackbar,
+  pascalscada.secure_controls.comctrls.secure_updown,
+  pascalscada.secure_controls.comctrls.secure_progressbar,
+  pascalscada.secure_controls.dbctrls.secure_dbedit,
+  pascalscada.secure_controls.dbctrls.secure_dbnavigator,
+  pascalscada.secure_controls.dbctrls.secure_dbtext,
   pascalscada.secure_controls.extctrls.secure_checkgroup,
+  pascalscada.secure_controls.extctrls.secure_image,
   pascalscada.secure_controls.extctrls.secure_panel,
   pascalscada.secure_controls.extctrls.secure_radiogroup,
+  pascalscada.secure_controls.forms.secure_scrollbox,
+  pascalscada.secure_controls.maskedit.secure_maskedit,
   pascalscada.secure_controls.stdctrls.secure_button,
   pascalscada.secure_controls.stdctrls.secure_checkbox,
   pascalscada.secure_controls.stdctrls.secure_combobox,
@@ -55,6 +65,7 @@ Resourcestring
   SPascalSCADA_Secure_Frame = 'PascalSCADA Secure Frame';
   SPascalSCADA_Secure_Frame_Desc = 'Create a new unit with a frame, with security features.';
   SPascalSCADA_HCL_Std_Controls = 'PascalSCADA HCL - Std. Controls';
+  SPascalSCADA_HCL_DB_Controls = 'PascalSCADA HCL - DB Controls';
 
 procedure Register;
 
@@ -62,25 +73,38 @@ implementation
 
 procedure Register;
 begin
-  RegisterComponents(SPascalSCADA_HCL_Std_Controls, [TSecureCheckBox,
+  RegisterComponents(SPascalSCADA_HCL_Std_Controls, [TSecureButton,
+                                                     TSecureCheckBox,
+                                                     TSecureCheckGroup,
+                                                     TSecureCheckListBox,
                                                      TSecureComboBox,
-                                                     TSecureButton,
                                                      TSecureEdit,
                                                      TSecureGroupBox,
+                                                     TSecureImage,
                                                      TSecureLabel,
                                                      TSecureListBox,
+                                                     TSecureMaskEdit,
                                                      TSecureMemo,
-                                                     TSecureRadioButton,
-                                                     TSecureScrollBar,
-                                                     TSecureToggleBox,
-
-                                                     TSecureCheckGroup,
                                                      TSecurePanel,
-                                                     TSecureRadioGroup]);
+                                                     TSecureProgressBar,
+                                                     TSecureRadioButton,
+                                                     TSecureRadioGroup,
+                                                     TSecureScrollBar,
+                                                     TSecureScrollbox,
+                                                     TSecureToggleBox,
+                                                     TSecureTrackBar,
+                                                     TSecureUpDown]);
 
-    RegisterProjectFileDescriptor(TpSCADASecureFormFileDescriptor.Create);
-    RegisterProjectFileDescriptor(TpSCADASecureFrameFileDescriptor.Create);
-    FormEditingHook.RegisterDesignerBaseClass(TpSCADASecureForm);
+  RegisterComponents(SPascalSCADA_HCL_DB_Controls, [TSecureDBEdit,
+                                                    TSecureDBNavigator,
+                                                    TSecureDBText]);
+
+
+
+  RegisterProjectFileDescriptor(TpSCADASecureFormFileDescriptor.Create);
+  RegisterProjectFileDescriptor(TpSCADASecureFrameFileDescriptor.Create);
+  FormEditingHook.RegisterDesignerBaseClass(TpSCADASecureForm);
+  FormEditingHook.RegisterDesignerBaseClass(TpSCADASecureFrame);
 
 
 end;

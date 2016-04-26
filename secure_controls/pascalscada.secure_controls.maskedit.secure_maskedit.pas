@@ -1,20 +1,19 @@
-unit pascalscada.secure_controls.buttons.secure_bitbtn;
+unit pascalscada.secure_controls.maskedit.secure_maskedit;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  StdCtrls,
   Classes,
-  Buttons,
+  MaskEdit,
   pascalscada.security.control_security_manager;
 
 type
 
-  { TSecureCustomBitBtn }
+  { TSecureCustomMaskEdit }
 
-  TSecureCustomBitBtn = class(TCustomBitBtn, ISecureControlInterface)
+  TSecureCustomMaskEdit = class(TCustomMaskEdit, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -48,34 +47,46 @@ type
     destructor Destroy; override;
   end;
 
-  TSecureBitBtn = class(TSecureCustomBitBtn)
+  TSecureMaskEdit = class(TSecureCustomMaskEdit)
+  public
+    property IsMasked;
+    property EditText;
   published
-    property Action;
     property Align;
+    property Alignment;
     property Anchors;
+    property AutoSelect;
     property AutoSize;
-    property BidiMode;
+    property BiDiMode;
     property BorderSpacing;
-    property Cancel;
-    property Caption;
+    property BorderStyle;
+    property CharCase;
     property Color;
     property Constraints;
-    property Default;
-    property DefaultCaption;
+    property DragCursor;
+    property DragKind;
+    property DragMode;
     property Enabled;
     property Font;
-    property Glyph;
-    property GlyphShowMode;
-    property Kind;
-    property Layout;
-    property Margin;
-    property ModalResult;
-    property NumGlyphs;
-    property OnChangeBounds;
+    property MaxLength;
+    property ParentBiDiMode;
+    property ParentColor;
+    property ParentFont;
+    property ParentShowHint;
+    property PopupMenu;
+    property ReadOnly;
+    property SecurityCode;
+    property ShowHint;
+    property TabOrder;
+    property TabStop;
+    property Visible;
+    property OnChange;
     property OnClick;
-    property OnContextPopup;
+    property OnDblClick;
     property OnDragDrop;
     property OnDragOver;
+    property OnEditingDone;
+    property OnEndDock;
     property OnEndDrag;
     property OnEnter;
     property OnExit;
@@ -90,26 +101,23 @@ type
     property OnMouseWheel;
     property OnMouseWheelDown;
     property OnMouseWheelUp;
-    property OnResize;
+    property OnStartDock;
     property OnStartDrag;
     property OnUTF8KeyPress;
-    property ParentBidiMode;
-    property ParentFont;
-    property ParentShowHint;
-    property PopupMenu;
-    property SecurityCode;
-    property ShowHint;
-    property Spacing;
-    property TabOrder;
-    property TabStop;
-    property Visible;
+    property EditMask;
+    property Text;
+    property TextHint;
+    property TextHintFontColor;
+    property TextHintFontStyle;
+    property SpaceChar;
   end;
+
 
 implementation
 
-{ TSecureCustomBitBtn }
+{ TSecureCustomMaskEdit }
 
-constructor TSecureCustomBitBtn.Create(TheOwner: TComponent);
+constructor TSecureCustomMaskEdit.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
@@ -118,35 +126,35 @@ begin
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-destructor TSecureCustomBitBtn.Destroy;
+destructor TSecureCustomMaskEdit.Destroy;
 begin
   GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
   inherited Destroy;
 end;
 
-procedure TSecureCustomBitBtn.SetSecurityCode(AValue: String);
+procedure TSecureCustomMaskEdit.SetSecurityCode(AValue: String);
 begin
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
-function TSecureCustomBitBtn.GetControlSecurityCode: String;
+function TSecureCustomMaskEdit.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TSecureCustomBitBtn.MakeUnsecure;
+procedure TSecureCustomMaskEdit.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TSecureCustomBitBtn.CanBeAccessed(a: Boolean);
+procedure TSecureCustomMaskEdit.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TSecureCustomBitBtn.SetEnabled(Value: Boolean);
+procedure TSecureCustomMaskEdit.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);

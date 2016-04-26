@@ -1,20 +1,19 @@
-unit pascalscada.secure_controls.buttons.secure_bitbtn;
+unit pascalscada.secure_controls.comctrls.secure_trackbar;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  StdCtrls,
   Classes,
-  Buttons,
+  ComCtrls,
   pascalscada.security.control_security_manager;
 
 type
 
-  { TSecureCustomBitBtn }
+  { TSecureCustomTrackbar }
 
-  TSecureCustomBitBtn = class(TCustomBitBtn, ISecureControlInterface)
+  TSecureCustomTrackbar = class(TCustomTrackBar, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -48,29 +47,23 @@ type
     destructor Destroy; override;
   end;
 
-  TSecureBitBtn = class(TSecureCustomBitBtn)
+  { TSecureTrackBar }
+
+  TSecureTrackBar = class(TSecureCustomTrackBar)
   published
-    property Action;
     property Align;
     property Anchors;
-    property AutoSize;
-    property BidiMode;
     property BorderSpacing;
-    property Cancel;
-    property Caption;
-    property Color;
     property Constraints;
-    property Default;
-    property DefaultCaption;
+    property DragCursor;
+    property DragMode;
     property Enabled;
-    property Font;
-    property Glyph;
-    property GlyphShowMode;
-    property Kind;
-    property Layout;
-    property Margin;
-    property ModalResult;
-    property NumGlyphs;
+    property Frequency;
+    property Hint;
+    property LineSize;
+    property Max;
+    property Min;
+    property OnChange;
     property OnChangeBounds;
     property OnClick;
     property OnContextPopup;
@@ -79,9 +72,6 @@ type
     property OnEndDrag;
     property OnEnter;
     property OnExit;
-    property OnKeyDown;
-    property OnKeyPress;
-    property OnKeyUp;
     property OnMouseDown;
     property OnMouseEnter;
     property OnMouseLeave;
@@ -90,26 +80,36 @@ type
     property OnMouseWheel;
     property OnMouseWheelDown;
     property OnMouseWheelUp;
+    property OnKeyDown;
+    property OnKeyPress;
+    property OnKeyUp;
     property OnResize;
     property OnStartDrag;
     property OnUTF8KeyPress;
-    property ParentBidiMode;
-    property ParentFont;
+    property Orientation;
+    property PageSize;
     property ParentShowHint;
     property PopupMenu;
+    property Position;
+    property Reversed;
+    property ScalePos;
     property SecurityCode;
+    property SelEnd;
+    property SelStart;
     property ShowHint;
-    property Spacing;
+    property ShowSelRange;
     property TabOrder;
     property TabStop;
+    property TickMarks;
+    property TickStyle;
     property Visible;
   end;
 
 implementation
 
-{ TSecureCustomBitBtn }
+{ TSecureCustomTrackbar }
 
-constructor TSecureCustomBitBtn.Create(TheOwner: TComponent);
+constructor TSecureCustomTrackbar.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
@@ -118,35 +118,35 @@ begin
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-destructor TSecureCustomBitBtn.Destroy;
+destructor TSecureCustomTrackbar.Destroy;
 begin
   GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
   inherited Destroy;
 end;
 
-procedure TSecureCustomBitBtn.SetSecurityCode(AValue: String);
+procedure TSecureCustomTrackbar.SetSecurityCode(AValue: String);
 begin
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
-function TSecureCustomBitBtn.GetControlSecurityCode: String;
+function TSecureCustomTrackbar.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TSecureCustomBitBtn.MakeUnsecure;
+procedure TSecureCustomTrackbar.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TSecureCustomBitBtn.CanBeAccessed(a: Boolean);
+procedure TSecureCustomTrackbar.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TSecureCustomBitBtn.SetEnabled(Value: Boolean);
+procedure TSecureCustomTrackbar.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);

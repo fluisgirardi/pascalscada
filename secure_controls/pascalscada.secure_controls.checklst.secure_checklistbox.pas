@@ -1,20 +1,19 @@
-unit pascalscada.secure_controls.buttons.secure_bitbtn;
+unit pascalscada.secure_controls.checklst.secure_checklistbox;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  StdCtrls,
   Classes,
-  Buttons,
+  CheckLst,
   pascalscada.security.control_security_manager;
 
 type
 
-  { TSecureCustomBitBtn }
+  { TSecureCustomCheckListBox }
 
-  TSecureCustomBitBtn = class(TCustomBitBtn, ISecureControlInterface)
+  TSecureCustomCheckListBox = class(TCustomCheckListBox, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -48,39 +47,41 @@ type
     destructor Destroy; override;
   end;
 
-  TSecureBitBtn = class(TSecureCustomBitBtn)
+  TSecureCheckListBox = class(TSecureCustomCheckListBox)
   published
-    property Action;
     property Align;
+    property AllowGrayed;
     property Anchors;
-    property AutoSize;
     property BidiMode;
     property BorderSpacing;
-    property Cancel;
-    property Caption;
+    property BorderStyle;
     property Color;
+    property Columns;
     property Constraints;
-    property Default;
-    property DefaultCaption;
+    property DragCursor;
+    property DragMode;
+    property ExtendedSelect;
     property Enabled;
     property Font;
-    property Glyph;
-    property GlyphShowMode;
-    property Kind;
-    property Layout;
-    property Margin;
-    property ModalResult;
-    property NumGlyphs;
+    property IntegralHeight;
+    property Items;
+    property ItemHeight;
+    property ItemIndex;
+    property MultiSelect;
     property OnChangeBounds;
     property OnClick;
+    property OnClickCheck;
     property OnContextPopup;
+    property OnDblClick;
+    property OnDrawItem;
     property OnDragDrop;
     property OnDragOver;
     property OnEndDrag;
     property OnEnter;
     property OnExit;
-    property OnKeyDown;
+    property OnItemClick;
     property OnKeyPress;
+    property OnKeyDown;
     property OnKeyUp;
     property OnMouseDown;
     property OnMouseEnter;
@@ -91,6 +92,7 @@ type
     property OnMouseWheelDown;
     property OnMouseWheelUp;
     property OnResize;
+    property OnShowHint;
     property OnStartDrag;
     property OnUTF8KeyPress;
     property ParentBidiMode;
@@ -99,17 +101,19 @@ type
     property PopupMenu;
     property SecurityCode;
     property ShowHint;
-    property Spacing;
+    property Sorted;
+    property Style;
     property TabOrder;
     property TabStop;
+    property TopIndex;
     property Visible;
   end;
 
 implementation
 
-{ TSecureCustomBitBtn }
+{ TSecureCustomCheckListBox }
 
-constructor TSecureCustomBitBtn.Create(TheOwner: TComponent);
+constructor TSecureCustomCheckListBox.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
@@ -118,35 +122,35 @@ begin
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-destructor TSecureCustomBitBtn.Destroy;
+destructor TSecureCustomCheckListBox.Destroy;
 begin
   GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
   inherited Destroy;
 end;
 
-procedure TSecureCustomBitBtn.SetSecurityCode(AValue: String);
+procedure TSecureCustomCheckListBox.SetSecurityCode(AValue: String);
 begin
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
-function TSecureCustomBitBtn.GetControlSecurityCode: String;
+function TSecureCustomCheckListBox.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TSecureCustomBitBtn.MakeUnsecure;
+procedure TSecureCustomCheckListBox.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TSecureCustomBitBtn.CanBeAccessed(a: Boolean);
+procedure TSecureCustomCheckListBox.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TSecureCustomBitBtn.SetEnabled(Value: Boolean);
+procedure TSecureCustomCheckListBox.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);

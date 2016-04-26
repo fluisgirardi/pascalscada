@@ -1,20 +1,19 @@
-unit pascalscada.secure_controls.buttons.secure_bitbtn;
+unit pascalscada.secure_controls.comctrls.secure_progressbar;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  StdCtrls,
   Classes,
-  Buttons,
+  ComCtrls,
   pascalscada.security.control_security_manager;
 
 type
 
-  { TSecureCustomBitBtn }
+  { TSecureCustomProgressBar }
 
-  TSecureCustomBitBtn = class(TCustomBitBtn, ISecureControlInterface)
+  TSecureCustomProgressBar = class(TCustomProgressBar, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -48,40 +47,26 @@ type
     destructor Destroy; override;
   end;
 
-  TSecureBitBtn = class(TSecureCustomBitBtn)
+  TSecureProgressBar = class(TSecureCustomProgressBar)
   published
-    property Action;
     property Align;
     property Anchors;
-    property AutoSize;
-    property BidiMode;
     property BorderSpacing;
-    property Cancel;
-    property Caption;
-    property Color;
+    property BorderWidth;
     property Constraints;
-    property Default;
-    property DefaultCaption;
+    property DragCursor;
+    property DragKind;
+    property DragMode;
     property Enabled;
-    property Font;
-    property Glyph;
-    property GlyphShowMode;
-    property Kind;
-    property Layout;
-    property Margin;
-    property ModalResult;
-    property NumGlyphs;
-    property OnChangeBounds;
-    property OnClick;
+    property Hint;
+    property Max;
+    property Min;
     property OnContextPopup;
     property OnDragDrop;
     property OnDragOver;
     property OnEndDrag;
     property OnEnter;
     property OnExit;
-    property OnKeyDown;
-    property OnKeyPress;
-    property OnKeyUp;
     property OnMouseDown;
     property OnMouseEnter;
     property OnMouseLeave;
@@ -90,26 +75,29 @@ type
     property OnMouseWheel;
     property OnMouseWheelDown;
     property OnMouseWheelUp;
-    property OnResize;
+    property OnStartDock;
     property OnStartDrag;
-    property OnUTF8KeyPress;
-    property ParentBidiMode;
-    property ParentFont;
+    property Orientation;
     property ParentShowHint;
     property PopupMenu;
+    property Position;
     property SecurityCode;
     property ShowHint;
-    property Spacing;
+    property Smooth;
+    property Step;
+    property Style;
     property TabOrder;
     property TabStop;
     property Visible;
+    property BarShowText;
   end;
+
 
 implementation
 
-{ TSecureCustomBitBtn }
+{ TSecureCustomProgressBar }
 
-constructor TSecureCustomBitBtn.Create(TheOwner: TComponent);
+constructor TSecureCustomProgressBar.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
@@ -118,35 +106,35 @@ begin
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-destructor TSecureCustomBitBtn.Destroy;
+destructor TSecureCustomProgressBar.Destroy;
 begin
   GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
   inherited Destroy;
 end;
 
-procedure TSecureCustomBitBtn.SetSecurityCode(AValue: String);
+procedure TSecureCustomProgressBar.SetSecurityCode(AValue: String);
 begin
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
-function TSecureCustomBitBtn.GetControlSecurityCode: String;
+function TSecureCustomProgressBar.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TSecureCustomBitBtn.MakeUnsecure;
+procedure TSecureCustomProgressBar.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TSecureCustomBitBtn.CanBeAccessed(a: Boolean);
+procedure TSecureCustomProgressBar.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TSecureCustomBitBtn.SetEnabled(Value: Boolean);
+procedure TSecureCustomProgressBar.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);

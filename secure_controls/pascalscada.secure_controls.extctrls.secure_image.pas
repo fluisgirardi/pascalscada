@@ -1,20 +1,19 @@
-unit pascalscada.secure_controls.buttons.secure_bitbtn;
+unit pascalscada.secure_controls.extctrls.secure_image;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  StdCtrls,
   Classes,
-  Buttons,
+  ExtCtrls,
   pascalscada.security.control_security_manager;
 
 type
 
-  { TSecureCustomBitBtn }
+  { TSecureCustomImage }
 
-  TSecureCustomBitBtn = class(TCustomBitBtn, ISecureControlInterface)
+  TSecureCustomImage = class(TCustomImage, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -48,40 +47,28 @@ type
     destructor Destroy; override;
   end;
 
-  TSecureBitBtn = class(TSecureCustomBitBtn)
+  { TImage }
+
+  TSecureImage = class(TSecureCustomImage)
   published
-    property Action;
+    property AntialiasingMode;
     property Align;
     property Anchors;
     property AutoSize;
-    property BidiMode;
     property BorderSpacing;
-    property Cancel;
-    property Caption;
-    property Color;
+    property Center;
+    property KeepOriginXWhenClipped;
+    property KeepOriginYWhenClipped;
     property Constraints;
-    property Default;
-    property DefaultCaption;
+    property DragCursor;
+    property DragMode;
     property Enabled;
-    property Font;
-    property Glyph;
-    property GlyphShowMode;
-    property Kind;
-    property Layout;
-    property Margin;
-    property ModalResult;
-    property NumGlyphs;
     property OnChangeBounds;
     property OnClick;
-    property OnContextPopup;
+    property OnDblClick;
     property OnDragDrop;
     property OnDragOver;
     property OnEndDrag;
-    property OnEnter;
-    property OnExit;
-    property OnKeyDown;
-    property OnKeyPress;
-    property OnKeyUp;
     property OnMouseDown;
     property OnMouseEnter;
     property OnMouseLeave;
@@ -90,26 +77,27 @@ type
     property OnMouseWheel;
     property OnMouseWheelDown;
     property OnMouseWheelUp;
+    property OnPaint;
+    property OnPictureChanged;
+    property OnPaintBackground;
     property OnResize;
     property OnStartDrag;
-    property OnUTF8KeyPress;
-    property ParentBidiMode;
-    property ParentFont;
     property ParentShowHint;
+    property Picture;
     property PopupMenu;
+    property Proportional;
     property SecurityCode;
     property ShowHint;
-    property Spacing;
-    property TabOrder;
-    property TabStop;
+    property Stretch;
+    property Transparent;
     property Visible;
   end;
 
 implementation
 
-{ TSecureCustomBitBtn }
+{ TSecureCustomImage }
 
-constructor TSecureCustomBitBtn.Create(TheOwner: TComponent);
+constructor TSecureCustomImage.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
@@ -118,35 +106,35 @@ begin
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-destructor TSecureCustomBitBtn.Destroy;
+destructor TSecureCustomImage.Destroy;
 begin
   GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
   inherited Destroy;
 end;
 
-procedure TSecureCustomBitBtn.SetSecurityCode(AValue: String);
+procedure TSecureCustomImage.SetSecurityCode(AValue: String);
 begin
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
-function TSecureCustomBitBtn.GetControlSecurityCode: String;
+function TSecureCustomImage.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TSecureCustomBitBtn.MakeUnsecure;
+procedure TSecureCustomImage.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TSecureCustomBitBtn.CanBeAccessed(a: Boolean);
+procedure TSecureCustomImage.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TSecureCustomBitBtn.SetEnabled(Value: Boolean);
+procedure TSecureCustomImage.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
