@@ -1,6 +1,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
+#: pascalscada_secure_objects_reg.spascalscada_hcl_db_controls
+msgid "PascalSCADA HCL - DB Controls"
+msgstr ""
+
 #: pascalscada_secure_objects_reg.spascalscada_hcl_std_controls
 msgid "PascalSCADA HCL - Std. Controls"
 msgstr ""
