@@ -16,11 +16,12 @@ uses
 
 type
 
-  { TMultiCoreThread }
+  { TpSCADACoreAffinityThread }
 
   TpSCADACoreAffinityThread = class(TThread)
   public
     procedure MoveThreadToTheNextCore;
+    procedure SetAffinity(CPUIndex:cint32);
     class function GetSystemThreadCount: cint32;
   end;
 
@@ -108,6 +109,18 @@ begin
   CPUSet:=1 shl CurCore;
   CurCore+=1;
   if (CurCore>=32) OR (CurCore>=GetSystemThreadCount) then InterLockedExchange(CurrentCore, 0);
+  {$IFDEF UNIX}
+  pthread_setaffinity_np(ThreadID,SizeOf(cint32),@CPUSet);
+  {$ELSE}
+  {$ERROR Implementation missing for Windows!}
+  {$ENDIF}
+end;
+
+procedure TpSCADACoreAffinityThread.SetAffinity(CPUIndex: cint32);
+var
+  CPUSet:cint32;
+begin
+  CPUSet:=1 shl CPUIndex;
   {$IFDEF UNIX}
   pthread_setaffinity_np(ThreadID,SizeOf(cint32),@CPUSet);
   {$ELSE}
