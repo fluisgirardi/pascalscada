@@ -71,7 +71,7 @@ end;
 begin
   Result:=1;
 end;
-{$ELSEIF defined(UNTESTEDsolaris)}
+{$ELSEIF defined(solaris)}
   begin
     t = sysconf(_SC_NPROC_ONLN);
   end;
@@ -129,15 +129,9 @@ begin
 end;
 
 var
-  //AllCoresSet , aux, i :cint32;
   AllCoresSet:cuint32 = $ffffffff;
 initialization
-  //AllCoresSet:=0;
-  //for i:=0 to TpSCADACoreAffinityThread.GetSystemThreadCount-1 do begin
-  //  aux:=1 shl i;
-  //  AllCoresSet:=allCoresSet or aux;
-  //end;
-
+  //sets the process affinity with all processor threads.
   {$IFDEF UNIX}
   sched_setaffinity(GetProcessID,SizeOf(AllCoresSet), @AllCoresSet);
   {$ELSE}
