@@ -8,7 +8,9 @@ unit pascalscada_communication_ports;
 interface
 
 uses
-  pascalscada.communication.ports.basecommport, LazarusPackageIntf;
+  pascalscada.communication.ports.basecommport, 
+  pascalscada.communication.ports.serial.baseserialport, 
+  pascalscada.communication.ports.serial.unixserialport, LazarusPackageIntf;
 
 implementation
 

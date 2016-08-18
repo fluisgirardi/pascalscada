@@ -8,14 +8,16 @@ uses
   Classes, SysUtils, fgl, syncobjs;
 
 type
-  TNotificationList=specialize TFPGList<TThreadMethod>;
+  TpSCADANotificationList=specialize TFPGList<TThreadMethod>;
 
-  {: TCustomCommPort }
+  TpSCADAIOResult = -$7FFFFFFF..0;
 
-  { TCustomCommPort }
+  { TpSCADACustomCommPort }
 
-  TCustomCommPort = class(TComponent)
+  TpSCADACustomCommPort = class(TComponent)
   private
+    FActive,
+    FActiveInLoading: Boolean;
     FPortBeingDestroyed:Integer;
 
     FOnPortClose: TNotifyEvent;
@@ -33,7 +35,7 @@ type
     FPortCloseErrorHandlerList,
     FPortDisconnectedHandlerList,
     FWriteErrorHandlerList,
-    FReadErrorHandlerList:TNotificationList;
+    FReadErrorHandlerList:TpSCADANotificationList;
 
     //handler list mutexes
     FPortOpenHandlerListCS,
@@ -42,18 +44,25 @@ type
     FPortCloseErrorHandlerListCS,
     FPortDisconnectedHandlerListCS,
     FWriteErrorHandlerListCS,
-    FReadErrorHandlerListCS:TCriticalSection;
+    FReadErrorHandlerListCS,
+
+    FOperationCS,
+    FLockCS:TCriticalSection;
+
+    FLastOSErrorNumber:LongInt;
+    FLastOSErrorMessage:AnsiString;
+
+    procedure SetActive(AValue: Boolean);
+    procedure InternalOpen;
+    procedure InternalClose;
 
   protected
-    procedure AddPortOpenHandler(handler:TThreadMethod);
-    procedure AddPortOpenErrorHandler(handler:TThreadMethod);
-    procedure AddPortCloseHandler(handler:TThreadMethod);
-    procedure AddPortCloseErrorHandler(handler:TThreadMethod);
-    procedure AddPortDisconnectedHandler(handler:TThreadMethod);
-    procedure AddReadErrorHandler(handler:TThreadMethod);
-    procedure AddWriteErrorHandler(handler:TThreadMethod);
-    procedure RemoveHandler(handler:TThreadMethod);
-    procedure RemoveHandlersOfObject(AnObject:TObject);
+    FExclusiveDevice:Boolean;
+
+    procedure RefreshLastOSError;
+    function BeingDestroyed: Boolean;
+
+    function  PortSettingsOK:Boolean; virtual;
 
     procedure CallPortOpenHandlers; virtual;
     procedure CallPortOpenErrorHandlers; virtual;
@@ -73,6 +82,18 @@ type
 
     function ReallyActive:Boolean; virtual;
 
+    function  Open:Boolean; virtual; abstract;
+    function  Close:Boolean; virtual; abstract;
+    procedure Begin_IO_Operation;
+    procedure End_IO_Operation;
+    function  Read(buffer:PByte; buffer_size, max_retries:LongInt; var bytes_read:LongInt):LongInt; virtual; abstract;
+    function  Read(var buffer:TBytes; bytes_to_read, max_retries:LongInt; var bytes_read:LongInt):LongInt; virtual;
+    function  Write(buffer:PByte; buffer_size:LongInt):LongInt; virtual; abstract;
+    function  Write(buffer:TBytes):LongInt; overload;
+    procedure Loaded; override;
+
+    property Active:Boolean read FActive write SetActive;
+
     property OnPortOpen:TNotifyEvent read FOnPortOpen write FOnPortOpen;
     property OnPortClose:TNotifyEvent read FOnPortClose write FOnPortClose;
     property OnPortOpenError:TNotifyEvent read FOnPortOpenError write FOnPortOpenError;
@@ -80,16 +101,96 @@ type
     property OnPortDisconnected:TNotifyEvent read  FOnPortDisconnected write FOnPortDisconnected;
     property OnReadError:TNotifyEvent read FOnReadError write FOnReadError;
     property OnWriteError:TNotifyEvent read FOnWriteError write FOnWriteError;
+
+    property LastOSErrorNumber:LongInt read FLastOSErrorNumber;
+    property LastOSErrorMessage:AnsiString read FLastOSErrorMessage;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+
+    procedure Lock;
+    procedure Unlock;
+
+    procedure AddPortOpenHandler(handler:TThreadMethod);
+    procedure AddPortOpenErrorHandler(handler:TThreadMethod);
+    procedure AddPortCloseHandler(handler:TThreadMethod);
+    procedure AddPortCloseErrorHandler(handler:TThreadMethod);
+    procedure AddPortDisconnectedHandler(handler:TThreadMethod);
+    procedure AddReadErrorHandler(handler:TThreadMethod);
+    procedure AddWriteErrorHandler(handler:TThreadMethod);
+    procedure RemoveHandler(handler:TThreadMethod);
+    procedure RemoveHandlersOfObject(AnObject:TObject);
+
   end;
+
+const
+   iorOK        = TpSCADAIOResult( 0);
+   iorTimeOut   = TpSCADAIOResult(-1);
+   iorNotReady  = TpSCADAIOResult(-2);
+   iorNone      = TpSCADAIOResult(-3);
+   iorPortError = TpSCADAIOResult(-4);
 
 implementation
 
+uses math;
+
 { TCustomCommPort }
 
-procedure TCustomCommPort.AddPortOpenHandler(handler: TThreadMethod);
+procedure TpSCADACustomCommPort.SetActive(AValue: Boolean);
+begin
+  if ComponentState * [csReading,csLoading]<>[] then begin
+    FActiveInLoading:=AValue;
+    exit;
+  end;
+
+  //evita a abertura/fechamento da porta em edição, quando um dispositivo
+  //e de uso exclusivo (porta serial).
+  //
+  //avoid the open/close of communication port in design-time if the communication
+  //port is exclusive (like a serial port)
+  if FExclusiveDevice and (csDesigning in ComponentState) then begin
+    if AValue then begin
+      if PortSettingsOK then begin
+        FActive := true;
+      end;
+    end else begin
+      FActive := false;
+    end;
+  end else begin
+    if AValue then
+      InternalOpen
+    else
+      InternalClose;
+  end;
+end;
+
+procedure TpSCADACustomCommPort.InternalOpen;
+begin
+  FLockCS.Acquire;
+  FOperationCS.Acquire;
+  try
+    if Open then
+      FActive:=true;
+  finally
+    FOperationCS.Release;
+    FLockCS.Leave;
+  end;
+end;
+
+procedure TpSCADACustomCommPort.InternalClose;
+begin
+  FLockCS.Acquire;
+  FOperationCS.Acquire;
+  try
+    if Close then
+      FActive:=False;
+  finally
+    FOperationCS.Leave;
+    FLockCS.Leave;
+  end;
+end;
+
+procedure TpSCADACustomCommPort.AddPortOpenHandler(handler: TThreadMethod);
 var
   res: cardinal;
 begin
@@ -105,7 +206,7 @@ begin
   end;
 end;
 
-procedure TCustomCommPort.AddPortOpenErrorHandler(handler: TThreadMethod);
+procedure TpSCADACustomCommPort.AddPortOpenErrorHandler(handler: TThreadMethod);
 var
   res: cardinal;
 begin
@@ -121,7 +222,7 @@ begin
   end;
 end;
 
-procedure TCustomCommPort.AddPortCloseHandler(handler: TThreadMethod);
+procedure TpSCADACustomCommPort.AddPortCloseHandler(handler: TThreadMethod);
 var
   res: cardinal;
 begin
@@ -137,7 +238,7 @@ begin
   end;
 end;
 
-procedure TCustomCommPort.AddPortCloseErrorHandler(handler: TThreadMethod);
+procedure TpSCADACustomCommPort.AddPortCloseErrorHandler(handler: TThreadMethod);
 var
   res: cardinal;
 begin
@@ -153,7 +254,7 @@ begin
   end;
 end;
 
-procedure TCustomCommPort.AddPortDisconnectedHandler(handler: TThreadMethod);
+procedure TpSCADACustomCommPort.AddPortDisconnectedHandler(handler: TThreadMethod);
 var
   res: cardinal;
 begin
@@ -169,7 +270,7 @@ begin
   end;
 end;
 
-procedure TCustomCommPort.AddReadErrorHandler(handler: TThreadMethod);
+procedure TpSCADACustomCommPort.AddReadErrorHandler(handler: TThreadMethod);
 var
   res: cardinal;
 begin
@@ -185,7 +286,7 @@ begin
   end;
 end;
 
-procedure TCustomCommPort.AddWriteErrorHandler(handler: TThreadMethod);
+procedure TpSCADACustomCommPort.AddWriteErrorHandler(handler: TThreadMethod);
 var
   res: cardinal;
 begin
@@ -201,7 +302,7 @@ begin
   end;
 end;
 
-procedure TCustomCommPort.RemoveHandler(handler: TThreadMethod);
+procedure TpSCADACustomCommPort.RemoveHandler(handler: TThreadMethod);
 var
   res: cardinal;
 begin
@@ -258,7 +359,7 @@ begin
   end;
 end;
 
-procedure TCustomCommPort.RemoveHandlersOfObject(AnObject: TObject);
+procedure TpSCADACustomCommPort.RemoveHandlersOfObject(AnObject: TObject);
 var
   i: Integer;
   res: cardinal;
@@ -330,7 +431,7 @@ begin
   end;
 end;
 
-procedure TCustomCommPort.CallPortOpenHandlers;
+procedure TpSCADACustomCommPort.CallPortOpenHandlers;
 var
   i: Integer;
   res: cardinal;
@@ -351,7 +452,7 @@ begin
   end;
 end;
 
-procedure TCustomCommPort.CallPortOpenErrorHandlers;
+procedure TpSCADACustomCommPort.CallPortOpenErrorHandlers;
 var
   i: Integer;
   res: cardinal;
@@ -372,7 +473,7 @@ begin
   end;
 end;
 
-procedure TCustomCommPort.CallPortCloseHandlers;
+procedure TpSCADACustomCommPort.CallPortCloseHandlers;
 var
   i: Integer;
   res: cardinal;
@@ -393,7 +494,7 @@ begin
   end;
 end;
 
-procedure TCustomCommPort.CallPortCloseErrorHandlers;
+procedure TpSCADACustomCommPort.CallPortCloseErrorHandlers;
 var
   i: Integer;
   res: cardinal;
@@ -414,10 +515,10 @@ begin
   end;
 end;
 
-procedure TCustomCommPort.CallPortDisconnectedHandlers;
+procedure TpSCADACustomCommPort.CallPortDisconnectedHandlers;
 var
   i: Integer;
-  res: cardinal;
+  res: cardinal = 0;
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   if res=1 then exit;
@@ -435,10 +536,10 @@ begin
   end;
 end;
 
-procedure TCustomCommPort.CallReadErrorHandlers;
+procedure TpSCADACustomCommPort.CallReadErrorHandlers;
 var
   i: Integer;
-  res: cardinal;
+  res: cardinal = 0;
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   if res=1 then exit;
@@ -456,10 +557,10 @@ begin
   end;
 end;
 
-procedure TCustomCommPort.CallWriteErrorHandlers;
+procedure TpSCADACustomCommPort.CallWriteErrorHandlers;
 var
   i: Integer;
-  res: cardinal;
+  res: cardinal = 0;
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   if res=1 then exit;
@@ -477,65 +578,105 @@ begin
   end;
 end;
 
-procedure TCustomCommPort.DoPortOpen;
+procedure TpSCADACustomCommPort.DoPortOpen;
 begin
   if Assigned(FOnPortOpen) then
     FOnPortOpen(Self);
 end;
 
-procedure TCustomCommPort.DoPortOpenError;
+procedure TpSCADACustomCommPort.DoPortOpenError;
 begin
   if Assigned(FOnPortOpenError) then
     FOnPortOpenError(Self);
 end;
 
-procedure TCustomCommPort.DoPortClose;
+procedure TpSCADACustomCommPort.DoPortClose;
 begin
   if Assigned(FOnPortClose) then
     FOnPortClose(Self);
 end;
 
-procedure TCustomCommPort.DoPortCloseError;
+procedure TpSCADACustomCommPort.DoPortCloseError;
 begin
   if Assigned(FOnPortCloseError) then
     FOnPortCloseError(Self);
 end;
 
-procedure TCustomCommPort.DoPortDisconnected;
+procedure TpSCADACustomCommPort.DoPortDisconnected;
 begin
   if Assigned(FOnPortDisconnected) then
     FOnPortDisconnected(Self);
 end;
 
-procedure TCustomCommPort.DoReadError;
+procedure TpSCADACustomCommPort.DoReadError;
 begin
   if Assigned(FOnReadError) then
     FOnReadError(Self);
 end;
 
-procedure TCustomCommPort.DoWriteError;
+procedure TpSCADACustomCommPort.DoWriteError;
 begin
   if Assigned(FOnWriteError) then
     FOnWriteError(Self);
 end;
 
-function TCustomCommPort.ReallyActive: Boolean;
+function TpSCADACustomCommPort.ReallyActive: Boolean;
 begin
   Result:=false;
 end;
 
-constructor TCustomCommPort.Create(AOwner: TComponent);
+procedure TpSCADACustomCommPort.Begin_IO_Operation;
+var
+  res: cardinal;
+begin
+  InterLockedExchange(res,FPortBeingDestroyed);
+  if res=1 then exit;
+  FOperationCS.Enter;
+end;
+
+procedure TpSCADACustomCommPort.End_IO_Operation;
+var
+  res: cardinal;
+begin
+  InterLockedExchange(res,FPortBeingDestroyed);
+  if res=1 then exit;
+
+  FOperationCS.Leave;
+end;
+
+function TpSCADACustomCommPort.Read(var buffer: TBytes; bytes_to_read,
+  max_retries: LongInt; var bytes_read: LongInt): LongInt;
+begin
+  Result:=Read(@buffer[0], min(Length(buffer), bytes_to_read), max_retries, bytes_read);
+end;
+
+function TpSCADACustomCommPort.Write(buffer: TBytes): LongInt;
+begin
+  Result:=write(@buffer[0],Length(buffer));
+end;
+
+procedure TpSCADACustomCommPort.Loaded;
+begin
+  inherited Loaded;
+  SetActive(FActiveInLoading);
+end;
+
+constructor TpSCADACustomCommPort.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FPortBeingDestroyed:=0;
+  FExclusiveDevice:=true;
 
-  FPortOpenHandlerList         := TNotificationList.Create;
-  FPortOpenErrorHandlerList    := TNotificationList.Create;
-  FPortCloseHandlerList        := TNotificationList.Create;
-  FPortCloseErrorHandlerList   := TNotificationList.Create;
-  FPortDisconnectedHandlerList := TNotificationList.Create;
-  FWriteErrorHandlerList       := TNotificationList.Create;
-  FReadErrorHandlerList        := TNotificationList.Create;
+  FOperationCS                   := TCriticalSection.Create;
+  FLockCS                        := TCriticalSection.Create;
+
+  FPortOpenHandlerList           := TpSCADANotificationList.Create;
+  FPortOpenErrorHandlerList      := TpSCADANotificationList.Create;
+  FPortCloseHandlerList          := TpSCADANotificationList.Create;
+  FPortCloseErrorHandlerList     := TpSCADANotificationList.Create;
+  FPortDisconnectedHandlerList   := TpSCADANotificationList.Create;
+  FWriteErrorHandlerList         := TpSCADANotificationList.Create;
+  FReadErrorHandlerList          := TpSCADANotificationList.Create;
 
   FPortOpenHandlerListCS         := TCriticalSection.Create;
   FPortOpenErrorHandlerListCS    := TCriticalSection.Create;
@@ -546,8 +687,10 @@ begin
   FReadErrorHandlerListCS        := TCriticalSection.Create;
 end;
 
-destructor TCustomCommPort.Destroy;
+destructor TpSCADACustomCommPort.Destroy;
 begin
+  InternalClose;
+
   InterLockedExchange(FPortBeingDestroyed, 1);
 
   TThread.RemoveQueuedEvents(@DoPortOpen);
@@ -575,6 +718,59 @@ begin
   FreeAndNil(FReadErrorHandlerList);
 
   inherited Destroy;
+end;
+
+procedure TpSCADACustomCommPort.Lock;
+begin
+  if Assigned(FLockCS) then
+    FLockCS.Acquire
+  else
+    raise EAccessViolation.Create('FLockCS = nil');
+end;
+
+procedure TpSCADACustomCommPort.Unlock;
+begin
+  if Assigned(FLockCS) then
+    FLockCS.Release
+  else
+    raise EAccessViolation.Create('FLockCS = nil')
+end;
+
+procedure TpSCADACustomCommPort.RefreshLastOSError;
+{$IFNDEF FPC}
+{$IF defined(WIN32) or defined(WIN64)}
+var
+  buffer:PAnsiChar;
+{$IFEND}
+{$ENDIF}
+begin
+{$IFDEF FPC}
+  FLastOSErrorNumber:=GetLastOSError;
+  FLastOSErrorMessage:=SysErrorMessage(FLastOSErrorNumber);
+{$ELSE}
+{$IF defined(WIN32) or defined(WIN64)}
+  FLastOSErrorNumber:=GetLastError;
+  GetMem(buffer, 512);
+  if FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM,nil,FLastOSErrorNumber,LANG_NEUTRAL,Buffer,512,nil)<>0 then begin
+    FLastOSErrorMessage:=Buffer;
+    FreeMem(buffer);
+  end else
+    FLastOSErrorMessage:=SFaultGettingLastOSError;
+{$IFEND}
+{$ENDIF}
+end;
+
+function TpSCADACustomCommPort.PortSettingsOK: Boolean;
+begin
+  Result:=false;
+end;
+
+function TpSCADACustomCommPort.BeingDestroyed: Boolean;
+var
+  res: cardinal = 0;
+begin
+  InterLockedExchange(res,FPortBeingDestroyed);
+  Result:=res=1;
 end;
 
 end.
