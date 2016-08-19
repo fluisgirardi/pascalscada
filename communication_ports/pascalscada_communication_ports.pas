@@ -13,8 +13,8 @@ uses
   pascalscada.communication.ports.serial.serialport, 
   pascalscada.communication.ports.sockets.basesocket, 
   pascalscada.communication.ports.sockets.tcp, 
-  pascalscada_communication_ports_reg, 
-  pascalscada.communication.ports.sockets.udp, LazarusPackageIntf;
+  pascalscada.communication.ports.sockets.udp, 
+  pascalscada_communication_ports_reg, LazarusPackageIntf;
 
 implementation
 

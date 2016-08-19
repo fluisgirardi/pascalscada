@@ -15,7 +15,7 @@
       <OutDir Value="languages"/>
       <EnableI18NForLFM Value="True"/>
     </i18n>
-    <RequiredPkgs Count="6">
+    <RequiredPkgs Count="7">
       <Item1>
         <PackageName Value="pascalscada_graphical_security_manager"/>
         <DefaultFilename Value="graphical_security_manager/pascalscada_graphical_security_manager.lpk" Prefer="True"/>
@@ -40,6 +40,10 @@
         <PackageName Value="pascalscada_threads"/>
         <DefaultFilename Value="threads/pascalscada_threads.lpk" Prefer="True"/>
       </Item6>
+      <Item7>
+        <PackageName Value="pascalscada_communication_ports"/>
+        <DefaultFilename Value="communication_ports/pascalscada_communication_ports.lpk" Prefer="True"/>
+      </Item7>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

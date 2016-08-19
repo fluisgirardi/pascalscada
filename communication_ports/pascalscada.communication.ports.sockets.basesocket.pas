@@ -95,8 +95,11 @@ type
     procedure CallPortOpenErrorHandlers; override;
     procedure CallReadErrorHandlers; override;
     procedure CallWriteErrorHandlers; override;
-
+    function  Close: Boolean; override;
     procedure Loaded; override;
+    function  PortSettingsOK: Boolean; override;
+    function  Open: Boolean; override;
+
     //: Enables the auto reconnection if a connection is lost or failed.
     property EnableAutoReconnect:Boolean read GetEnableAutoReconect write setEnableAutoReconnect default true;
     //: Tells if the communication port is exclusive (if true, avoid it to open in design time).
@@ -116,7 +119,6 @@ type
     procedure ConnectSocket(var Ok: Boolean); virtual; abstract;
     function  GetSocketType:TpSCADASocketType; virtual; abstract;
     function  InvalidSocket:Tsocket; virtual; abstract;
-    function ReallyActive: Boolean; override;
     procedure ReconnectSocket(var Ok: Boolean);  virtual; abstract;
 
   protected
@@ -131,6 +133,7 @@ type
     destructor Destroy; override;
     function Read(buffer: PByte; buffer_size, max_retries: LongInt;
       var bytes_read: LongInt): LongInt; override; overload;
+    function ReallyActive: Boolean; override;
     function Write(buffer: PByte; buffer_size, max_retries: LongInt;
       var bytes_written: LongInt): LongInt; override; overload;
   end;
@@ -150,7 +153,7 @@ uses dateutils, syncobjs, pascalscada.utilities.strings;
 
 function TpSCADAConnectSocketThread.GetEnableAutoReconnect: Boolean;
 var
-  res: LongInt;
+  res: LongInt = 0;
 begin
   InterLockedExchange(res,FAutoReconnect);
   Result:=res=1;
@@ -439,10 +442,29 @@ begin
   TThread.Queue(nil, @DoWriteError);
 end;
 
+function TpSCADACustomSocket.Close: Boolean;
+begin
+  if ([csDesigning]*ComponentState=[]) or FExclusiveDevice then
+    FConnectThread.Disconnect;
+  Result:=true;
+end;
+
 procedure TpSCADACustomSocket.Loaded;
 begin
   FExclusiveDevice:=FExclusiveReaded;
   inherited Loaded;
+end;
+
+function TpSCADACustomSocket.PortSettingsOK: Boolean;
+begin
+  Result:=IsIPv4Address(FIPv4Address);
+end;
+
+function TpSCADACustomSocket.Open: Boolean;
+begin
+  if ([csDesigning]*ComponentState=[]) or FExclusiveDevice then
+    FConnectThread.Connect;
+  Result:=true;
 end;
 
 function TpSCADACustomSocket.ReallyActive: Boolean;
@@ -482,8 +504,7 @@ function TpSCADACustomSocket.Read(buffer: PByte; buffer_size,
 var
   lidos:LongInt;
   tentativas:Cardinal;
-  incretries:Boolean;
-  aResult: TpSCADAIOResult;
+  incretries:Boolean = false;
 begin
   Result:=iorNone;
 
@@ -500,8 +521,7 @@ begin
     end;
 
     if lidos<=0 then begin
-      if not CheckConnection(aResult, incretries) then begin
-        Result:=aResult;
+      if not CheckConnection(Result, incretries) then begin
         break;
       end;
       if incRetries then
@@ -522,7 +542,7 @@ function TpSCADACustomSocket.Write(buffer: PByte; buffer_size,
 var
   escritos:LongInt;
   tentativas:Cardinal;
-  incretries:Boolean;
+  incretries:Boolean = false;
 begin
   Result:=iorNone;
 

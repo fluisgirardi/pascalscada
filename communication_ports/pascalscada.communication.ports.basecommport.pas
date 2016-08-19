@@ -188,7 +188,7 @@ end;
 
 procedure TpSCADACustomCommPort.AddPortOpenHandler(handler: TThreadMethod);
 var
-  res: cardinal;
+  res: cardinal = 0;
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   if res=1 then exit;
@@ -204,7 +204,7 @@ end;
 
 procedure TpSCADACustomCommPort.AddPortOpenErrorHandler(handler: TThreadMethod);
 var
-  res: cardinal;
+  res: cardinal = 0;
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   if res=1 then exit;
@@ -220,7 +220,7 @@ end;
 
 procedure TpSCADACustomCommPort.AddPortCloseHandler(handler: TThreadMethod);
 var
-  res: cardinal;
+  res: cardinal = 0;
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   if res=1 then exit;
@@ -236,7 +236,7 @@ end;
 
 procedure TpSCADACustomCommPort.AddPortCloseErrorHandler(handler: TThreadMethod);
 var
-  res: cardinal;
+  res: cardinal = 0;
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   if res=1 then exit;
@@ -252,7 +252,7 @@ end;
 
 procedure TpSCADACustomCommPort.AddPortDisconnectedHandler(handler: TThreadMethod);
 var
-  res: cardinal;
+  res: cardinal = 0;
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   if res=1 then exit;
@@ -268,7 +268,7 @@ end;
 
 procedure TpSCADACustomCommPort.AddReadErrorHandler(handler: TThreadMethod);
 var
-  res: cardinal;
+  res: cardinal = 0;
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   if res=1 then exit;
@@ -284,7 +284,7 @@ end;
 
 procedure TpSCADACustomCommPort.AddWriteErrorHandler(handler: TThreadMethod);
 var
-  res: cardinal;
+  res: cardinal = 0;
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   if res=1 then exit;
@@ -300,7 +300,7 @@ end;
 
 procedure TpSCADACustomCommPort.RemoveHandler(handler: TThreadMethod);
 var
-  res: cardinal;
+  res: cardinal = 0;
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   if res=1 then exit;
@@ -358,7 +358,7 @@ end;
 procedure TpSCADACustomCommPort.RemoveHandlersOfObject(AnObject: TObject);
 var
   i: Integer;
-  res: cardinal;
+  res: cardinal = 0;
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   if res=1 then exit;
@@ -430,7 +430,7 @@ end;
 procedure TpSCADACustomCommPort.CallPortOpenHandlers;
 var
   i: Integer;
-  res: cardinal;
+  res: cardinal = 0;
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   if res=1 then exit;
@@ -451,7 +451,7 @@ end;
 procedure TpSCADACustomCommPort.CallPortOpenErrorHandlers;
 var
   i: Integer;
-  res: cardinal;
+  res: cardinal = 0;
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   if res=1 then exit;
@@ -472,7 +472,7 @@ end;
 procedure TpSCADACustomCommPort.CallPortCloseHandlers;
 var
   i: Integer;
-  res: cardinal;
+  res: cardinal = 0;
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   if res=1 then exit;
@@ -493,7 +493,7 @@ end;
 procedure TpSCADACustomCommPort.CallPortCloseErrorHandlers;
 var
   i: Integer;
-  res: cardinal;
+  res: cardinal = 0;
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   if res=1 then exit;
@@ -623,7 +623,7 @@ end;
 
 procedure TpSCADACustomCommPort.Begin_IO_Operation;
 var
-  res: cardinal;
+  res: cardinal = 0;
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   if res=1 then exit;
@@ -632,7 +632,7 @@ end;
 
 procedure TpSCADACustomCommPort.End_IO_Operation;
 var
-  res: cardinal;
+  res: cardinal = 0;
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   if res=1 then exit;

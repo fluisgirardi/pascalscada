@@ -44,7 +44,7 @@ procedure TpSCADAUnixSocket.CloseMySocket(var Closed: Boolean);
 var
   buffer:TBytes;
   lidos:LongInt;
-  ASocket: Tsocket;
+  ASocket: Tsocket = -1;
 begin
   InterLockedExchange(ASocket, FSocket);
   InterLockedExchange(FSocket, InvalidSocket);
@@ -184,7 +184,7 @@ function TpSCADAUnixSocket.CheckConnection(var CommResult: LongInt;
 var
   retval, nbytes:LongInt;
   sel:tpollfd;
-  closed: Boolean;
+  closed: Boolean = false;
 begin
   Result:=true;
 
@@ -276,7 +276,7 @@ begin
       sel.events:=POLLIN or POLLPRI or POLLOUT;
       sel.revents:=0;
 
-      mode := FpPoll(@sel,1,timeout);
+      mode := FpPoll(@sel,1,ConnectTimeout);
 
       if (mode > 0) then begin
         if ((sel.revents and POLLERR)=POLLERR) or ((sel.revents and POLLHUP)=POLLHUP) or ((sel.revents and POLLNVAL)=POLLNVAL) then
@@ -336,7 +336,7 @@ begin
       sel.fd:=FSocket;
       sel.events:=POLLIN;
 
-      mode := FpPoll(@sel, 1, timeout);
+      mode := FpPoll(@sel, 1, recv_timeout);
 
       if (mode > 0) then begin
         if ((sel.revents and POLLERR)=POLLERR) or ((sel.revents and POLLHUP)=POLLHUP) or ((sel.revents and POLLNVAL)=POLLNVAL) then
@@ -367,7 +367,7 @@ begin
       sel.fd:=FSocket;
       sel.events:=POLLOUT;
 
-      mode := FpPoll(@sel, 1, timeout);
+      mode := FpPoll(@sel, 1, send_timeout);
 
       if (mode > 0) then begin
         if ((sel.revents and POLLERR)=POLLERR) or ((sel.revents and POLLHUP)=POLLHUP) or ((sel.revents and POLLNVAL)=POLLNVAL) then

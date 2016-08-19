@@ -34,6 +34,10 @@ type
     property ExclusiveDevice;
     //: IPv4 address of the server to connect.
     property IPv4Address;
+
+    property LastOSErrorMessage;
+    property LastOSErrorNumber;
+
     //: Server port to connect. To use Modbus, set this to 502 and to use Siemens ISOTCP set it to 102.
     property Port;
     //: Time to retry a lost connection in milliseconds.

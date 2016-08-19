@@ -132,7 +132,7 @@ type
     procedure SetTimeout(AValue: LongWord);
   protected
     procedure ClearIOBuffers; virtual;
-    function  SerialPortExists(AValue:AnsiString):Boolean; virtual;
+    function  SerialPortExists(AValue:AnsiString):Boolean; virtual; abstract;
     procedure CallPortOpenHandlers; override;
     procedure CallPortOpenErrorHandlers; override;
     procedure CallPortCloseHandlers; override;
@@ -165,6 +165,7 @@ end;
 
 function TpSCADACustomSerialPort.GetTimeout: LongWord;
 begin
+  Result:=0;
   InterLockedExchange(Result,FTimeout);
 end;
 
@@ -199,7 +200,7 @@ end;
 
 procedure TpSCADACustomSerialPort.SetTimeout(AValue: LongWord);
 var
-  res: LongWord;
+  res: LongWord = 0;
 begin
   InterLockedExchange(res, FTimeout);
   if res=AValue then exit;
@@ -211,11 +212,6 @@ end;
 procedure TpSCADACustomSerialPort.ClearIOBuffers;
 begin
 
-end;
-
-function TpSCADACustomSerialPort.SerialPortExists(AValue: AnsiString): Boolean;
-begin
-  Result:=false;
 end;
 
 procedure TpSCADACustomSerialPort.CallPortOpenHandlers;

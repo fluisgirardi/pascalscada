@@ -33,13 +33,13 @@
         <UnitName Value="pascalscada.communication.ports.sockets.tcp"/>
       </Item5>
       <Item6>
+        <Filename Value="pascalscada.communication.ports.sockets.udp.pas"/>
+        <UnitName Value="pascalscada.communication.ports.sockets.udp"/>
+      </Item6>
+      <Item7>
         <Filename Value="pascalscada_communication_ports_reg.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="pascalscada_communication_ports_reg"/>
-      </Item6>
-      <Item7>
-        <Filename Value="pascalscada.communication.ports.sockets.udp.pas"/>
-        <UnitName Value="pascalscada.communication.ports.sockets.udp"/>
       </Item7>
     </Files>
     <i18n>
