@@ -1,0 +1,7 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: pascalscada.communication.ports.serial.baseserialport.spascalscada_cannotchangesettingswhileactive
+msgid "Cannot change settings while active!"
+msgstr ""
+

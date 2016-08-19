@@ -1,0 +1,7 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: pascalscada_communication_ports_reg.spascalscada_communicationports
+msgid "PascalSCADA Ports"
+msgstr ""
+
