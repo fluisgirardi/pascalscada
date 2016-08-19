@@ -131,7 +131,6 @@ type
     procedure SetStopBits(AValue: TpSCADASerialStopBits);
     procedure SetTimeout(AValue: LongWord);
   protected
-    procedure DoExceptionIfActive;
     procedure ClearIOBuffers; virtual;
     function  SerialPortExists(AValue:AnsiString):Boolean; virtual;
     procedure CallPortOpenHandlers; override;
@@ -152,9 +151,6 @@ type
   public
     constructor Create(AOwner: TComponent); override;
   end;
-
-resourcestring
-  SPascalSCADA_CannotChangeSettingsWhileActive = 'Cannot change settings while active!';
 
 implementation
 
@@ -210,11 +206,7 @@ begin
   InterLockedExchange(FTimeout,AValue);
 end;
 
-procedure TpSCADACustomSerialPort.DoExceptionIfActive;
-begin
-  if ReallyActive then
-    exception.Create(SPascalSCADA_CannotChangeSettingsWhileActive);
-end;
+
 
 procedure TpSCADACustomSerialPort.ClearIOBuffers;
 begin

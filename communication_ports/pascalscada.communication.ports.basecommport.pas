@@ -59,53 +59,47 @@ type
   protected
     FExclusiveDevice:Boolean;
 
-    procedure RefreshLastOSError;
-    function BeingDestroyed: Boolean;
-
-    function  PortSettingsOK:Boolean; virtual;
-
-    procedure CallPortOpenHandlers; virtual;
-    procedure CallPortOpenErrorHandlers; virtual;
+    function  BeingDestroyed: Boolean;
     procedure CallPortCloseHandlers; virtual;
     procedure CallPortCloseErrorHandlers; virtual;
     procedure CallPortDisconnectedHandlers; virtual;
+    procedure CallPortOpenHandlers; virtual;
+    procedure CallPortOpenErrorHandlers; virtual;
     procedure CallReadErrorHandlers; virtual;
     procedure CallWriteErrorHandlers; virtual;
-
-    procedure DoPortOpen; virtual;
-    procedure DoPortOpenError; virtual;
+    function  Close:Boolean; virtual; abstract;
+    procedure DoExceptionIfActive; virtual;
     procedure DoPortClose; virtual;
     procedure DoPortCloseError; virtual;
     procedure DoPortDisconnected; virtual;
+    procedure DoPortOpen; virtual;
+    procedure DoPortOpenError; virtual;
     procedure DoReadError; virtual;
     procedure DoWriteError; virtual;
-
-    function  Open:Boolean; virtual; abstract;
-    function  Close:Boolean; virtual; abstract;
-
     procedure Loaded; override;
+    function  Open:Boolean; virtual; abstract;
+    function  PortSettingsOK:Boolean; virtual;
+    procedure RefreshLastOSError;
 
-    property Active:Boolean read FActive write SetActive;
-
-    property OnPortOpen:TNotifyEvent read FOnPortOpen write FOnPortOpen;
-    property OnPortClose:TNotifyEvent read FOnPortClose write FOnPortClose;
-    property OnPortOpenError:TNotifyEvent read FOnPortOpenError write FOnPortOpenError;
-    property OnPortCloseError:TNotifyEvent read FOnPortCloseError write FOnPortCloseError;
-    property OnPortDisconnected:TNotifyEvent read  FOnPortDisconnected write FOnPortDisconnected;
-    property OnReadError:TNotifyEvent read FOnReadError write FOnReadError;
-    property OnWriteError:TNotifyEvent read FOnWriteError write FOnWriteError;
-
-    property LastOSErrorNumber:LongInt read FLastOSErrorNumber;
-    property LastOSErrorMessage:AnsiString read FLastOSErrorMessage;
+    property  Active:Boolean read FActive write SetActive;
+    property  LastOSErrorNumber:LongInt read FLastOSErrorNumber;
+    property  LastOSErrorMessage:AnsiString read FLastOSErrorMessage;
+    property  OnPortClose:TNotifyEvent read FOnPortClose write FOnPortClose;
+    property  OnPortCloseError:TNotifyEvent read FOnPortCloseError write FOnPortCloseError;
+    property  OnPortDisconnected:TNotifyEvent read  FOnPortDisconnected write FOnPortDisconnected;
+    property  OnPortOpen:TNotifyEvent read FOnPortOpen write FOnPortOpen;
+    property  OnPortOpenError:TNotifyEvent read FOnPortOpenError write FOnPortOpenError;
+    property  OnReadError:TNotifyEvent read FOnReadError write FOnReadError;
+    property  OnWriteError:TNotifyEvent read FOnWriteError write FOnWriteError;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
+    procedure AddPortCloseErrorHandler(handler:TThreadMethod);
+    procedure AddPortCloseHandler(handler:TThreadMethod);
+    procedure AddPortDisconnectedHandler(handler:TThreadMethod);
     procedure AddPortOpenHandler(handler:TThreadMethod);
     procedure AddPortOpenErrorHandler(handler:TThreadMethod);
-    procedure AddPortCloseHandler(handler:TThreadMethod);
-    procedure AddPortCloseErrorHandler(handler:TThreadMethod);
-    procedure AddPortDisconnectedHandler(handler:TThreadMethod);
     procedure AddReadErrorHandler(handler:TThreadMethod);
     procedure AddWriteErrorHandler(handler:TThreadMethod);
 
@@ -115,14 +109,11 @@ type
     function  Read(buffer:PByte; buffer_size, max_retries:LongInt; var bytes_read:LongInt):LongInt; virtual; abstract; overload;
     function  Read(var buffer:TBytes; bytes_to_read, max_retries:LongInt; var bytes_read:LongInt):LongInt; virtual;
     function  ReallyActive:Boolean; virtual;
-    function  Write(buffer:PByte; buffer_size, max_retries:LongInt; var bytes_written:LongInt):LongInt; virtual; abstract; overload;
-    function  Write(buffer:TBytes; max_retries:LongInt; var bytes_written:LongInt):LongInt; virtual;
-    procedure Unlock;
-
-
     procedure RemoveHandler(handler:TThreadMethod);
     procedure RemoveHandlersOfObject(AnObject:TObject);
-
+    procedure Unlock;
+    function  Write(buffer:PByte; buffer_size, max_retries:LongInt; var bytes_written:LongInt):LongInt; virtual; abstract; overload;
+    function  Write(buffer:TBytes; max_retries:LongInt; var bytes_written:LongInt):LongInt; virtual;
   end;
 
 const
@@ -131,6 +122,9 @@ const
    iorNotReady  = TpSCADAIOResult(-2);
    iorNone      = TpSCADAIOResult(-3);
    iorPortError = TpSCADAIOResult(-4);
+
+resourcestring
+  SPascalSCADA_CannotChangeSettingsWhileActive = 'Cannot change settings while active!';
 
 implementation
 
@@ -774,6 +768,12 @@ var
 begin
   InterLockedExchange(res,FPortBeingDestroyed);
   Result:=res=1;
+end;
+
+procedure TpSCADACustomCommPort.DoExceptionIfActive;
+begin
+  if ReallyActive then
+    exception.Create(SPascalSCADA_CannotChangeSettingsWhileActive);
 end;
 
 end.

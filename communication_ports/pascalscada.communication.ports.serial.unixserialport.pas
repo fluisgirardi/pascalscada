@@ -58,12 +58,7 @@ var
 implementation
 
 uses pascalscada.communication.ports.basecommport, Unix, BaseUnix, termio,
-  dateutils;
-
-function CrossNow:TDateTime;
-begin
-  Result:=Now;
-end;
+     pascalscada.utilities.datetime, dateutils;
 
 { TpSCADALinuxSerialPort }
 

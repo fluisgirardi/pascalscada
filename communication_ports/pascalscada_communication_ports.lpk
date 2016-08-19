@@ -11,7 +11,7 @@
       </SearchPaths>
     </CompilerOptions>
     <Version Major="1"/>
-    <Files Count="4">
+    <Files Count="5">
       <Item1>
         <Filename Value="pascalscada.communication.ports.basecommport.pas"/>
         <UnitName Value="pascalscada.communication.ports.basecommport"/>
@@ -29,16 +29,28 @@
         <HasRegisterProc Value="True"/>
         <UnitName Value="pascalscada_communication_ports_reg"/>
       </Item4>
+      <Item5>
+        <Filename Value="pascalscada.communication.ports.sockets.basesocket.pas"/>
+        <UnitName Value="pascalscada.communication.ports.sockets.basesocket"/>
+      </Item5>
     </Files>
     <i18n>
       <EnableI18N Value="True"/>
       <OutDir Value="../languages"/>
       <EnableI18NForLFM Value="True"/>
     </i18n>
-    <RequiredPkgs Count="1">
+    <RequiredPkgs Count="3">
       <Item1>
         <PackageName Value="FCL"/>
       </Item1>
+      <Item2>
+        <PackageName Value="pascalscada_utilities"/>
+        <DefaultFilename Value="../utilities/pascalscada_utilities.lpk" Prefer="True"/>
+      </Item2>
+      <Item3>
+        <PackageName Value="pascalscada_threads"/>
+        <DefaultFilename Value="../threads/pascalscada_threads.lpk" Prefer="True"/>
+      </Item3>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

@@ -1,0 +1,11 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: pascalscada.communication.ports.sockets.basesocket.spascalscada_invalidsocketportnumber
+msgid "\"%d\" is not a valid socket port number"
+msgstr ""
+
+#: pascalscada.communication.ports.sockets.basesocket.spascalscada_theaddressisnotavalidipv4address
+msgid "The address \"%s\" is not a valid IPv4 address"
+msgstr ""
+

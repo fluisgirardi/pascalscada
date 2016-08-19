@@ -68,8 +68,6 @@ type
   }
   {$ENDIF}
   TINTRTLEvent = record
-    EventAttr:Pointer;
-    Name:String;
     condvar: pthread_cond_t;
     mutex: pthread_mutex_t;
     isset: boolean;
@@ -98,6 +96,9 @@ type
   @author(Fabio Luis Girardi <fabio@pascalscada.com>)
   }
   {$ENDIF}
+
+  { TpSCADAThreadSyncEvent }
+
   TpSCADAThreadSyncEvent = class(TObject)
    private
       FManualReset: Boolean;
@@ -141,7 +142,7 @@ type
       @seealso(WaitFor)
       }
       {$ENDIF}
-      constructor Create(EventAttributes:PSecurityAttributes; AManualReset, InitialState:Boolean; const Name:string);
+      constructor Create(AManualReset, InitialState:Boolean);
 
       {$IFDEF PORTUGUES}
       //: Destroi o objeto de eventos.
@@ -212,7 +213,7 @@ type
 
 implementation
 
-constructor TpSCADAThreadSyncEvent.Create(EventAttributes : PSecurityAttributes; AManualReset,InitialState : Boolean;const Name : string);
+constructor TpSCADAThreadSyncEvent.Create(AManualReset, InitialState: Boolean);
 begin
   inherited Create;
   FManualReset := AManualReset;
@@ -222,8 +223,6 @@ begin
   pthread_mutex_init(@FEvent.mutex, nil);
   FEvent.isset:= InitialState;
   FEvent.IsDestroing := false;
-  FEvent.Name:=Name;
-  FEvent.EventAttr:=EventAttributes;
   {$ELSE}
   {$IFDEF WinCE}
   FEvent :=  CreateEvent(nil,AManualReset,InitialState,nil);
@@ -233,7 +232,7 @@ begin
   {$IFEND}
 end;
 
-destructor TpSCADAThreadSyncEvent.destroy;
+destructor TpSCADAThreadSyncEvent.Destroy;
 begin
   {$if defined(NeedCrossEvents)}
   pthread_mutex_lock(@FEvent.mutex);
