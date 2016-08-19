@@ -11,8 +11,10 @@ uses
   pascalscada.communication.ports.basecommport, 
   pascalscada.communication.ports.serial.baseserialport, 
   pascalscada.communication.ports.serial.serialport, 
+  pascalscada.communication.ports.sockets.basesocket, 
+  pascalscada.communication.ports.sockets.tcp, 
   pascalscada_communication_ports_reg, 
-  pascalscada.communication.ports.sockets.basesocket, LazarusPackageIntf;
+  pascalscada.communication.ports.sockets.udp, LazarusPackageIntf;
 
 implementation
 

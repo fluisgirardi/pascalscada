@@ -13,7 +13,17 @@ uses
 
 type
   TConnectEvent=procedure(var Ok:Boolean) of object;
-  TSocketType = (stUndefined, stTCP, stUDP);
+  TpSCADASocketType = (stUndefined, stTCP, stUDP);
+
+  {$IF defined(FPC) AND (FPC_FULLVERSION >= 20400)}
+  {$IF defined(WIN32) or defined(WIN64)}
+  TpSCADASockLen = tOS_INT;
+  {$ELSE}
+  TpSCADASockLen = TSockLen;
+  {$IFEND}
+  {$ELSE}
+  TpSCADASockLen = LongInt;
+  {$IFEND}
 
   { TpSCADAConnectSocketThread }
 
@@ -63,9 +73,6 @@ type
   private
     FConnectThread:TpSCADAConnectSocketThread;
     FExclusiveReaded:Boolean;
-    FIPv4Address: AnsiString;
-    FPortNumber: Word;
-    FTimeout: LongWord;
     function  GetEnableAutoReconect: Boolean;
     function  GetReconnectInterval: Integer;
     procedure setEnableAutoReconnect(AValue: Boolean);
@@ -75,8 +82,11 @@ type
     procedure SetReconnectInterval(AValue: Integer);
     procedure SetTimeout(AValue: LongWord);
   protected
+    FIPv4Address: AnsiString;
+    FPortNumber: Word;
+    FTimeout: LongWord;
     FSocket:Tsocket;
-    FSocketType:TSocketType;
+    FSocketType:TpSCADASocketType;
 
     procedure CallPortCloseHandlers; override;
     procedure CallPortCloseErrorHandlers; override;
@@ -104,12 +114,30 @@ type
     procedure CheckSocket(var Ok: Boolean); virtual; abstract;
     procedure CloseMySocket(var Ok: Boolean); virtual; abstract;
     procedure ConnectSocket(var Ok: Boolean); virtual; abstract;
-    function  GetSocketType:TSocketType; virtual; abstract;
+    function  GetSocketType:TpSCADASocketType; virtual; abstract;
     function  InvalidSocket:Tsocket; virtual; abstract;
+    function ReallyActive: Boolean; override;
     procedure ReconnectSocket(var Ok: Boolean);  virtual; abstract;
+
+  protected
+    function CheckConnection(var CommResult:LongInt; var incRetries:Boolean):Boolean; virtual; abstract;
+    function connect_with_timeout(sock:Tsocket; address:PSockAddr; address_len:TpSCADASockLen; ConnectTimeout:LongInt):LongInt; virtual; abstract;
+    function connect_without_timeout(sock:Tsocket; address:PSockAddr; address_len:TpSCADASockLen):LongInt; virtual; abstract;
+    function setblockingmode(fd:TSocket; mode:LongInt):LongInt; virtual; abstract;
+    function socket_recv(buf:PByte; len: Cardinal; flags, recv_timeout: LongInt):LongInt; virtual; abstract;
+    function socket_send(buf:PByte; len: Cardinal; flags, send_timeout: LongInt):LongInt; virtual; abstract;
   public
     constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    function Read(buffer: PByte; buffer_size, max_retries: LongInt;
+      var bytes_read: LongInt): LongInt; override; overload;
+    function Write(buffer: PByte; buffer_size, max_retries: LongInt;
+      var bytes_written: LongInt): LongInt; override; overload;
   end;
+
+const
+  MODE_NONBLOCKING = 1;
+  MODE_BLOCKING = 0;
 
 resourcestring
   SPascalSCADA_TheAddressIsNotAValidIPv4Address = 'The address "%s" is not a valid IPv4 address';
@@ -118,6 +146,7 @@ resourcestring
 implementation
 
 uses dateutils, syncobjs, pascalscada.utilities.strings;
+
 
 function TpSCADAConnectSocketThread.GetEnableAutoReconnect: Boolean;
 var
@@ -416,6 +445,11 @@ begin
   inherited Loaded;
 end;
 
+function TpSCADACustomSocket.ReallyActive: Boolean;
+begin
+  Result:=FSocket<>InvalidSocket;
+end;
+
 constructor TpSCADACustomSocket.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
@@ -433,6 +467,93 @@ begin
   FConnectThread.DisconnectSocket:=@CloseMySocket;
   FConnectThread.CheckSocket:=@CheckSocket;
   FConnectThread.Start;
+end;
+
+destructor TpSCADACustomSocket.Destroy;
+begin
+  inherited Destroy;
+  FConnectThread.Terminate;
+  FConnectThread.WaitEnd;
+  FreeAndNil(FConnectThread);
+end;
+
+function TpSCADACustomSocket.Read(buffer: PByte; buffer_size,
+  max_retries: LongInt; var bytes_read: LongInt): LongInt;
+var
+  lidos:LongInt;
+  tentativas:Cardinal;
+  incretries:Boolean;
+  aResult: TpSCADAIOResult;
+begin
+  Result:=iorNone;
+
+  if BeingDestroyed then exit;
+
+  tentativas := 0;
+  lidos := 0;
+
+  bytes_read := 0;
+  while (bytes_read<buffer_size) and (tentativas<max_retries) do begin
+    try
+      lidos := socket_recv(@buffer[bytes_read], buffer_size-bytes_read, 0, FTimeout);
+    finally
+    end;
+
+    if lidos<=0 then begin
+      if not CheckConnection(aResult, incretries) then begin
+        Result:=aResult;
+        break;
+      end;
+      if incRetries then
+        inc(tentativas);
+    end else
+      bytes_read := bytes_read + lidos;
+  end;
+
+  if buffer_size>bytes_read then begin
+    if Result=iorNone then
+      Result := iorTimeOut;
+  end else
+    Result := bytes_read;
+end;
+
+function TpSCADACustomSocket.Write(buffer: PByte; buffer_size,
+  max_retries: LongInt; var bytes_written: LongInt): LongInt;
+var
+  escritos:LongInt;
+  tentativas:Cardinal;
+  incretries:Boolean;
+begin
+  Result:=iorNone;
+
+  if BeingDestroyed then exit;
+
+  tentativas := 0;
+  escritos := 0;
+
+  bytes_written := 0;
+  while (bytes_written<buffer_size) and (tentativas<max_retries) do begin
+    try
+      escritos := socket_send(@buffer[bytes_written], buffer_size-bytes_written, 0, FTimeout);
+    finally
+    end;
+
+    if escritos<=0 then begin
+      if not CheckConnection(Result, incretries) then
+        break;
+      if incRetries then
+        inc(tentativas);
+    end else
+      bytes_written := bytes_written + escritos;
+  end;
+
+  if buffer_size>bytes_written then begin
+    Result := iorTimeOut;
+  end else
+    Result := iorOK;
+
+  if Result<iorOK then
+    CallWriteErrorHandlers;
 end;
 
 end.
