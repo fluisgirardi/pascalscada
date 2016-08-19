@@ -80,16 +80,9 @@ type
     procedure DoReadError; virtual;
     procedure DoWriteError; virtual;
 
-    function ReallyActive:Boolean; virtual;
-
     function  Open:Boolean; virtual; abstract;
     function  Close:Boolean; virtual; abstract;
-    procedure Begin_IO_Operation;
-    procedure End_IO_Operation;
-    function  Read(buffer:PByte; buffer_size, max_retries:LongInt; var bytes_read:LongInt):LongInt; virtual; abstract;
-    function  Read(var buffer:TBytes; bytes_to_read, max_retries:LongInt; var bytes_read:LongInt):LongInt; virtual;
-    function  Write(buffer:PByte; buffer_size:LongInt):LongInt; virtual; abstract;
-    function  Write(buffer:TBytes):LongInt; overload;
+
     procedure Loaded; override;
 
     property Active:Boolean read FActive write SetActive;
@@ -108,9 +101,6 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure Lock;
-    procedure Unlock;
-
     procedure AddPortOpenHandler(handler:TThreadMethod);
     procedure AddPortOpenErrorHandler(handler:TThreadMethod);
     procedure AddPortCloseHandler(handler:TThreadMethod);
@@ -118,6 +108,18 @@ type
     procedure AddPortDisconnectedHandler(handler:TThreadMethod);
     procedure AddReadErrorHandler(handler:TThreadMethod);
     procedure AddWriteErrorHandler(handler:TThreadMethod);
+
+    procedure Begin_IO_Operation;
+    procedure End_IO_Operation;
+    procedure Lock;
+    function  Read(buffer:PByte; buffer_size, max_retries:LongInt; var bytes_read:LongInt):LongInt; virtual; abstract; overload;
+    function  Read(var buffer:TBytes; bytes_to_read, max_retries:LongInt; var bytes_read:LongInt):LongInt; virtual;
+    function  ReallyActive:Boolean; virtual;
+    function  Write(buffer:PByte; buffer_size, max_retries:LongInt; var bytes_written:LongInt):LongInt; virtual; abstract; overload;
+    function  Write(buffer:TBytes; max_retries:LongInt; var bytes_written:LongInt):LongInt; virtual;
+    procedure Unlock;
+
+
     procedure RemoveHandler(handler:TThreadMethod);
     procedure RemoveHandlersOfObject(AnObject:TObject);
 
@@ -650,9 +652,10 @@ begin
   Result:=Read(@buffer[0], min(Length(buffer), bytes_to_read), max_retries, bytes_read);
 end;
 
-function TpSCADACustomCommPort.Write(buffer: TBytes): LongInt;
+function TpSCADACustomCommPort.Write(buffer: TBytes; max_retries: LongInt;
+  var bytes_written: LongInt): LongInt;
 begin
-  Result:=write(@buffer[0],Length(buffer));
+  Result:=write(@buffer[0],Length(buffer), max_retries, bytes_written);
 end;
 
 procedure TpSCADACustomCommPort.Loaded;
@@ -745,7 +748,7 @@ var
 {$ENDIF}
 begin
 {$IFDEF FPC}
-  FLastOSErrorNumber:=GetLastOSError;
+  InterLockedExchange(FLastOSErrorNumber, GetLastOSError);
   FLastOSErrorMessage:=SysErrorMessage(FLastOSErrorNumber);
 {$ELSE}
 {$IF defined(WIN32) or defined(WIN64)}

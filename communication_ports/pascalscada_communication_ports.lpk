@@ -10,8 +10,8 @@
         <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Version Major="10"/>
-    <Files Count="3">
+    <Version Major="1"/>
+    <Files Count="4">
       <Item1>
         <Filename Value="pascalscada.communication.ports.basecommport.pas"/>
         <UnitName Value="pascalscada.communication.ports.basecommport"/>
@@ -21,9 +21,14 @@
         <UnitName Value="pascalscada.communication.ports.serial.baseserialport"/>
       </Item2>
       <Item3>
-        <Filename Value="pascalscada.communication.ports.serial.unixserialport.pas"/>
-        <UnitName Value="pascalscada.communication.ports.serial.unixserialport"/>
+        <Filename Value="pascalscada.communication.ports.serial.serialport.pas"/>
+        <UnitName Value="pascalscada.communication.ports.serial.serialport"/>
       </Item3>
+      <Item4>
+        <Filename Value="pascalscada_communication_ports_reg.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="pascalscada_communication_ports_reg"/>
+      </Item4>
     </Files>
     <i18n>
       <EnableI18N Value="True"/>

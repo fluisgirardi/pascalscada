@@ -121,7 +121,8 @@ type
     FSerialPortName: Ansistring;
     FStopBits: TpSCADASerialStopBits;
     FTimeout: LongWord;
-    PAcceptAnyPortName: Boolean;
+    FClearBufOnErr,
+    FAcceptAnyPortName: Boolean;
     function  GetTimeout: LongWord;
     procedure SetBaudRate(AValue: TpSCADASerialBaudRate);
     procedure SetDataBits(AValue: TpSCADASerialDataBits);
@@ -140,16 +141,20 @@ type
     procedure CallReadErrorHandlers; override;
     procedure CallWriteErrorHandlers; override;
 
-    property AcceptAnyPortName:Boolean read PAcceptAnyPortName write PAcceptAnyPortName stored true default false;
-    property SerialPort:Ansistring read FSerialPortName write SetSerialPortName;
+    property AcceptAnyPortName:Boolean read FAcceptAnyPortName write FAcceptAnyPortName stored true default false;
     property BaudRate:TpSCADASerialBaudRate read FBaudRate write SetBaudRate default sbr19200;
+    property ClearBuffersOnCommErrors:Boolean read FClearBufOnErr write FClearBufOnErr default true;
     property DataBits:TpSCADASerialDataBits read FDataBits write SetDataBits default sdb8;
     property Parity:  TpSCADASerialParity   read FParity   write SetParity   default spNone;
+    property SerialPort:Ansistring read FSerialPortName write SetSerialPortName;
     property StopBits:TpSCADASerialStopBits read FStopBits Write SetStopBits default ssb1;
     property Timeout:LongWord               read GetTimeout write SetTimeout default 100;
   public
     constructor Create(AOwner: TComponent); override;
   end;
+
+resourcestring
+  SPascalSCADA_CannotChangeSettingsWhileActive = 'Cannot change settings while active!';
 
 implementation
 
@@ -208,7 +213,7 @@ end;
 procedure TpSCADACustomSerialPort.DoExceptionIfActive;
 begin
   if ReallyActive then
-    exception.Create('Cannot change settings while active!');
+    exception.Create(SPascalSCADA_CannotChangeSettingsWhileActive);
 end;
 
 procedure TpSCADACustomSerialPort.ClearIOBuffers;
@@ -266,6 +271,7 @@ begin
   FStopBits := ssb1;
   FTimeout  := 100;
   FExclusiveDevice:=true;
+  FClearBufOnErr:=true;
 end;
 
 end.

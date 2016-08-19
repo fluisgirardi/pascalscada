@@ -17,17 +17,20 @@ type
   private
     FPortHandle:cint;
   protected
-    function ReallyActive: Boolean; override;
-    procedure ClearIOBuffers; override;
     function SerialPortExists(AValue: AnsiString): Boolean; override;
     function PortSettingsOK: Boolean; override;
     function Open: Boolean; override;
     function Close: Boolean; override;
-    function Read(buffer: PByte; buffer_size, max_retries: LongInt;
-      var bytes_read: LongInt): LongInt; override;
-    function Write(buffer: PByte; buffer_size: LongInt): LongInt; override;
+
   public
     constructor Create(AOwner: TComponent); override;
+
+    procedure ClearIOBuffers; override;
+    function Read(buffer: PByte; buffer_size, max_retries: LongInt;
+      var bytes_read: LongInt): LongInt; override;
+    function ReallyActive: Boolean; override;
+    function Write(buffer: PByte; buffer_size, max_retries: LongInt;
+      var bytes_written: LongInt): LongInt; override;
   end;
 
 
@@ -79,7 +82,7 @@ begin
     {$IFDEF LINUX}
     fpioctl(LongInt(FPortHandle), TCIOFLUSH, nil);
     {$ELSE}
-    fpioctl(LongInt(PPortHandle), TIOCFLUSH, nil);
+    fpioctl(LongInt(FPortHandle), TIOCFLUSH, nil);
     {$ENDIF}
   end;
 end;
@@ -243,7 +246,7 @@ end;
 function TpSCADAUnixSerialPort.Read(buffer: PByte; buffer_size,
   max_retries: LongInt; var bytes_read: LongInt): LongInt;
 var
-  lidos:Cardinal;
+  lidos:cint64;
   tentativas:Cardinal;
   start:TDateTime;
   Req, Rem:TimeSpec;
@@ -258,24 +261,69 @@ begin
   bytes_read := 0;
 
   While (bytes_read<buffer_size) and (tentativas<max_retries) do begin
-     lidos := FpRead(FPortHandle,buffer[bytes_read], buffer_size-bytes_read);
-     bytes_read := bytes_read + lidos;
-     if (MilliSecondsBetween(CrossNow, start)>FTimeout) then begin
+    lidos := FpRead(FPortHandle,buffer[bytes_read], buffer_size-bytes_read);
+    if lidos>=0 then begin
+      bytes_read := bytes_read + lidos;
+      if (MilliSecondsBetween(CrossNow, start)>FTimeout) then begin
         inc(tentativas);
         start:=CrossNow;
-     end;
-     //faz esperar 0,1ms
-     //waits 0,1ms
-     Req.tv_sec:=0;
-     Req.tv_nsec:=100000;
-     FpNanoSleep(@Req,@Rem);
+      end;
+      //faz esperar 0,1ms
+      //waits 0,1ms
+      Req.tv_sec:=0;
+      Req.tv_nsec:=100000;
+      FpNanoSleep(@Req,@Rem);
+    end else begin
+      Result:=iorPortError;
+      RefreshLastOSError;
+      Break;
+    end;
   end;
+
+  if buffer_size>bytes_read then begin
+    if Result=iorNone then
+      Result := iorTimeOut;
+    if FClearBufOnErr then
+      ClearIOBuffers;
+  end else
+    Result := bytes_read;
+
+  if Result<0 then
+    CallReadErrorHandlers;
 end;
 
-function TpSCADAUnixSerialPort.Write(buffer: PByte; buffer_size: LongInt
-  ): LongInt;
+function TpSCADAUnixSerialPort.Write(buffer: PByte; buffer_size,
+  max_retries: LongInt; var bytes_written: LongInt): LongInt;
+var
+  escritos:cint64;
+  tentativas:Cardinal;
 begin
-  //Result:=inherited Write(buffer, buffer_size);
+  Result:=iorNone;
+
+  if BeingDestroyed then exit;
+
+  tentativas := 0;
+
+  bytes_written := 0;
+  While (bytes_written<buffer_size) and (tentativas<max_retries) do begin
+    escritos := FpWrite(FPortHandle, buffer[bytes_written], buffer_size-bytes_written);
+    if escritos>=0 then begin
+      bytes_written := bytes_written + escritos;
+      Inc(tentativas);
+    end else begin
+      Result:=iorPortError;
+      RefreshLastOSError;
+      Break;
+    end;
+  end;
+
+  if buffer_size>bytes_written then begin
+    if Result=iorNone then
+      Result := iorTimeOut;
+    if FClearBufOnErr then
+       ClearIOBuffers;
+  end else
+    Result := bytes_written;
 end;
 
 constructor TpSCADAUnixSerialPort.Create(AOwner: TComponent);

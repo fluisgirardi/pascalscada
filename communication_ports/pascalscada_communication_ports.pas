@@ -10,12 +10,15 @@ interface
 uses
   pascalscada.communication.ports.basecommport, 
   pascalscada.communication.ports.serial.baseserialport, 
-  pascalscada.communication.ports.serial.unixserialport, LazarusPackageIntf;
+  pascalscada.communication.ports.serial.serialport, 
+  pascalscada_communication_ports_reg, LazarusPackageIntf;
 
 implementation
 
 procedure Register;
 begin
+  RegisterUnit('pascalscada_communication_ports_reg', 
+    @pascalscada_communication_ports_reg.Register);
 end;
 
 initialization
