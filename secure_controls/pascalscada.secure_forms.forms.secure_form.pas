@@ -12,8 +12,6 @@ uses
 
 type
 
-  { TSecureForm }
-
   { TpSCADASecureForm }
 
   TpSCADASecureForm = class(TForm, ISecureControlInterface)
