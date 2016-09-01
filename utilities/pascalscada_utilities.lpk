@@ -6,11 +6,11 @@
     <CompilerOptions>
       <Version Value="11"/>
       <SearchPaths>
-        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)/"/>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
     <Version Major="1"/>
-    <Files Count="2">
+    <Files Count="4">
       <Item1>
         <Filename Value="pascalscada.utilities.strings.pas"/>
         <UnitName Value="pascalscada.utilities.strings"/>
@@ -19,6 +19,14 @@
         <Filename Value="pascalscada.utilities.datetime.pas"/>
         <UnitName Value="pascalscada.utilities.datetime"/>
       </Item2>
+      <Item3>
+        <Filename Value="pascalscada.utilities.scales.basescale.pas"/>
+        <UnitName Value="pascalscada.utilities.scales.basescale"/>
+      </Item3>
+      <Item4>
+        <Filename Value="pascalscada.utilities.scales.scalequeue.pas"/>
+        <UnitName Value="pascalscada.utilities.scales.scalequeue"/>
+      </Item4>
     </Files>
     <i18n>
       <EnableI18N Value="True"/>
