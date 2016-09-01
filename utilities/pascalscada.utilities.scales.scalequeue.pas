@@ -14,10 +14,10 @@ type
   {$ELSE}
   //: Implements a item of a scales processors collection.
   {$ENDIF}
-  TScaleQueueItem = class(TCollectionItem)
+  TpSCADAScaleQueueItem = class(TCollectionItem)
   private
-    SProcessor:TScaleProcessor;
-    procedure SetScaleProcessor(SP:TScaleProcessor);
+    SProcessor:TpSCADAScaleProcessor;
+    procedure SetScaleProcessor(SP:TpSCADAScaleProcessor);
   protected
     //: @exclude
     function  GetDisplayName: AnsiString; override;
@@ -99,7 +99,7 @@ type
     {$ELSE}
     //: Scale processor object that does the values transformations of this item.
     {$ENDIF}
-    property ScaleProcessor:TScaleProcessor read SProcessor write SetScaleProcessor;
+    property ScaleProcessor:TpSCADAScaleProcessor read SProcessor write SetScaleProcessor;
   end;
 
   {$IFDEF PORTUGUES}
@@ -107,7 +107,7 @@ type
   {$ELSE}
   //: Implements a collection of scale processors.
   {$ENDIF}
-  TScaleQueue = class(TCollection)
+  TpSCADAScaleQueue = class(TCollection)
   private
     FOwner:TPersistent;
   protected
@@ -128,7 +128,7 @@ type
     @returns(The new item of the collection.)
     }
     {$ENDIF}
-    function Add:TScaleQueueItem;
+    function Add:TpSCADAScaleQueueItem;
 
     {$IFDEF PORTUGUES}
     {:
@@ -234,11 +234,11 @@ type
 
   { TScalesQueue }
 
-  TScalesQueue = class(TScaleProcessor)
+  TpSCADAScalesQueue = class(TpSCADAScaleProcessor)
   private
-    FScaleQueue:TScaleQueue;
-    function  GetScaleQueue:TScaleQueue;
-    procedure SetScaleQueue(ScaleQueue:TScaleQueue);
+    FScaleQueue:TpSCADAScaleQueue;
+    function  GetScaleQueue:TpSCADAScaleQueue;
+    procedure SetScaleQueue(ScaleQueue:TpSCADAScaleQueue);
   public
     //: @exclude
     constructor Create(AOwner:TComponent); override;
@@ -246,9 +246,9 @@ type
     destructor  Destroy; override;
 
     //: @seealso(TScalePIPE.SetInGetOut)
-    function SetInGetOut(Sender: TComponent; aInput: Double): Double; override;
+    function SetPLCValueGetSysValue(Sender: TComponent; aInput: Double): Double; override;
     //: @seealso(TScalePIPE.SetOutGetIn)
-    function SetOutGetIn(Sender: TComponent; aOutput: Double): Double; override;
+    function SetSysValueGetPLCValue(Sender: TComponent; aOutput: Double): Double; override;
 
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
   published
@@ -258,7 +258,7 @@ type
     {$ELSE}
     //: Collection of scale processors.
     {$ENDIF}
-    property ScalesQueue:TScaleQueue read GetScaleQueue write SetScaleQueue stored true;
+    property ScalesQueue:TpSCADAScaleQueue read GetScaleQueue write SetScaleQueue stored true;
   end;
 
 resourcestring
@@ -271,7 +271,7 @@ implementation
 ////////////////////////////////////////////////////////////////////////////////
 // TScaleQueueItem implementation
 ////////////////////////////////////////////////////////////////////////////////
-procedure TScaleQueueItem.SetScaleProcessor(SP:TScaleProcessor);
+procedure TpSCADAScaleQueueItem.SetScaleProcessor(SP: TpSCADAScaleProcessor);
 begin
   if not (Collection.Owner is TComponent) then
     raise exception.Create(SpSCADACollectionOwnerShouldBeATComponent);
@@ -291,7 +291,7 @@ begin
   SProcessor := SP;
 end;
 
-function TScaleQueueItem.GetDisplayName: AnsiString;
+function TpSCADAScaleQueueItem.GetDisplayName: AnsiString;
 begin
    if SProcessor<>nil then
       Result := SProcessor.Name
@@ -299,23 +299,23 @@ begin
       Result := SpSCADAEmpty;
 end;
 
-function TScaleQueueItem.SetInGetOut(Sender:TComponent; Input:Double):Double;
+function TpSCADAScaleQueueItem.SetInGetOut(Sender:TComponent; Input:Double):Double;
 begin
   if SProcessor<>nil then
-     Result := SProcessor.SetInGetOut(Sender,Input)
+     Result := SProcessor.SetPLCValueGetSysValue(Sender,Input)
   else
      Result := Input;
 end;
 
-function TScaleQueueItem.SetOutGetIn(Sender:TComponent; Output:Double):Double;
+function TpSCADAScaleQueueItem.SetOutGetIn(Sender:TComponent; Output:Double):Double;
 begin
   if SProcessor<>nil then
-     Result := SProcessor.SetOutGetIn(Sender,Output)
+     Result := SProcessor.SetSysValueGetPLCValue(Sender,Output)
   else
      Result := Output;
 end;
 
-procedure TScaleQueueItem.RemoveScaleProcessor;
+procedure TpSCADAScaleQueueItem.RemoveScaleProcessor;
 begin
   SProcessor := nil;
 end;
@@ -324,94 +324,95 @@ end;
 // TScalePIPE implementation
 ////////////////////////////////////////////////////////////////////////////////
 
-constructor TScaleQueue.Create(aOwner: TComponent);
+constructor TpSCADAScaleQueue.Create(aOwner: TComponent);
 begin
-  inherited Create(TScaleQueueItem);
+  inherited Create(TpSCADAScaleQueueItem);
   FOwner:=aOwner;
 end;
 
-function TScaleQueue.GetOwner:TPersistent;
+function TpSCADAScaleQueue.GetOwner:TPersistent;
 begin
   Result:=FOwner;
 end;
 
-function TScaleQueue.Add:TScaleQueueItem;
+function TpSCADAScaleQueue.Add:TpSCADAScaleQueueItem;
 begin
-   Result := TScaleQueueItem(inherited Add)
+   Result := TpSCADAScaleQueueItem(inherited Add)
 end;
 
-function TScaleQueue.SetInGetOut(Sender:TComponent; Input:Double):Double;
+function TpSCADAScaleQueue.SetInGetOut(Sender:TComponent; Input:Double):Double;
 var
   c:LongInt;
 begin
   Result := Input;
   for c:=0 to Count-1 do
-    if GetItem(c) is TScaleQueueItem then
-       Result := TScaleQueueItem(GetItem(c)).SetInGetOut(Sender,Result);
+    if GetItem(c) is TpSCADAScaleQueueItem then
+       Result := TpSCADAScaleQueueItem(GetItem(c)).SetInGetOut(Sender,Result);
 end;
 
-function TScaleQueue.SetOutGetIn(Sender:TComponent; Output:Double):Double;
+function TpSCADAScaleQueue.SetOutGetIn(Sender:TComponent; Output:Double):Double;
 var
   c:LongInt;
 begin
   Result := Output;
   for c:=(Count-1) downto 0 do
-    if GetItem(c) is TScaleQueueItem then
-       Result := TScaleQueueItem(GetItem(c)).SetOutGetIn(Sender,Result);
+    if GetItem(c) is TpSCADAScaleQueueItem then
+       Result := TpSCADAScaleQueueItem(GetItem(c)).SetOutGetIn(Sender,Result);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // TPIPE implementation
 ////////////////////////////////////////////////////////////////////////////////
 
-constructor TScalesQueue.Create(AOwner:TComponent);
+constructor TpSCADAScalesQueue.Create(AOwner:TComponent);
 begin
   inherited Create(AOwner);
-  FScaleQueue := TScaleQueue.Create(Self);
+  FScaleQueue := TpSCADAScaleQueue.Create(Self);
 end;
 
-destructor  TScalesQueue.Destroy;
+destructor  TpSCADAScalesQueue.Destroy;
 var
   i: Integer;
 begin
   for i:=0 to FScaleQueue.Count-1 do
-    if Assigned(TScaleQueueItem(FScaleQueue.Items[i]).ScaleProcessor) then
-       TScaleQueueItem(FScaleQueue.Items[i]).ScaleProcessor.RemoveFreeNotification(Self);
+    if Assigned(TpSCADAScaleQueueItem(FScaleQueue.Items[i]).ScaleProcessor) then
+       TpSCADAScaleQueueItem(FScaleQueue.Items[i]).ScaleProcessor.RemoveFreeNotification(Self);
 
   FreeAndNil(FScaleQueue);
   inherited Destroy;
 end;
 
-function  TScalesQueue.GetScaleQueue:TScaleQueue;
+function  TpSCADAScalesQueue.GetScaleQueue:TpSCADAScaleQueue;
 begin
   Result := FScaleQueue;
 end;
 
-procedure TScalesQueue.SetScaleQueue(ScaleQueue:TScaleQueue);
+procedure TpSCADAScalesQueue.SetScaleQueue(ScaleQueue:TpSCADAScaleQueue);
 begin
   FScaleQueue.Assign(ScaleQueue);
 end;
 
-function TScalesQueue.SetInGetOut(Sender:TComponent; aInput:Double):Double;
+function TpSCADAScalesQueue.SetPLCValueGetSysValue(Sender: TComponent; aInput: Double
+  ): Double;
 begin
    Result := FScaleQueue.SetInGetOut(Sender,aInput);
 end;
 
-function TScalesQueue.SetOutGetIn(Sender:TComponent; aOutput:Double):Double;
+function TpSCADAScalesQueue.SetSysValueGetPLCValue(Sender: TComponent; aOutput: Double
+  ): Double;
 begin
    Result := FScaleQueue.SetOutGetIn(Sender, aOutput);
 end;
 
-procedure TScalesQueue.Notification(AComponent: TComponent;
+procedure TpSCADAScalesQueue.Notification(AComponent: TComponent;
   Operation: TOperation);
 var
   i: Integer;
 begin
   inherited Notification(AComponent, Operation);
   for i:=0 to FScaleQueue.Count-1 do
-    if TScaleQueueItem(FScaleQueue.Items[i]).ScaleProcessor=AComponent then
-       TScaleQueueItem(FScaleQueue.Items[i]).ScaleProcessor:=nil;
+    if TpSCADAScaleQueueItem(FScaleQueue.Items[i]).ScaleProcessor=AComponent then
+       TpSCADAScaleQueueItem(FScaleQueue.Items[i]).ScaleProcessor:=nil;
 end;
 
 end.
-

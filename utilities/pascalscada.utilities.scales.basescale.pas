@@ -28,7 +28,7 @@ type
     @author(Fabio Luis Girardi <fabio@pascalscada.com>)
   }
   {$ENDIF}
-  TScaleProcessor = class(TComponent)
+  TpSCADAScaleProcessor = class(TComponent)
   private
     FValueIn:Double;
     procedure SetInput(value:Double);
@@ -59,7 +59,7 @@ type
     @returns(Double. The value tranformed to engineering scale.)
     }
     {$ENDIF}
-    function SetInGetOut(Sender:TComponent; Input:Double):Double; virtual;
+    function SetPLCValueGetSysValue(Sender:TComponent; Input:Double):Double; virtual;
 
     {$IFDEF PORTUGUES}
     {:
@@ -84,7 +84,7 @@ type
     @returns(Double. The tranformed raw value.)
     }
     {$ENDIF}
-    function SetOutGetIn(Sender:TComponent; Output:Double):Double; virtual;
+    function SetSysValueGetPLCValue(Sender:TComponent; Output:Double):Double; virtual;
 
   published
 
@@ -109,7 +109,7 @@ type
     @seealso(OutPut)
     }
     {$ENDIF}
-    property Input:Double read FValueIn write SetInput Stored false;
+    property PLCValue:Double read FValueIn write SetInput Stored false;
 
     {$IFDEF PORTUGUES}
     {:
@@ -132,7 +132,7 @@ type
     @seealso(Input)
     }
     {$ENDIF}
-    property Output:Double read GetOutput write SetOutput Stored false;
+    property SysValue:Double read GetOutput write SetOutput Stored false;
   end;
 
 implementation
@@ -141,29 +141,31 @@ implementation
 // TScaleProcessor implementation
 ////////////////////////////////////////////////////////////////////////////////
 
-function TScaleProcessor.SetInGetOut(Sender:TComponent; Input:Double):Double;
+function TpSCADAScaleProcessor.SetPLCValueGetSysValue(Sender: TComponent;
+  Input: Double): Double;
 begin
   Result := Input;
 end;
 
-function TScaleProcessor.SetOutGetIn(Sender:TComponent; Output:Double):Double;
+function TpSCADAScaleProcessor.SetSysValueGetPLCValue(Sender: TComponent;
+  Output: Double): Double;
 begin
   Result := Output;
 end;
 
-procedure TScaleProcessor.SetInput(value:Double);
+procedure TpSCADAScaleProcessor.SetInput(value:Double);
 begin
   FValueIn := value;
 end;
 
-procedure TScaleProcessor.SetOutput(value:Double);
+procedure TpSCADAScaleProcessor.SetOutput(value:Double);
 begin
-  FValueIn := SetOutGetIn(self, value);
+  FValueIn := SetSysValueGetPLCValue(self, value);
 end;
 
-function  TScaleProcessor.GetOutput:Double;
+function  TpSCADAScaleProcessor.GetOutput:Double;
 begin
-  Result := SetInGetOut(self, FValueIn);
+  Result := SetPLCValueGetSysValue(self, FValueIn);
 end;
 
 end.

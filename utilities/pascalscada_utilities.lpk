@@ -10,7 +10,7 @@
       </SearchPaths>
     </CompilerOptions>
     <Version Major="1"/>
-    <Files Count="4">
+    <Files Count="5">
       <Item1>
         <Filename Value="pascalscada.utilities.strings.pas"/>
         <UnitName Value="pascalscada.utilities.strings"/>
@@ -27,6 +27,10 @@
         <Filename Value="pascalscada.utilities.scales.scalequeue.pas"/>
         <UnitName Value="pascalscada.utilities.scales.scalequeue"/>
       </Item4>
+      <Item5>
+        <Filename Value="pascalscada.utilities.scales.userscale.pas"/>
+        <UnitName Value="pascalscada.utilities.scales.userscale"/>
+      </Item5>
     </Files>
     <i18n>
       <EnableI18N Value="True"/>
