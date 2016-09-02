@@ -9,9 +9,7 @@ interface
 
 uses
   pascalscada.utilities.strings, pascalscada.utilities.datetime, 
-  pascalscada.utilities.scales.basescale, 
-  pascalscada.utilities.scales.scalequeue, 
-  pascalscada.utilities.scales.userscale, LazarusPackageIntf;
+  LazarusPackageIntf;
 
 implementation
 
