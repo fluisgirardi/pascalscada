@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="3">
+      <Unit0>
+        <Filename Value="hashcracker.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="1"/>
+        <CursorPos X="30" Y="21"/>
+        <UsageCount Value="30"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="159"/>
+        <CursorPos X="67" Y="163"/>
+        <UsageCount Value="30"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="../pascalscada.multithreading.core_affinity_threads.pas"/>
+        <EditorIndex Value="2"/>
+        <CursorPos X="15" Y="24"/>
+        <UsageCount Value="13"/>
+        <Loaded Value="True"/>
+      </Unit2>
+    </Units>
+    <JumpHistory Count="30" HistoryIndex="29">
+      <Position1>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="219" TopLine="196"/>
+      </Position1>
+      <Position2>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="220" TopLine="196"/>
+      </Position2>
+      <Position3>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="221" TopLine="196"/>
+      </Position3>
+      <Position4>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="222" TopLine="196"/>
+      </Position4>
+      <Position5>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="223" TopLine="196"/>
+      </Position5>
+      <Position6>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="222" TopLine="196"/>
+      </Position6>
+      <Position7>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="229" TopLine="196"/>
+      </Position7>
+      <Position8>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="182" TopLine="167"/>
+      </Position8>
+      <Position9>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="219" TopLine="196"/>
+      </Position9>
+      <Position10>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="182" TopLine="159"/>
+      </Position10>
+      <Position11>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="216" Column="52" TopLine="196"/>
+      </Position11>
+      <Position12>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="182" TopLine="159"/>
+      </Position12>
+      <Position13>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="193" TopLine="159"/>
+      </Position13>
+      <Position14>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="183" TopLine="161"/>
+      </Position14>
+      <Position15>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="216" Column="52" TopLine="197"/>
+      </Position15>
+      <Position16>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="224" TopLine="191"/>
+      </Position16>
+      <Position17>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="199" TopLine="192"/>
+      </Position17>
+      <Position18>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="223" TopLine="191"/>
+      </Position18>
+      <Position19>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="224" TopLine="191"/>
+      </Position19>
+      <Position20>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="194" Column="34" TopLine="175"/>
+      </Position20>
+      <Position21>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="200" TopLine="174"/>
+      </Position21>
+      <Position22>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="142" TopLine="108"/>
+      </Position22>
+      <Position23>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="149" TopLine="110"/>
+      </Position23>
+      <Position24>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="116" Column="18" TopLine="114"/>
+      </Position24>
+      <Position25>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="238" TopLine="212"/>
+      </Position25>
+      <Position26>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="196" TopLine="173"/>
+      </Position26>
+      <Position27>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="104" Column="86" TopLine="93"/>
+      </Position27>
+      <Position28>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="238" TopLine="212"/>
+      </Position28>
+      <Position29>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="237" Column="3" TopLine="214"/>
+      </Position29>
+      <Position30>
+        <Filename Value="umain_hash_cracker.pas"/>
+        <Caret Line="163" TopLine="158"/>
+      </Position30>
+    </JumpHistory>
+  </ProjectSession>
+  <Debugging>
+    <Watches Count="2">
+      <Item1>
+        <Expression Value="senhainicial"/>
+      </Item1>
+      <Item2>
+        <Expression Value="SenhaAnterior"/>
+      </Item2>
+    </Watches>
+  </Debugging>
+</CONFIG>
