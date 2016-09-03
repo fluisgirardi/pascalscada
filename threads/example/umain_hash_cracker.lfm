@@ -6,6 +6,7 @@ object Form1: TForm1
   Caption = 'Form1'
   ClientHeight = 153
   ClientWidth = 693
+  LCLVersion = '1.7'
   Visible = False
   object Edit1: TEdit
     Left = 8

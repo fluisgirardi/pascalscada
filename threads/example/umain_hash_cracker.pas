@@ -22,8 +22,9 @@ type
   protected
     FHashTarget:String;
     FHashList:THashList;
+    FFirstChar,
+    FLastChar,
     FCharactersLimit:Integer;
-    FStartLevel:Integer;
     FTimeHashing:TDateTime;
 
     procedure Execute; override;
@@ -32,7 +33,7 @@ type
     function  CompareHash(aCombination:String):Boolean;
   public
     constructor Create(ASuspended: Boolean; HashTarget: String;
-      aStartCaracteres, aLimiteCaracteres: Integer; aHashList: THashList);
+      aLimiteCaracteres, primeiroCaracter, UltimoCaracter: Integer; aHashList: THashList);
   end;
 
   { TForm1 }
@@ -69,7 +70,7 @@ var
 
 implementation
 
-uses md5, sha1;
+uses md5, sha1, math;
 
 {$R *.lfm}
 
@@ -86,6 +87,7 @@ procedure TForm1.Button1Click(Sender: TObject);
 var
   hashlist:THashList;
   i: Integer;
+  fatia, inicio, final: Int64;
 begin
   hashlist:=THashList.Create;
   if (ComboBox1.ItemIndex=0) or (ComboBox1.ItemIndex=1) then
@@ -101,9 +103,12 @@ begin
     hashlist.Add(@ComputeHashSHA1);
 
   SetLength(FHashCrackThread,TpSCADACoreAffinityThread.GetSystemThreadCount);
+  fatia:=trunc(round(95/TpSCADACoreAffinityThread.GetSystemThreadCount));
   for i:=0 to {0 do begin //} TpSCADACoreAffinityThread.GetSystemThreadCount-1 do begin
     //if i<>1 then continue;
-    FHashCrackThread[i]:=THashCrackerClass.Create(True,Edit1.Text, ((i*5)+1), (i+1)*5,hashlist);
+    inicio:=i*fatia+32;
+    final :=(i+1)*fatia+31;
+    FHashCrackThread[i]:=THashCrackerClass.Create(True, Edit1.Text, 20, inicio, final, hashlist);
     FHashCrackThread[i].OnTerminate:=@ThreadTerminated;
     FHashCrackThread[i].FreeOnTerminate:=true;
     FHashCrackThread[i].SetAffinity(i);
@@ -111,6 +116,7 @@ begin
   end;
   Label5.Caption:=FormatDateTime('hh:nn:ss.zzz',Now);
   Label6.Caption:='';
+  Label7.Caption:='';
   Button1.Enabled:=false;
   ComboBox1.Enabled:=false;
   Button2.Enabled:=true;
@@ -184,45 +190,48 @@ var
   iencontrou: Boolean;
   aSenha, senhainicial: String;
 
-  function GeraSenha(SenhaAnterior:String; levelAtual, TamanhoMaximo, profundidade:Integer; var encontrou:Boolean):String;
+  function GeraSenha(SenhaAnterior:String; levelAtual, TamanhoMaximo:Integer; var encontrou:Boolean):String;
   var
-    i: Integer;
+    i, inicio, final: Integer;
   begin
     Result:='';
     encontrou:=false;
 
     if levelAtual<=TamanhoMaximo then begin
-      for i:=32 to 126 do begin
+      if levelAtual=1 then begin
+        inicio:=FFirstChar;
+        final :=FLastChar;
+      end else begin
+        inicio:=32;
+        final :=126;
+      end;
+      for i:=inicio to final do begin
         if Terminated then exit;
-        if profundidade=levelAtual then begin
 
-          if levelAtual=TamanhoMaximo then begin
-            if CompareHash(SenhaAnterior+chr(i)) then begin
-              Result:=SenhaAnterior+chr(i);
-              encontrou:=true;
-              exit;
-            end;
+        if levelAtual=TamanhoMaximo then begin
+          if CompareHash(SenhaAnterior+chr(i)) then begin
+            Result:=SenhaAnterior+chr(i);
+            encontrou:=true;
+            exit;
           end;
+        end;
 
-          if levelAtual<TamanhoMaximo then
-            Result:=GeraSenha(SenhaAnterior+chr(i),levelAtual+1,TamanhoMaximo, profundidade+1, encontrou);
-          if encontrou then exit;
-        end else
-          Result:=GeraSenha(SenhaAnterior+chr(i),levelAtual,TamanhoMaximo, profundidade+1, encontrou);
-          if encontrou then exit;
+        if levelAtual<TamanhoMaximo then
+          Result:=GeraSenha(SenhaAnterior+chr(i),levelAtual+1,TamanhoMaximo, encontrou);
+        if encontrou then exit;
       end;
     end;
   end;
 
 begin
-  level:=FStartLevel;
+  level:=1;
   aEncontrouSenha:=false;
   iencontrou:=false;
 
   while (level<FCharactersLimit) or (FCharactersLimit<=0) do begin
     if Terminated then exit;
 
-    aSenha:=GeraSenha('',FStartLevel,level, 1,iencontrou);
+    aSenha:=GeraSenha('', 1, level, iencontrou);
     if iencontrou then begin
       Result:=aSenha;
       aEncontrouSenha:=true;
@@ -251,12 +260,14 @@ begin
 end;
 
 constructor THashCrackerClass.Create(ASuspended: Boolean; HashTarget: String;
-  aStartCaracteres, aLimiteCaracteres: Integer; aHashList: THashList);
+  aLimiteCaracteres, primeiroCaracter, UltimoCaracter: Integer;
+  aHashList: THashList);
 begin
   inherited Create(ASuspended);
-  FStartLevel:=aStartCaracteres;
-  FHashList:=aHashList;
-  FHashTarget:=LowerCase(HashTarget);
+  FHashList   := aHashList;
+  FHashTarget := LowerCase(HashTarget);
+  FFirstChar  := Max(32,  primeiroCaracter);
+  FLastChar   := Min(126, UltimoCaracter);
   FCharactersLimit:=aLimiteCaracteres;
 end;
 
