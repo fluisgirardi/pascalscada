@@ -6,13 +6,38 @@
     <CompilerOptions>
       <Version Value="11"/>
       <SearchPaths>
-        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)/"/>
+        <OtherUnitFiles Value="."/>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
     <Version Major="1"/>
+    <Files Count="5">
+      <Item1>
+        <Filename Value="pascalscada.utilities.scales.basescale.pas"/>
+        <UnitName Value="pascalscada.utilities.scales.basescale"/>
+      </Item1>
+      <Item2>
+        <Filename Value="pascalscada.utilities.scales.linearscale.pas"/>
+        <UnitName Value="pascalscada.utilities.scales.linearscale"/>
+      </Item2>
+      <Item3>
+        <Filename Value="pascalscada.utilities.scales.scalequeue.pas"/>
+        <UnitName Value="pascalscada.utilities.scales.scalequeue"/>
+      </Item3>
+      <Item4>
+        <Filename Value="pascalscada.utilities.scales.userscale.pas"/>
+        <UnitName Value="pascalscada.utilities.scales.userscale"/>
+      </Item4>
+      <Item5>
+        <Filename Value="pascalscada_scada_utilities_register.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="pascalscada_scada_utilities_register"/>
+      </Item5>
+    </Files>
     <i18n>
       <EnableI18N Value="True"/>
       <OutDir Value="../languages"/>
+      <EnableI18NForLFM Value="True"/>
     </i18n>
     <RequiredPkgs Count="1">
       <Item1>

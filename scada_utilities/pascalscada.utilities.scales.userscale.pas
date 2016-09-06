@@ -23,7 +23,7 @@ type
    {$ELSE}
    //: Definition of event used to process values.
    {$ENDIF}
-   TScaleEvent = procedure(Sender:TObject; const Input:Double; var Output:Double) of object;
+   TpSCADAScaleEvent = procedure(Sender:TObject; const Input:Double; var Output:Double) of object;
 
    {$IFDEF PORTUGUES}
    {:
@@ -36,10 +36,10 @@ type
    @author(Fabio Luis Girardi <fabio@pascalscada.com>)
    }
    {$ENDIF}
-   TUserScale = class(TpSCADAScaleProcessor)
+   TpSCADAUserScale = class(TpSCADAScaleProcessor)
    private
-     PPLCToSys:TScaleEvent;
-     PSysToPLC:TScaleEvent;
+     PPLCToSys:TpSCADAScaleEvent;
+     PSysToPLC:TpSCADAScaleEvent;
    public
      {:
      @seealso(TScaleProcessor.SetInGetOut)
@@ -83,7 +83,7 @@ type
 
      }
      {$ENDIF}
-     property OnPLCToSys:TScaleEvent read PPLCToSys write PPLCToSys;
+     property OnPLCToSys:TpSCADAScaleEvent read PPLCToSys write PPLCToSys;
 
      {$IFDEF PORTUGUES}
      {:
@@ -114,12 +114,12 @@ type
      }
      {$ENDIF}
 
-     property OnUserToPLC:TScaleEvent read PSysToPLC write PSysToPLC;
+     property OnUserToPLC:TpSCADAScaleEvent read PSysToPLC write PSysToPLC;
    end;
 
 implementation
 
-function TUserScale.SetPLCValueGetSysValue(Sender: TComponent; Entrada: Double
+function TpSCADAUserScale.SetPLCValueGetSysValue(Sender: TComponent; Entrada: Double
   ): Double;
 begin
   if Assigned(PPLCToSys) then begin
@@ -129,7 +129,7 @@ begin
      Result := Entrada;
 end;
 
-function TUserScale.SetSysValueGetPLCValue(Sender: TComponent; Saida: Double
+function TpSCADAUserScale.SetSysValueGetPLCValue(Sender: TComponent; Saida: Double
   ): Double;
 begin
   if Assigned(PSysToPLC) then begin

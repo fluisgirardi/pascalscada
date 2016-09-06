@@ -8,12 +8,18 @@ unit pascalscada_scada_utilities;
 interface
 
 uses
-  LazarusPackageIntf;
+  pascalscada.utilities.scales.basescale, 
+  pascalscada.utilities.scales.linearscale, 
+  pascalscada.utilities.scales.scalequeue, 
+  pascalscada.utilities.scales.userscale, 
+  pascalscada_scada_utilities_register, LazarusPackageIntf;
 
 implementation
 
 procedure Register;
 begin
+  RegisterUnit('pascalscada_scada_utilities_register', 
+    @pascalscada_scada_utilities_register.Register);
 end;
 
 initialization
