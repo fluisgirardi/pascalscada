@@ -1,0 +1,11 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: pascalscada.utilities.scales.linearscale.spscadainvalidvalue
+msgid "Invalid value"
+msgstr ""
+
+#: pascalscada.utilities.scales.linearscale.spscadavalueshouldbedifferent
+msgid "The value of property \"%s\" should be different of value of property \"%s\""
+msgstr ""
+
