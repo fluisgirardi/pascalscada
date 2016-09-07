@@ -3,7 +3,7 @@
   <Package Version="4">
     <Name Value="pascalscada_threads"/>
     <Type Value="RunAndDesignTime"/>
-    <Author Value="Fabio Luis Girardi"/>
+    <Author Value="Fabio Luis Girardi &lt;fabio@pascalscada.com>"/>
     <CompilerOptions>
       <Version Value="11"/>
       <SearchPaths>
