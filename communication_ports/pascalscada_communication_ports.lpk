@@ -3,6 +3,7 @@
   <Package Version="4">
     <Name Value="pascalscada_communication_ports"/>
     <Type Value="RunAndDesignTime"/>
+    <Author Value="Fabio Luis Girardi"/>
     <CompilerOptions>
       <Version Value="11"/>
       <SearchPaths>
@@ -10,6 +11,8 @@
         <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
+    <Description Value="Communication ports subsystem for SCADA applications."/>
+    <License Value="LGPL with linking exception , v2.1 (same from Lazarus)"/>
     <Version Major="1"/>
     <Files Count="7">
       <Item1>

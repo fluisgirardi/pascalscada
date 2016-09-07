@@ -220,8 +220,8 @@ type
     function GetValueRaw: Int64; virtual; abstract;
     procedure SetValueRaw(AValue: Int64); virtual; abstract;
 
-    procedure ReatTagBitValue(const addresInfo:TpSCADAAddressInfo; var Value:Int64;     var ValueTimeStamp:TDateTime; var ValueQuality: TpSCADATagValueState);
-    procedure WritTagBitValue(const addresInfo:TpSCADAAddressInfo; const Value:Int64; var ValueQuality: TpSCADATagValueState);
+    procedure ReatTagBitValue(const addresInfo:TpSCADAAddressInfo; var Value:Int64;   var aValueTimeStamp:TDateTime; var aValueQuality: TpSCADATagValueState);
+    procedure WritTagBitValue(const addresInfo:TpSCADAAddressInfo; const Value:Int64; var aValueQuality: TpSCADATagValueState);
 
 
     procedure ValidateInsert(AComponent: TComponent); override;
@@ -265,6 +265,7 @@ resourcestring
   SpSCADASubComponentsNotAllowed = 'This class %s dont accept %s class as child.';
   SpSCADAAssignError             = 'Assign error: The class %s cannot assign %s class';
   SpSCADABitCountError           = 'The bit count must be greater than zero.';
+  SpSCADAInvalidTagAddress       = 'Invalid tag address object for ';
 
 implementation
 
@@ -425,7 +426,7 @@ end;
 
 procedure TpSCADATagbookIntegerTag.ReatTagBitValue(
   const addresInfo: TpSCADAAddressInfo; var Value: Int64;
-  var ValueTimeStamp: TDateTime; var ValueQuality: TpSCADATagValueState);
+  var aValueTimeStamp: TDateTime; var aValueQuality: TpSCADATagValueState);
 begin
   if not (addresInfo is TpSCADATagBitAddressInfo) then
     raise Exception.Create();
@@ -433,7 +434,7 @@ end;
 
 procedure TpSCADATagbookIntegerTag.WritTagBitValue(
   const addresInfo: TpSCADAAddressInfo; const Value: Int64;
-  var ValueQuality: TpSCADATagValueState);
+  var aValueQuality: TpSCADATagValueState);
 begin
   if not (addresInfo is TpSCADATagBitAddressInfo) then
     raise Exception.Create();

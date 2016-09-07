@@ -3,12 +3,15 @@
   <Package Version="4">
     <Name Value="pascalscada_secure_actions"/>
     <Type Value="RunAndDesignTime"/>
+    <Author Value="Fabio Luis Girardi"/>
     <CompilerOptions>
       <Version Value="11"/>
       <SearchPaths>
         <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
+    <Description Value="Security enabled actions"/>
+    <License Value="LGPL with linking exception , v2.1 (same from Lazarus)"/>
     <Version Major="1"/>
     <Files Count="10">
       <Item1>

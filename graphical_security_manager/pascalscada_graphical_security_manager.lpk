@@ -3,12 +3,15 @@
   <Package Version="4">
     <Name Value="pascalscada_graphical_security_manager"/>
     <Type Value="RunAndDesignTime"/>
+    <Author Value="Fabio Luis Girardi"/>
     <CompilerOptions>
       <Version Value="11"/>
       <SearchPaths>
         <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
+    <Description Value="Graphical security manager for GUI applications "/>
+    <License Value="LGPL with linking exception , v2.1 (same from Lazarus)"/>
     <Version Major="1"/>
     <Files Count="3">
       <Item1>
