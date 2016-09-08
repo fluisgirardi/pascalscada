@@ -12,7 +12,7 @@
       </SearchPaths>
     </CompilerOptions>
     <Description Value="Provides miscellaneous utilities, like linear scale and network mutex."/>
-    <License Value="LGPL with linking exception , v2.1 (same from Lazarus)"/>
+    <License Value="LGPL with linking exception, v2.1 (same from Lazarus LCL)"/>
     <Version Major="1"/>
     <Files Count="5">
       <Item1>

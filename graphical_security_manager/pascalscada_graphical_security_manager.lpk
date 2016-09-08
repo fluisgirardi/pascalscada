@@ -11,7 +11,7 @@
       </SearchPaths>
     </CompilerOptions>
     <Description Value="Graphical security manager for GUI applications "/>
-    <License Value="LGPL with linking exception , v2.1 (same from Lazarus)"/>
+    <License Value="LGPL with linking exception, v2.1 (same from Lazarus LCL)"/>
     <Version Major="1"/>
     <Files Count="3">
       <Item1>

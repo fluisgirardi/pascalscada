@@ -11,7 +11,7 @@
       </SearchPaths>
     </CompilerOptions>
     <Description Value="Provides a tag subsystem for SCADA applications "/>
-    <License Value="LGPL with linking exception , v2.1 (same from Lazarus)"/>
+    <License Value="LGPL with linking exception, v2.1 (same from Lazarus LCL)"/>
     <Version Major="1"/>
     <Files Count="1">
       <Item1>

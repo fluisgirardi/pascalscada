@@ -11,7 +11,7 @@
       </SearchPaths>
     </CompilerOptions>
     <Description Value="Miscellaneous coding utilities when handing datetime and string, that are not present on RTL, FCL or LCL, like a IPv4 validator. "/>
-    <License Value="LGPL with linking exception , v2.1 (same from Lazarus)"/>
+    <License Value="LGPL with linking exception, v2.1 (same from Lazarus LCL)"/>
     <Version Major="1"/>
     <Files Count="2">
       <Item1>

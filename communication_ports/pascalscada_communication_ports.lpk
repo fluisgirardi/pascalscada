@@ -12,7 +12,7 @@
       </SearchPaths>
     </CompilerOptions>
     <Description Value="Communication ports subsystem for SCADA applications."/>
-    <License Value="LGPL with linking exception , v2.1 (same from Lazarus)"/>
+    <License Value="LGPL with linking exception, v2.1 (same from Lazarus LCL)"/>
     <Version Major="1"/>
     <Files Count="7">
       <Item1>
