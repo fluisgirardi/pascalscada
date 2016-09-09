@@ -1,0 +1,27 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: pascalscada.tags.base.spscadaassignerror
+msgid "Assign error: The class %s cannot assign %s class"
+msgstr ""
+
+#: pascalscada.tags.base.spscadabitcounterror
+msgid "The bit count must be greater than zero."
+msgstr ""
+
+#: pascalscada.tags.base.spscadaget
+msgid "get"
+msgstr ""
+
+#: pascalscada.tags.base.spscadainvalidtagaddress
+msgid "The address information object is not a %s class, required for %s values in class %s"
+msgstr ""
+
+#: pascalscada.tags.base.spscadaset
+msgid "set"
+msgstr ""
+
+#: pascalscada.tags.base.spscadasubcomponentsnotallowed
+msgid "This class %s dont accept %s class as child."
+msgstr ""
+
