@@ -9,9 +9,10 @@ uses
 
 type
 
-  TpSCADATagValueState = (ioNone,ioOk,ioDriverError, ioCommError, ioTimeOut,
-                          ioIllegalFunction, ioIllegalRegAddress,ioIllegalValue,
-                          ioPLCError, ioTagError, ioNullDriver, ioIllegalRequest,
+  TpSCADATagValueState = (ioNone, ioPendingRefresh, ioOk,ioDriverError,
+                          ioCommError, ioTimeOut, ioIllegalFunction,
+                          ioIllegalRegAddress,ioIllegalValue, ioPLCError,
+                          ioTagError, ioNullDriver, ioIllegalRequest,
                           ioIllegalStationAddress, ioObjectNotExists,
                           ioIllegalMemoryAddress, ioUnknownError, ioEmptyPacket,
                           ioPartialOk, ioAcknowledge, ioBusy, ioNACK,
@@ -146,6 +147,8 @@ type
     PropBit         = 3000;
     PropBitCount    = 3001;
     PropUseValueRaw = 3002;
+  protected
+    procedure AddressChanged; override;
   public
     procedure Assign(Source: TpSCADAAddressInfo); override;
     property  Bit:Byte read FBit write SetBit;
@@ -230,7 +233,7 @@ type
     property Value:Int64 read GetValue write SetValue;
     property ValueRaw:Int64 read GetValueRaw write SetValueRaw;
   public
-    constructor Create(AOwner: TComponent; GetValueProc:TpSCADAGetIntegerValue; SetValueProc:TpSCADASetIntegerValue); virtual;
+    constructor Create(AOwner: TComponent); override;
   end;
 
   { TpSCADATagbookBitmapTag }
@@ -251,7 +254,7 @@ type
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     procedure Loaded; override;
   public
-    constructor Create(AOwner: TComponent; GetValueProc: TpSCADAGetIntegerValue; SetValueProc: TpSCADASetIntegerValue); override;
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   published
     property BitAddress:TpSCADATagBitAddressInfo read GetBitAddress write SetBitAddress;
@@ -277,7 +280,7 @@ type
     property Value:Double read GetValue write SetValue;
     property ValueRaw:Double read GetValueRaw write SetValueRaw;
   public
-    constructor Create(AOwner: TComponent; GetValueProc:TpSCADAGetDoubleValue; SetValueProc:TpSCADASetDoubleValue); virtual;
+    constructor Create(AOwner: TComponent); override;
   end;
 
 resourcestring
@@ -314,15 +317,12 @@ end;
 
 procedure TpSCADATagbookRealTag.ValidateInsert(AComponent: TComponent);
 begin
-  raise Exception.Create(SpSCADASubComponentsNotAllowed,[Self.ClassName,AComponent.ClassName]);
+  raise Exception.Create(Format(SpSCADASubComponentsNotAllowed,[Self.ClassName,AComponent.ClassName]));
 end;
 
-constructor TpSCADATagbookRealTag.Create(AOwner: TComponent;
-  GetValueProc: TpSCADAGetDoubleValue; SetValueProc: TpSCADASetDoubleValue);
+constructor TpSCADATagbookRealTag.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  FSetValueProc:=SetValueProc;
-  FGetValueProc:=GetValueProc;
 end;
 
 { TpSCADATagbookBitmaskTag }
@@ -355,6 +355,7 @@ end;
 
 function TpSCADATagbookBitmapTag.GetValueRaw: Int64;
 begin
+  Result:=0;
   if Assigned(FGetValueProc) then
     FGetValueProc(FBitAddressInfo, Result, FValueTimestamp, FValueQuality);
 end;
@@ -392,14 +393,13 @@ begin
     FSetValueProc(FBitAddressInfo, AValue, FWriteQuality);
 end;
 
-constructor TpSCADATagbookBitmapTag.Create(AOwner: TComponent;
-  GetValueProc: TpSCADAGetIntegerValue; SetValueProc: TpSCADASetIntegerValue);
+constructor TpSCADATagbookBitmapTag.Create(AOwner: TComponent);
 begin
-  inherited Create(AOwner, GetValueProc, SetValueProc);
+  inherited Create(AOwner);
   FBitAddressInfo:=TpSCADATagBitAddressInfo.Create;
   if Assigned(AOwner) and (AOwner is TpSCADATagbookIntegerTag) then begin
-    FGetValueProc:=@(AOwner as TpSCADATagbookIntegerTag).ReadTagBitValue;
-    FSetValueProc:=@(AOwner as TpSCADATagbookIntegerTag).WriteTagBitValue;
+    FGetValueProc:=@TpSCADATagbookIntegerTag(AOwner).ReadTagBitValue;
+    FSetValueProc:=@TpSCADATagbookIntegerTag(AOwner).WriteTagBitValue;
   end;
 end;
 
@@ -453,6 +453,11 @@ begin
   DoChangeValidation(PropUseValueRaw, ifthen(FUseValueRaw,1,0), ifthen(AValue, 1, 0));
   FUseValueRaw:=AValue;
   AddressChanged;
+end;
+
+procedure TpSCADATagBitAddressInfo.AddressChanged;
+begin
+
 end;
 
 procedure TpSCADATagBitAddressInfo.Assign(Source: TpSCADAAddressInfo);
@@ -521,6 +526,7 @@ function TpSCADATagbookIntegerTag.ReadBits(BitIndex: Byte;
 var
   aValue, aBitIndex, aMask: Int64;
 begin
+  Result:=0;
   if BitCount<1 then
     raise exception.Create(SpSCADABitCountMustBeGreaterThanZero);
 
@@ -578,12 +584,9 @@ begin
   raise Exception.Create(Format(SpSCADASubComponentsNotAllowed,[Self.ClassName, AComponent.ClassName]));
 end;
 
-constructor TpSCADATagbookIntegerTag.Create(AOwner: TComponent;
-  GetValueProc: TpSCADAGetIntegerValue; SetValueProc: TpSCADASetIntegerValue);
+constructor TpSCADATagbookIntegerTag.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  FSetValueProc:=SetValueProc;
-  FGetValueProc:=GetValueProc;
 end;
 
 { TpSCADATabgookNumericTag }

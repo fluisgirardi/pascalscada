@@ -9,6 +9,14 @@ msgstr ""
 msgid "The bit count must be greater than zero."
 msgstr ""
 
+#: pascalscada.tags.base.spscadabitcountmustbegreaterthanzero
+msgid "Bit count must be greater than zero"
+msgstr ""
+
+#: pascalscada.tags.base.spscadabitmaskoutofbounds
+msgid "Bit index added with bit count exceeds the Int64 Limit. BitIndex=%d and BitCount=%d"
+msgstr ""
+
 #: pascalscada.tags.base.spscadaget
 msgid "get"
 msgstr ""

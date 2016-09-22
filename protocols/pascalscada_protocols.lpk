@@ -1,37 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <Package Version="4">
-    <Name Value="pascalscada_tags"/>
+    <Name Value="pascalscada_protocols"/>
     <Type Value="RunAndDesignTime"/>
     <Author Value="Fabio Luis Girardi &lt;fabio@pascalscada.com>"/>
     <CompilerOptions>
       <Version Value="11"/>
       <SearchPaths>
+        <OtherUnitFiles Value="."/>
         <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Description Value="Provides a tag subsystem for SCADA applications "/>
+    <Description Value="Provides base protocols drivers "/>
     <License Value="LGPL with linking exception, v2.1 (same from Lazarus LCL)"/>
     <Version Major="1"/>
-    <Files Count="1">
+    <Files Count="2">
       <Item1>
-        <Filename Value="pascalscada.tags.base.pas"/>
-        <UnitName Value="pascalscada.tags.base"/>
+        <Filename Value="pascalscada.protocols.customprotocol.pas"/>
+        <UnitName Value="pascalscada.protocols.customprotocol"/>
       </Item1>
+      <Item2>
+        <Filename Value="pascalscada.protocols.memory_manager.pas"/>
+        <UnitName Value="pascalscada.protocols.memory_manager"/>
+      </Item2>
     </Files>
     <i18n>
       <EnableI18N Value="True"/>
       <OutDir Value="../languages"/>
     </i18n>
-    <RequiredPkgs Count="2">
+    <RequiredPkgs Count="3">
       <Item1>
-        <PackageName Value="pascalscada_scada_utilities"/>
+        <PackageName Value="pascalscada_tags"/>
         <MaxVersion Major="1"/>
         <MinVersion Major="1" Valid="True"/>
       </Item1>
       <Item2>
-        <PackageName Value="FCL"/>
+        <PackageName Value="pascalscada_communication_ports"/>
+        <MinVersion Major="1" Valid="True"/>
       </Item2>
+      <Item3>
+        <PackageName Value="FCL"/>
+      </Item3>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

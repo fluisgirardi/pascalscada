@@ -251,7 +251,7 @@ begin
   if BeingDestroyed then exit;
 
   tentativas := 0;
-  start := CrossNow;
+  start := pSCADA_CrossNow;
 
   bytes_read := 0;
 
@@ -259,9 +259,9 @@ begin
     lidos := FpRead(FPortHandle,buffer[bytes_read], buffer_size-bytes_read);
     if lidos>=0 then begin
       bytes_read := bytes_read + lidos;
-      if (MilliSecondsBetween(CrossNow, start)>FTimeout) then begin
+      if (MilliSecondsBetween(pSCADA_CrossNow, start)>FTimeout) then begin
         inc(tentativas);
-        start:=CrossNow;
+        start:=pSCADA_CrossNow;
       end;
       //faz esperar 0,1ms
       //waits 0,1ms

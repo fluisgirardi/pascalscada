@@ -1,0 +1,23 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: pascalscada.protocols.memory_manager.spscadainvalidareasize
+msgid "Invalid area size. It should be greater than zero."
+msgstr ""
+
+#: pascalscada.protocols.memory_manager.spscadasizeshouldbegreaterthanzero
+msgid "Size and RegSize should be greater than zero."
+msgstr ""
+
+#: pascalscada.protocols.memory_manager.spscadaunassignedaddressinfo
+msgid "Unassigned address info"
+msgstr ""
+
+#: pascalscada.protocols.memory_manager.spscadaunassignedaddressmap
+msgid "Unassigned address map"
+msgstr ""
+
+#: pascalscada.protocols.memory_manager.spscadaunassignedscanlist
+msgid "Unassigned scan list"
+msgstr ""
+

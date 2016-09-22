@@ -7,11 +7,11 @@ interface
 uses
   Classes, SysUtils;
 
-function CrossNow:TDateTime;
+function pSCADA_CrossNow:TDateTime;
 
 implementation
 
-function CrossNow: TDateTime;
+function pSCADA_CrossNow: TDateTime;
 begin
   Result:=Now;
   //todo: ifdef wince...
