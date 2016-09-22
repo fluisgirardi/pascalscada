@@ -9,7 +9,7 @@ uses
 
 type
 
-  TpSCADATagValueState = (ioNone, ioPendingRefresh, ioOk,ioDriverError,
+  TpSCADATagValueState = (ioNone, ioPendingRefresh, ioOk, ioDriverError,
                           ioCommError, ioTimeOut, ioIllegalFunction,
                           ioIllegalRegAddress,ioIllegalValue, ioPLCError,
                           ioTagError, ioNullDriver, ioIllegalRequest,
@@ -17,7 +17,8 @@ type
                           ioIllegalMemoryAddress, ioUnknownError, ioEmptyPacket,
                           ioPartialOk, ioAcknowledge, ioBusy, ioNACK,
                           ioMemoryParityError, ioGatewayUnavailable,
-                          ioDeviceGatewayFailedToRespond);
+                          ioDeviceGatewayFailedToRespond, ioAddressNotExists,
+                          ioMixedStates);
 
   TpSCADATagDataType = (tdtBool,
                         tdtUInt8,  tdtInt8,

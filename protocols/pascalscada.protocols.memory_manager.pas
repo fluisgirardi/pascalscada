@@ -29,6 +29,7 @@ type
     function GetRefCount: Integer;
     function GetScan: LongWord;
   public
+    StartAddress,
     ContinuousCount:Cardinal;
     constructor Create;
     destructor Destroy; override;
@@ -270,7 +271,8 @@ type
     @seealso(GetValues)
     }
     {$ENDIF}
-    //function  GetValues(AdrStart,Len,RegSize:Cardinal; var Values:TArrayOfDouble; var LastResult:TProtocolIOResult; var ValueTimeStamp:TDateTime):LongInt; virtual;
+    function GetValues(AddrStart, Size, RegSize: Cardinal;
+      var LastResult: TpSCADATagValueState; var ValueTimeStamp: TDateTime): Boolean; virtual;
   published
 
     {$IFDEF PORTUGUES}
@@ -346,12 +348,12 @@ type
     //: @seealso(TPLCMemoryManager.RemoveAddress)
     procedure RemoveAddress(Address,aSize,RegSize,Scan:Cardinal); override;
     //: @seealso(TPLCMemoryManager.Update)
-    procedure Update(AddrStart, Size, RegSize: LongWord; aTimeStamp: TDateTime;
+    procedure Update(AddrStart, aSize, RegSize: LongWord; aTimeStamp: TDateTime;
   LastResult: TpSCADATagValueState); override;
     //: @seealso(TPLCMemoryManager.GetValues)
-    //function  GetValues(AdrStart,Len,RegSize:Cardinal; var Values:TArrayOfDouble; var LastResult:TProtocolIOResult; var ValueTimeStamp:TDateTime):LongInt; override;
-    //: @seealso(TPLCMemoryManager.SetFault)
-    //procedure SetFault(AdrStart,Len,RegSize:Cardinal; Fault:TProtocolIOResult); override;
+    function GetValues(AddrStart, Size, RegSize: Cardinal;
+      var LastResult: TpSCADATagValueState; var ValueTimeStamp: TDateTime
+  ): Boolean; override;
   end;
 
 resourcestring
@@ -442,7 +444,6 @@ begin
 
   FAddressMap:=TpSCADAAddressMap.Create;
   FAddressMap.OnKeyCompare:=@SortAddressList;
-  FAddressMap.OnCompare:=@SortAddressList;
 
   FMaxDataBlockSize:=MaxAreaSizeInBytes;
   DataArea:=GetMem(MaxAreaSizeInBytes);
@@ -534,115 +535,53 @@ end;
 
 procedure TPLCMemoryManager.RebuildBlocks;
 var
-  c, c2, c3:LongInt;
-  //newBlocks:TRegisterRangeArray;
-  adrstart, adrend,BlockItems,BlockEnd,mscan:LongInt;
-  BlockOldOffset, BlockNewOffset:LongInt;
-  BlockIndex:LongInt;
-  found:Boolean;
+  CurrentAddress, LastAddress, NextAddress: LongWord;
+  i, i2: Integer;
+  BlockOpen:Boolean;
 begin
-  //SetLength(newBlocks,0);
-  //adrend := 0;
-  //adrstart := 0;
-  //BlockItems := 0;
-  //BlockEnd := 0;
-  //mscan := 0;
-  //BlockIndex := 0;
-  ////refaz blocos de dados
-  ////rebuild the memory blocks.
-  //for c:=0 to High(FAddress) do begin
-  //  if c=0 then begin
-  //    adrstart := FAddress[0].Address;
-  //    adrend := adrstart;
-  //    BlockEnd := adrend + FMaxHole + 1;
-  //    mscan := FAddress[0].MinScan;
-  //    BlockItems := 1;
-  //    if c<High(FAddress) then continue;
-  //  end;
-  //
-  //  if (FAddress[c].Address>BlockEnd) or ((FMaxBlockSize<>0) AND (BlockItems>=FMaxBlockSize)) then begin
-  //    //bloco terminou, feche esse e inicie um novo!!
-  //    //the block can't be extended, starts another...
-  //    SetLength(newBlocks,Length(newBlocks)+1);
-  //
-  //    newBlocks[BlockIndex] := CreateRegisterRange(adrStart,adrEnd);
-  //    newBlocks[BlockIndex].LastUpdate := CrossNow;
-  //    newBlocks[BlockIndex].ScanTime := mscan;
-  //    inc(BlockIndex);
-  //
-  //    //pega os enderecos de onde comeca um novo bloco...
-  //    //get the address of the new block.
-  //    adrstart := FAddress[c].Address;
-  //    adrend := adrstart;
-  //    BlockEnd := adrend + FMaxHole + 1;
-  //    mscan := FAddress[c].MinScan;
-  //    BlockItems := 1;
-  //  end else begin
-  //    //bloco continua, adiciona novos enderecos.
-  //    //the block can be extended, add the new address.
-  //    adrend := FAddress[c].Address;
-  //    BlockEnd := adrend + FMaxHole + 1;
-  //    mscan := min(mscan, FAddress[c].MinScan);
-  //    Inc(BlockItems);
-  //  end;
-  //  if c=High(FAddress) then begin
-  //    SetLength(newBlocks,Length(newBlocks)+1);
-  //    newBlocks[BlockIndex] := CreateRegisterRange(adrStart,adrEnd);
-  //    newBlocks[BlockIndex].LastUpdate := CrossNow;
-  //    newBlocks[BlockIndex].ScanTime := mscan;
-  //    inc(BlockIndex);
-  //  end;
-  //end;
-  //
-  ////copia os dados que estavam nos blocos antigos...
-  ////baseia-se em varer a array de enderecos, verificar em que bloco ela estava
-  ////e para que bloco o endereco foi parar...
-  ////
-  ////copy the data of the oldest blocks to the new blocks.
-  //
-  //for c:=0 to High(FAddress) do begin
-  //  found := false;
-  //  for c2 := 0 to High(Blocks) do
-  //    if (FAddress[c].Address>=Blocks[c2].AddressStart) and (FAddress[c].Address<=Blocks[c2].AddressEnd) then begin
-  //      found := true;
-  //      break;
-  //    end;
-  //
-  //  //se não encontrou aqui é pq o endereco foi adicionado...
-  //  //if not found the address here, it was added.
-  //  if not found then continue;
-  //
-  //  found := false;
-  //  for c3:= 0 to High(newBlocks) do
-  //    if (FAddress[c].Address>=newBlocks[c3].AddressStart) and (FAddress[c].Address<=newBlocks[c3].AddressEnd) then begin
-  //      found := true;
-  //      break;
-  //    end;
-  //
-  //  //se não encontrou aqui é pq o endereco foi deletado...
-  //  //if not found the address here, it was removed.
-  //  if not found then continue;
-  //  BlockOldOffset := FAddress[c].Address - Blocks[c2].AddressStart;
-  //  BlockNewOffset := FAddress[c].Address - newBlocks[c3].AddressStart;
-  //  newBlocks[c3].Values[BlockNewOffset] := Blocks[c2].Values[BlockOldOffset];
-  //
-  //  //coloca o menor tempo de atualização para priorizar quem necessita de refresh mais urgente..
-  //  //set the the block with the small timestamp.
-  //  newBlocks[c3].LastUpdate := Min(newBlocks[c3].LastUpdate,Blocks[c2].LastUpdate);
-  //end;
-  ////destroi os blocos antigos
-  ////remove the old blocks.
-  //for c:=0 to High(Blocks) do
-  //  Blocks[c].Destroy;
-  //SetLength(Blocks, 0);
-  //
-  ////copia os valores dos novos blocos para o bloco velho
-  ////copy the values from the new block to the old block.
-  //Blocks := newBlocks;
-  //
-  ////zera o auxiliar de blocos novos...
-  ////releases the memory
-  //SetLength(newBlocks,0);
+  if Assigned(FAddressMap) then begin
+    i:=0;
+    while i<FAddressMap.Count do begin
+      CurrentAddress:=FAddressMap.Keys[i];
+
+      if not Assigned(FAddressMap.KeyData[CurrentAddress]) then
+        raise Exception.Create(SpSCADAUnassignedAddressInfo);
+
+      FAddressMap.KeyData[CurrentAddress].ContinuousCount:=1;
+      FAddressMap.KeyData[CurrentAddress].StartAddress:=CurrentAddress;
+      BlockOpen:=false;
+      i2:=i+1;
+      LastAddress:=CurrentAddress;
+      while i2<FAddressMap.Count do begin
+        NextAddress:=FAddressMap.Keys[i2];
+
+        if not Assigned(FAddressMap.KeyData[NextAddress]) then
+          raise Exception.Create(SpSCADAUnassignedAddressInfo);
+
+        //if the next address is the next address or if it don't exceds the MaxHole AND if don't exceds the maximum block size.
+        if ((NextAddress=LastAddress+1) or (NextAddress<=(LastAddress+FMaxHole))) and ((FMaxBlockSize=0) or ((NextAddress-CurrentAddress)<FMaxBlockSize)) then begin
+          FAddressMap.KeyData[NextAddress].StartAddress:=CurrentAddress;
+          LastAddress:=NextAddress;
+          BlockOpen:=true;
+          i2:=i2+1;
+          continue;
+        end else begin
+          //something goes wrong:
+          //the next address exceds the MaxHole
+          //The next address exceds the maximum block size.
+          FAddressMap.KeyData[CurrentAddress].ContinuousCount := (LastAddress-CurrentAddress) + 1;
+          BlockOpen:=false;
+          i:=i2;
+          break;
+        end;
+      end;
+      if BlockOpen then begin
+        FAddressMap.KeyData[CurrentAddress].ContinuousCount := (LastAddress-CurrentAddress) + 1;
+        BlockOpen:=false;
+      end;
+    end;
+  end else
+    raise exception.Create(SpSCADAUnassignedAddressMap);
 end;
 
 function TPLCMemoryManager.GetSize: LongWord;
@@ -726,8 +665,42 @@ begin
   c:=AddrStart;
   items := Size*RegSize + AddrStart;
   while c<items do begin
-    if FAddressMap.Find(c,idx) then
-      FAddressMap.KeyData[c].Update(LastResult, aTimeStamp);
+    if FAddressMap.Find(c,idx) then begin
+      if Assigned(FAddressMap.KeyData[c]) then
+        FAddressMap.KeyData[c].Update(LastResult, aTimeStamp)
+      else
+        raise Exception.Create(SpSCADAUnassignedAddressInfo);
+    end;
+  end;
+end;
+
+function TPLCMemoryManager.GetValues(AddrStart, Size, RegSize: Cardinal;
+  var LastResult: TpSCADATagValueState; var ValueTimeStamp: TDateTime): Boolean;
+var
+  primeiro: Boolean;
+begin
+  primeiro:=true;
+  c:=AddrStart;
+  items := Size*RegSize + AddrStart;
+  while c<items do begin
+    if FAddressMap.Find(c,idx) then begin
+      if Assigned(FAddressMap.KeyData[c]) then
+        if primeiro then begin
+          LastResult:=FAddressMap.KeyData[c].LastReadStatus;
+          ValueTimeStamp:=FAddressMap.KeyData[c].Timestamp;
+          primeiro:=false;
+        end else begin
+          if LastResult<>FAddressMap.KeyData[c].LastReadStatus then begin
+            LastResult:=ioMixedStates;
+            exit;
+          end;
+        end
+      else
+        raise Exception.Create(SpSCADAUnassignedAddressInfo);
+    end else begin
+      LastResult:=ioAddressNotExists;
+      exit;
+    end;
   end;
 end;
 
@@ -743,7 +716,7 @@ begin
   inherited Destroy;
 end;
 
-procedure   TPLCMemoryManagerSafe.AddAddress(Address,aSize,RegSize,Scan:Cardinal);
+procedure TPLCMemoryManagerSafe.AddAddress(Address,aSize,RegSize,Scan:Cardinal);
 begin
   try
     FMutex.Enter;
@@ -764,35 +737,26 @@ begin
   end;
 end;
 
-procedure TPLCMemoryManagerSafe.Update(AddrStart, Size, RegSize: LongWord;
+procedure TPLCMemoryManagerSafe.Update(AddrStart, aSize, RegSize: LongWord;
   aTimeStamp: TDateTime; LastResult: TpSCADATagValueState);
 begin
   try
     FMutex.Enter;
-    inherited Update(AddrStart, Size, RegSize, Values, aTimeStamp, LastResult);
+    inherited Update(AddrStart, aSize, RegSize, aTimeStamp, LastResult);
   finally
     FMutex.Leave;
   end;
 end;
 
-//function    TPLCMemoryManagerSafe.GetValues(AdrStart,Len,RegSize:Cardinal; var Values:TArrayOfDouble; var LastResult:TProtocolIOResult; var ValueTimeStamp:TDateTime):LongInt;
-//begin
-//  try
-//    FMutex.Enter;
-//    Result := inherited GetValues(AdrStart, Len, RegSize, Values, LastResult, ValueTimeStamp);
-//  finally
-//    FMutex.Leave;
-//  end;
-//end;
-//
-//procedure   TPLCMemoryManagerSafe.SetFault(AdrStart,Len,RegSize:Cardinal; Fault:TProtocolIOResult);
-//begin
-//  try
-//    FMutex.Enter;
-//    inherited SetFault(AdrStart, Len, RegSize, Fault);
-//  finally
-//    FMutex.Leave;
-//  end;
-//end;
+function TPLCMemoryManagerSafe.GetValues(AddrStart, Size, RegSize: Cardinal;
+  var LastResult: TpSCADATagValueState; var ValueTimeStamp: TDateTime): Boolean;
+begin
+  try
+    FMutex.Enter;
+    Result := inherited GetValues(AddrStart, Size, RegSize, LastResult, ValueTimeStamp);
+  finally
+    FMutex.Leave;
+  end;
+end;
 
 end.
