@@ -62,7 +62,7 @@ type
             and the better organization of it.)
   }
   {$ENDIF}
-  TPLCMemoryManager = class
+  TpSCADAPLCMemoryManager = class
   private
     FAddressMap:TpSCADAAddressMap;
     FMaxHole,
@@ -335,23 +335,23 @@ type
     property Size:LongWord read GetSize;
   end;
 
-  TPLCMemoryManagerSafe = class(TPLCMemoryManager)
+  TpSCADAPLCMemoryManagerSafe = class(TpSCADAPLCMemoryManager)
   private
     FMutex:TCriticalSection;
   public
-    //: @seealso(TPLCMemoryManager.Create)
+    //: @seealso(TpSCADAPLCMemoryManager.Create)
     constructor Create(MaxAreaSizeInBytes: LongWord); override;
-    //: @seealso(TPLCMemoryManager.Destroy)
+    //: @seealso(TpSCADAPLCMemoryManager.Destroy)
     destructor Destroy; override;
-    //: @seealso(TPLCMemoryManager.AddAddress)
+    //: @seealso(TpSCADAPLCMemoryManager.AddAddress)
     procedure AddAddress(Address,aSize,RegSize,Scan:Cardinal); override;
-    //: @seealso(TPLCMemoryManager.RemoveAddress)
+    //: @seealso(TpSCADAPLCMemoryManager.RemoveAddress)
     procedure RemoveAddress(Address,aSize,RegSize,Scan:Cardinal); override;
-    //: @seealso(TPLCMemoryManager.Update)
+    //: @seealso(TpSCADAPLCMemoryManager.Update)
     procedure Update(AddrStart, aSize, RegSize: LongWord; aTimeStamp: TDateTime;
   LastResult: TpSCADATagValueState); override;
-    //: @seealso(TPLCMemoryManager.GetValues)
-    function GetValues(AddrStart, Size, RegSize: Cardinal;
+    //: @seealso(TpSCADAPLCMemoryManager.GetValues)
+    function GetValues(AddrStart, aSize, RegSize: Cardinal;
       var LastResult: TpSCADATagValueState; var ValueTimeStamp: TDateTime
   ): Boolean; override;
   end;
@@ -433,11 +433,11 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-//             inicio da implementacao do TPLCMemoryManager
-//                implementation of TPLCMemoryManager.
+//             inicio da implementacao do TpSCADAPLCMemoryManager
+//                implementation of TpSCADAPLCMemoryManager.
 ////////////////////////////////////////////////////////////////////////////////
 
-constructor TPLCMemoryManager.Create(MaxAreaSizeInBytes: LongWord);
+constructor TpSCADAPLCMemoryManager.Create(MaxAreaSizeInBytes: LongWord);
 begin
   if MaxAreaSizeInBytes=0 then
     raise exception.Create(SpSCADAInvalidAreaSize);
@@ -455,7 +455,7 @@ begin
   FMaxBlockSize := 0;
 end;
 
-destructor TPLCMemoryManager.Destroy;
+destructor TpSCADAPLCMemoryManager.Destroy;
 var
   i: LongInt;
 begin
@@ -472,7 +472,7 @@ begin
   inherited Destroy;
 end;
 
-function TPLCMemoryManager.FindAddress(const address:LongWord; var idx:LongInt):Boolean;
+function TpSCADAPLCMemoryManager.FindAddress(const address:LongWord; var idx:LongInt):Boolean;
 begin
   if Assigned(FAddressMap) then begin
     Result:=FAddressMap.Find(address, idx);
@@ -480,7 +480,7 @@ begin
     raise exception.Create(SpSCADAUnassignedAddressMap);
 end;
 
-procedure TPLCMemoryManager.AddAddress(Address, Scan: LongWord);
+procedure TpSCADAPLCMemoryManager.AddAddress(Address, Scan: LongWord);
 var
   idx: LongInt;
 begin
@@ -500,7 +500,7 @@ begin
     raise exception.Create(SpSCADAUnassignedAddressMap);
 end;
 
-procedure TPLCMemoryManager.RemoveAddress(Address, Scan: LongInt);
+procedure TpSCADAPLCMemoryManager.RemoveAddress(Address, Scan: LongInt);
 var
   idx: LongInt;
 begin
@@ -519,21 +519,21 @@ begin
     raise exception.Create(SpSCADAUnassignedAddressMap);
 end;
 
-procedure TPLCMemoryManager.SetHoleSize(size: LongWord);
+procedure TpSCADAPLCMemoryManager.SetHoleSize(size: LongWord);
 begin
   if size=FMaxHole then exit;
   FMaxHole := size;
   RebuildBlocks;
 end;
 
-procedure TPLCMemoryManager.SetBlockSize(size: LongWord);
+procedure TpSCADAPLCMemoryManager.SetBlockSize(size: LongWord);
 begin
   if size=FMaxBlockSize then exit;
   FMaxBlockSize := size;
   RebuildBlocks; //rebuild the blocks.
 end;
 
-procedure TPLCMemoryManager.RebuildBlocks;
+procedure TpSCADAPLCMemoryManager.RebuildBlocks;
 var
   CurrentAddress, LastAddress, NextAddress: LongWord;
   i, i2: Integer;
@@ -584,7 +584,7 @@ begin
     raise exception.Create(SpSCADAUnassignedAddressMap);
 end;
 
-function TPLCMemoryManager.GetSize: LongWord;
+function TpSCADAPLCMemoryManager.GetSize: LongWord;
 begin
   if Assigned(FAddressMap) then
     Result:=FAddressMap.Count
@@ -592,7 +592,7 @@ begin
     raise exception.Create(SpSCADAUnassignedAddressMap);
 end;
 
-procedure TPLCMemoryManager.AddAddress(Address,Size,RegSize,Scan:Cardinal);
+procedure TpSCADAPLCMemoryManager.AddAddress(Address,Size,RegSize,Scan:Cardinal);
 var
   c, items:Cardinal;
   len:LongInt;
@@ -622,7 +622,7 @@ begin
     RebuildBlocks;
 end;
 
-procedure TPLCMemoryManager.RemoveAddress(Address,Size,RegSize,Scan:LongWord);
+procedure TpSCADAPLCMemoryManager.RemoveAddress(Address,Size,RegSize,Scan:LongWord);
 var
   c, items:Cardinal;
   len:LongInt;
@@ -649,7 +649,7 @@ begin
     RebuildBlocks;
 end;
 
-procedure TPLCMemoryManager.Update(AddrStart, Size, RegSize: LongWord;
+procedure TpSCADAPLCMemoryManager.Update(AddrStart, Size, RegSize: LongWord;
   aTimeStamp: TDateTime; LastResult: TpSCADATagValueState);
 var
   items: Int64;
@@ -674,12 +674,15 @@ begin
   end;
 end;
 
-function TPLCMemoryManager.GetValues(AddrStart, Size, RegSize: Cardinal;
+function TpSCADAPLCMemoryManager.GetValues(AddrStart, Size, RegSize: Cardinal;
   var LastResult: TpSCADATagValueState; var ValueTimeStamp: TDateTime): Boolean;
 var
   primeiro: Boolean;
+  c, items: Cardinal;
+  idx: Integer;
 begin
   primeiro:=true;
+  Result:=false;
   c:=AddrStart;
   items := Size*RegSize + AddrStart;
   while c<items do begin
@@ -692,7 +695,6 @@ begin
         end else begin
           if LastResult<>FAddressMap.KeyData[c].LastReadStatus then begin
             LastResult:=ioMixedStates;
-            exit;
           end;
         end
       else
@@ -702,21 +704,22 @@ begin
       exit;
     end;
   end;
+  Result:=true;
 end;
 
-constructor TPLCMemoryManagerSafe.Create(MaxAreaSizeInBytes: LongWord);
+constructor TpSCADAPLCMemoryManagerSafe.Create(MaxAreaSizeInBytes: LongWord);
 begin
   inherited Create(MaxAreaSizeInBytes);
   FMutex:=TCriticalSection.Create;
 end;
 
-destructor  TPLCMemoryManagerSafe.Destroy;
+destructor  TpSCADAPLCMemoryManagerSafe.Destroy;
 begin
   FMutex.Destroy;
   inherited Destroy;
 end;
 
-procedure TPLCMemoryManagerSafe.AddAddress(Address,aSize,RegSize,Scan:Cardinal);
+procedure TpSCADAPLCMemoryManagerSafe.AddAddress(Address,aSize,RegSize,Scan:Cardinal);
 begin
   try
     FMutex.Enter;
@@ -726,7 +729,7 @@ begin
   end;
 end;
 
-procedure TPLCMemoryManagerSafe.RemoveAddress(Address, aSize, RegSize,
+procedure TpSCADAPLCMemoryManagerSafe.RemoveAddress(Address, aSize, RegSize,
   Scan: Cardinal);
 begin
   try
@@ -737,7 +740,7 @@ begin
   end;
 end;
 
-procedure TPLCMemoryManagerSafe.Update(AddrStart, aSize, RegSize: LongWord;
+procedure TpSCADAPLCMemoryManagerSafe.Update(AddrStart, aSize, RegSize: LongWord;
   aTimeStamp: TDateTime; LastResult: TpSCADATagValueState);
 begin
   try
@@ -748,12 +751,12 @@ begin
   end;
 end;
 
-function TPLCMemoryManagerSafe.GetValues(AddrStart, Size, RegSize: Cardinal;
+function TpSCADAPLCMemoryManagerSafe.GetValues(AddrStart, aSize, RegSize: Cardinal;
   var LastResult: TpSCADATagValueState; var ValueTimeStamp: TDateTime): Boolean;
 begin
   try
     FMutex.Enter;
-    Result := inherited GetValues(AddrStart, Size, RegSize, LastResult, ValueTimeStamp);
+    Result := inherited GetValues(AddrStart, aSize, RegSize, LastResult, ValueTimeStamp);
   finally
     FMutex.Leave;
   end;
