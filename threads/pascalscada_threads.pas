@@ -4,12 +4,14 @@
 
 unit pascalscada_threads;
 
+{$warn 5023 off : no warning about unused units}
 interface
 
 uses
   pascalscada.multithreading.core_affinity_threads, 
   pascalscada.multithreading.event_synchronization, 
-  pascalscada.multithreading.message_queue, LazarusPackageIntf;
+  pascalscada.multithreading.message_queue, 
+  pascalscada.multithreading.generic_thread_list, LazarusPackageIntf;
 
 implementation
 

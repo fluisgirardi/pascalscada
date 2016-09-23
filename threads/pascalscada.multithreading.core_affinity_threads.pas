@@ -5,7 +5,7 @@ unit pascalscada.multithreading.core_affinity_threads;
 interface
 
 uses
-  Classes, SysUtils, ctypes
+  Classes, SysUtils, ctypes, pascalscada.multithreading.event_synchronization
   {$IF defined(WIN32) or defined(WIN64) or defined(WINCE)}
   , Windows;
   {$ELSEIF defined(freebsd) or defined(darwin)}
@@ -25,6 +25,19 @@ type
     class function GetSystemThreadCount: cint32;
   end;
 
+  TpSCADACoreAffinityThreadWithLoop = class(TpSCADACoreAffinityThread)
+  private
+    FEndLoop:TpSCADAThreadSyncEvent;
+  protected
+    procedure Execute; override;
+    procedure Loop; virtual;
+  public
+    constructor Create(CreateSuspended: Boolean; const StackSize: SizeUInt=
+      DefaultStackSize);
+    destructor Destroy; override;
+    procedure  WaitForLoopTerminates;
+  end;
+
   {$IFDEF Linux}
   const _SC_NPROCESSORS_ONLN = 83;
   function sysconf(i: cint): clong; cdecl; external name 'sysconf';
@@ -40,6 +53,46 @@ type
 
 
 implementation
+
+uses syncobjs;
+
+{ TpSCADACoreAffinityThreadWithLoop }
+
+procedure TpSCADACoreAffinityThreadWithLoop.Execute;
+begin
+  while not FEndLoop.ResetEvent do;
+
+  while not Terminated do
+    Loop;
+
+  while not FEndLoop.SetEvent do;
+end;
+
+procedure TpSCADACoreAffinityThreadWithLoop.Loop;
+begin
+  Sleep(1000); //avoid use entire CPU...
+end;
+
+constructor TpSCADACoreAffinityThreadWithLoop.Create(CreateSuspended: Boolean;
+  const StackSize: SizeUInt);
+begin
+  inherited Create(CreateSuspended, StackSize);
+  FEndLoop:=TpSCADAThreadSyncEvent.Create(true, false);
+end;
+
+destructor TpSCADACoreAffinityThreadWithLoop.Destroy;
+begin
+  Terminate;
+  WaitForLoopTerminates;
+  FreeAndNil(FEndLoop);
+  inherited Destroy;
+end;
+
+procedure TpSCADACoreAffinityThreadWithLoop.WaitForLoopTerminates;
+begin
+  while FEndLoop.WaitFor(1)<>wrSignaled do
+    CheckSynchronize(1);
+end;
 
 { TMultiCoreThread }
 

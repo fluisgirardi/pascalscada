@@ -1,0 +1,7 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: pascalscada.multithreading.generic_thread_list.spscadaduplicateitem
+msgid "Duplicates not allowed in this list ($0%x)"
+msgstr ""
+

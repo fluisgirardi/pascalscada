@@ -1,0 +1,7 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: pascalscada.protocols.customprotocol.spscadainvalidtagaddressinfo
+msgid "Invalid tag address information object"
+msgstr ""
+

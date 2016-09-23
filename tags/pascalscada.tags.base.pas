@@ -91,6 +91,8 @@ type
   protected
     procedure AddressChanged; override;
   public
+    function  ShouldBeUpdate:Boolean;
+    procedure Update;
     procedure Assign(Source: TpSCADAAddressInfo); override;
  {0}property  MemAddress:LongInt read FMemAddress write SetMemAddress;
  {1}property  MemAddressArea:LongInt read FMemAddressArea write SetMemAddressArea;
@@ -805,6 +807,16 @@ begin
 end;
 
 procedure TpSCADAPLCAddressInfo.AddressChanged;
+begin
+
+end;
+
+function TpSCADAPLCAddressInfo.ShouldBeUpdate: Boolean;
+begin
+
+end;
+
+procedure TpSCADAPLCAddressInfo.Update;
 begin
 
 end;

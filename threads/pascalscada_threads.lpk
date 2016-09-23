@@ -13,7 +13,7 @@
     <Description Value="Provides optimized multithreading support, with threads with CPU affinity, events and message queue for inter thread communication (non inter process communicaion)"/>
     <License Value="LGPL with linking exception, v2.1 (same from Lazarus LCL)"/>
     <Version Major="1"/>
-    <Files Count="3">
+    <Files Count="4">
       <Item1>
         <Filename Value="pascalscada.multithreading.core_affinity_threads.pas"/>
         <UnitName Value="pascalscada.multithreading.core_affinity_threads"/>
@@ -26,6 +26,10 @@
         <Filename Value="pascalscada.multithreading.message_queue.pas"/>
         <UnitName Value="pascalscada.multithreading.message_queue"/>
       </Item3>
+      <Item4>
+        <Filename Value="pascalscada.multithreading.generic_thread_list.pas"/>
+        <UnitName Value="pascalscada.multithreading.generic_thread_list"/>
+      </Item4>
     </Files>
     <i18n>
       <EnableI18N Value="True"/>
