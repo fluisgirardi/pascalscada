@@ -13,7 +13,7 @@
     <Description Value="Basic user management for GUI and non-GUI applications "/>
     <License Value="LGPL with linking exception, v2.1 (same from Lazarus LCL)"/>
     <Version Major="1"/>
-    <Files Count="2">
+    <Files Count="4">
       <Item1>
         <Filename Value="pascalscada.security.control_security_manager.pas"/>
         <UnitName Value="pascalscada.security.control_security_manager"/>
@@ -22,6 +22,14 @@
         <Filename Value="pascalscada.security.basic_user_management.pas"/>
         <UnitName Value="pascalscada.security.basic_user_management"/>
       </Item2>
+      <Item3>
+        <Filename Value="pascalscada.security.security_exceptions.pas"/>
+        <UnitName Value="pascalscada.security.security_exceptions"/>
+      </Item3>
+      <Item4>
+        <Filename Value="pascalscada.security.security_texts.pas"/>
+        <UnitName Value="pascalscada.security.security_texts"/>
+      </Item4>
     </Files>
     <i18n>
       <EnableI18N Value="True"/>

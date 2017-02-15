@@ -4,11 +4,14 @@
 
 unit pascalscada_security;
 
+{$warn 5023 off : no warning about unused units}
 interface
 
 uses
   pascalscada.security.control_security_manager, 
-  pascalscada.security.basic_user_management, LazarusPackageIntf;
+  pascalscada.security.basic_user_management, 
+  pascalscada.security.security_exceptions, 
+  pascalscada.security.security_texts, LazarusPackageIntf;
 
 implementation
 

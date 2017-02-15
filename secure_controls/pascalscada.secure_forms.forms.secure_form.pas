@@ -8,7 +8,8 @@ uses
   Forms,
   Controls,
   Classes,
-  pascalscada.security.control_security_manager;
+  pascalscada.security.control_security_manager,
+  pascalscada.security.security_exceptions;
 
 type
 
@@ -16,11 +17,13 @@ type
 
   TpSCADASecureForm = class(TForm, ISecureControlInterface)
   private
-    FAllowUnauthorizedShowForm: Boolean;
+    FAllowUnauthorizedShowForm,
+    FAllowUnauthorizedShowFormLoaded: Boolean;
     procedure SetAllowUnauthorizedShowForm(AValue: Boolean);
   protected
     FSecurityCode: String;
     FIsEnabled,
+    FIsVisible,
     FIsEnabledBySecurity:Boolean;
 
     //: @exclude
@@ -44,8 +47,9 @@ type
     //:@excluee
     procedure SetVisible(Value: boolean); override;
   public
-    constructor Create(TheOwner: TComponent); override;
-    destructor Destroy; override;
+    constructor CreateNew(AOwner: TComponent; Num: Integer = 0); override;
+    destructor  Destroy; override;
+    function ShowModal: Integer; override;
   published
     //: @exclude
     property Enabled read FIsEnabled write SetEnabled default true;
@@ -57,6 +61,8 @@ type
     property SecurityCode:String read FSecurityCode write SetSecurityCode;
 
     property AllowUnauthorizedShowForm:Boolean read FAllowUnauthorizedShowForm write SetAllowUnauthorizedShowForm default true;
+
+    property Visible stored false;
   end;
 
 
@@ -64,9 +70,9 @@ implementation
 
 { TSecureForm }
 
-constructor TpSCADASecureForm.Create(TheOwner: TComponent);
+constructor TpSCADASecureForm.CreateNew(AOwner: TComponent; Num: Integer);
 begin
-  inherited Create(TheOwner);
+  inherited CreateNew(AOwner, Num);
   FIsEnabled:=true;
   FAllowUnauthorizedShowForm:=true;
   if ComponentState*[csDesigning]<>[] then begin
@@ -81,6 +87,14 @@ destructor TpSCADASecureForm.Destroy;
 begin
   GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
   inherited Destroy;
+end;
+
+function TpSCADASecureForm.ShowModal: Integer;
+begin
+  if GetPascalSCADAControlSecurityManager.CanAccess(FSecurityCode)=false then
+    raise ESecuritySystemAccessDenied.Create(FSecurityCode);
+
+  Result:=inherited ShowModal;
 end;
 
 procedure TpSCADASecureForm.SetSecurityCode(AValue: String);
@@ -106,6 +120,10 @@ procedure TpSCADASecureForm.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
+  if FAllowUnauthorizedShowForm=false then;
+    SetVisible(FIsVisible);
+  if (FAllowUnauthorizedShowForm=false) and (a=false) and Visible then
+    Close;
 end;
 
 procedure TpSCADASecureForm.SetEnabled(Value: Boolean);
@@ -119,6 +137,7 @@ var
   AValue: String;
 begin
   inherited Loaded;
+  SetAllowUnauthorizedShowForm(FAllowUnauthorizedShowFormLoaded);
   AValue:=FSecurityCode;
   FSecurityCode:='';
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
@@ -126,12 +145,17 @@ end;
 
 procedure TpSCADASecureForm.SetVisible(Value: boolean);
 begin
-  //if FAllowUnauthorizedShowForm ;
-  //inherited SetVisible(Value);
+  FIsVisible:=Value;
+  inherited SetVisible(FIsVisible and (FIsEnabledBySecurity or FAllowUnauthorizedShowForm));
 end;
 
 procedure TpSCADASecureForm.SetAllowUnauthorizedShowForm(AValue: Boolean);
 begin
+  if [csReading,csLoading]*ComponentState<>[] then begin
+    FAllowUnauthorizedShowFormLoaded:=AValue;
+    exit;
+  end;
+
   if FAllowUnauthorizedShowForm=AValue then Exit;
   FAllowUnauthorizedShowForm:=AValue;
 

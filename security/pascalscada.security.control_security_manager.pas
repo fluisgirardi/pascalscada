@@ -58,6 +58,7 @@ type
     procedure  Logout;
     procedure  Manage;
     function   GetCurrentUserlogin:String;
+    function   HasUserLoggedIn:Boolean;
     procedure  TryAccess(sc:String);
     procedure  RegisterControl(control:ISecureControlInterface);
     procedure  UnRegisterControl(control:ISecureControlInterface);
@@ -133,6 +134,13 @@ begin
   Result:='';
   if FUserManagement<>nil then
     Result:=TpSCADABasicUserManagement(FUserManagement).CurrentUserLogin;
+end;
+
+function TpSCADAControlSecurityManager.HasUserLoggedIn: Boolean;
+begin
+  Result:=false;
+  if FUserManagement<>nil then
+    Result:=TpSCADABasicUserManagement(FUserManagement).UserLogged;
 end;
 
 procedure  TpSCADAControlSecurityManager.TryAccess(sc:String);

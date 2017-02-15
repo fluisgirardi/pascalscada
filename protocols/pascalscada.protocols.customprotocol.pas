@@ -41,7 +41,8 @@ type
     procedure UnregisterTag(TagAddressInfo:TpSCADAAddressInfo); virtual;
     function  ValidateTag(TagAddressInfo:TpSCADAAddressInfo):Boolean; virtual;
 
-    procedure RequestScanRead(TagAddressInfo:TpSCADAAddressInfo);
+    function ReadValues(const AddressInfo:TpSCADAPLCAddressInfo; const Size, ElementSize:LongWord; var ReadStatus:TpSCADATagValueState; offset:LongWord = 0):Pointer;
+    function WriteValues(const AddressInfo:TpSCADAPLCAddressInfo; const Size, ElementSize:LongWord; var ReadStatus:TpSCADATagValueState; offset:LongWord = 0):TpSCADATagValueState;
 
     procedure GetIntegerValue (const addresInfo:TpSCADAAddressInfo; var Value:Int64;     var ValueTimeStamp:TDateTime; var ValueQuality: TpSCADATagValueState); virtual; abstract;
     procedure GetStringValue  (const addresInfo:TpSCADAAddressInfo; var Value:String;    var ValueTimeStamp:TDateTime; var ValueQuality: TpSCADATagValueState); virtual; abstract;
