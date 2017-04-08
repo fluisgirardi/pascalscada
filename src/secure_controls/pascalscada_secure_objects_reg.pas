@@ -72,6 +72,8 @@ procedure Register;
 
 implementation
 
+uses LResources;
+
 procedure Register;
 begin
   RegisterComponents(SPascalSCADA_HCL_Std_Controls, [TSecureButton,
@@ -162,6 +164,11 @@ function TpSCADASecureFormFileDescriptor.GetInterfaceUsesSection: String;
 begin
   Result:=inherited GetInterfaceUsesSection+', pascalscada.secure_forms.forms.secure_form';
 end;
+
+{$IFDEF FPC}
+initialization
+  {$I secure_controls.lrs}
+{$ENDIF}
 
 end.
 
