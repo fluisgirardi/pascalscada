@@ -32,7 +32,7 @@ for pkgfolder in `find ../src/ -maxdepth 1 -mindepth 1 -type d -printf '%f\n'`; 
     for svgfile in `find ../src/$pkgfolder/scalable -maxdepth 1 -mindepth 1 -type f -iname 't*.svg' -printf '%f\n'`; do
       outfile=`echo $svgfile | cut -d"/" -f3 | cut -d"." -f1`;
       echo " --> (Re)Creating file ../src/$pkgfolder/icons/$outfile.png";
-      $inkcmd --file=../src/$pkgfolder/scalable/$svgfile --export-png=../src/$pkgfolder/icons/$outfile.png --export-dpi=45 > /dev/null
+      $inkcmd --file=../src/$pkgfolder/scalable/$svgfile --export-png=../src/$pkgfolder/icons/$outfile.png --export-dpi=48 > /dev/null
     done;
   else
     echo "NOT FOUND...";
