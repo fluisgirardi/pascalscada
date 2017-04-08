@@ -16,10 +16,17 @@ procedure Register;
 
 implementation
 
+uses LResources;
+
 procedure Register;
 begin
   RegisterComponents(SPascalSCADASecurityPalette,[TpSCADACustomizedUserManagement]);
 end;
+
+{$IFDEF FPC}
+initialization
+  {$I graphical_security_manager.lrs}
+{$ENDIF}
 
 end.
 
