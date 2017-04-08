@@ -42,10 +42,13 @@
       <OutDir Value="../../languages"/>
       <EnableI18NForLFM Value="True"/>
     </i18n>
-    <RequiredPkgs Count="1">
+    <RequiredPkgs Count="2">
       <Item1>
-        <PackageName Value="FCL"/>
+        <PackageName Value="LCL"/>
       </Item1>
+      <Item2>
+        <PackageName Value="FCL"/>
+      </Item2>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

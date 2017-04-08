@@ -17,12 +17,19 @@ resourcestring
 
 implementation
 
+uses LResources;
+
 procedure Register;
 begin
   RegisterComponents(SpSCADAUtilitiesPalette,[TpSCADALinearScale,
                                               TpSCADAScalesQueue,
                                               TpSCADAUserScale]);
 end;
+
+{$IFDEF FPC}
+initialization
+  {$I scada_utilities.lrs}
+{$ENDIF}
 
 end.
 
