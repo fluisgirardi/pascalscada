@@ -83,7 +83,7 @@ for pkgfolder in `find ../src/ -maxdepth 1 -mindepth 1 -type d -printf '%f\n'`; 
   fi
 
   if [ $ShouldRemoveIconsFolder -eq 1 ]; then
-    echo "Removing icons folder...";
+    echo " --> Removing icons folder...";
     rm -rf "../src/$pkgfolder/icons";
   fi
   echo "";

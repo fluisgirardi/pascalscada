@@ -18,35 +18,39 @@
       <OutDir Value="languages"/>
       <EnableI18NForLFM Value="True"/>
     </i18n>
-    <RequiredPkgs Count="7">
+    <RequiredPkgs Count="8">
       <Item1>
-        <PackageName Value="pascalscada_graphical_security_manager"/>
-        <DefaultFilename Value="src/graphical_security_manager/pascalscada_graphical_security_manager.lpk" Prefer="True"/>
+        <PackageName Value="pascalscada_scada_utilities"/>
+        <DefaultFilename Value="src/scada_utilities/pascalscada_scada_utilities.lpk" Prefer="True"/>
       </Item1>
       <Item2>
-        <PackageName Value="pascalscada_hashs"/>
-        <DefaultFilename Value="src/hashs/pascalscada_hashs.lpk" Prefer="True"/>
+        <PackageName Value="pascalscada_graphical_security_manager"/>
+        <DefaultFilename Value="src/graphical_security_manager/pascalscada_graphical_security_manager.lpk" Prefer="True"/>
       </Item2>
       <Item3>
-        <PackageName Value="pascalscada_secure_controls"/>
-        <DefaultFilename Value="src/secure_controls/pascalscada_secure_controls.lpk" Prefer="True"/>
+        <PackageName Value="pascalscada_hashs"/>
+        <DefaultFilename Value="src/hashs/pascalscada_hashs.lpk" Prefer="True"/>
       </Item3>
       <Item4>
-        <PackageName Value="pascalscada_secure_actions"/>
-        <DefaultFilename Value="src/secure_actions/pascalscada_secure_actions.lpk" Prefer="True"/>
+        <PackageName Value="pascalscada_secure_controls"/>
+        <DefaultFilename Value="src/secure_controls/pascalscada_secure_controls.lpk" Prefer="True"/>
       </Item4>
       <Item5>
-        <PackageName Value="pascalscada_security"/>
-        <DefaultFilename Value="src/security/pascalscada_security.lpk" Prefer="True"/>
+        <PackageName Value="pascalscada_secure_actions"/>
+        <DefaultFilename Value="src/secure_actions/pascalscada_secure_actions.lpk" Prefer="True"/>
       </Item5>
       <Item6>
-        <PackageName Value="pascalscada_threads"/>
-        <DefaultFilename Value="src/threads/pascalscada_threads.lpk" Prefer="True"/>
+        <PackageName Value="pascalscada_security"/>
+        <DefaultFilename Value="src/security/pascalscada_security.lpk" Prefer="True"/>
       </Item6>
       <Item7>
+        <PackageName Value="pascalscada_threads"/>
+        <DefaultFilename Value="src/threads/pascalscada_threads.lpk" Prefer="True"/>
+      </Item7>
+      <Item8>
         <PackageName Value="pascalscada_communication_ports"/>
         <DefaultFilename Value="src/communication_ports/pascalscada_communication_ports.lpk" Prefer="True"/>
-      </Item7>
+      </Item8>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>
