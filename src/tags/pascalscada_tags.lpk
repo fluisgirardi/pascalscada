@@ -21,7 +21,7 @@
     </Files>
     <i18n>
       <EnableI18N Value="True"/>
-      <OutDir Value="../languages"/>
+      <OutDir Value="../../languages"/>
     </i18n>
     <RequiredPkgs Count="2">
       <Item1>
