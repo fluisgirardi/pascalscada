@@ -50,18 +50,21 @@
       <OutDir Value="../../languages"/>
       <EnableI18NForLFM Value="True"/>
     </i18n>
-    <RequiredPkgs Count="3">
+    <RequiredPkgs Count="4">
       <Item1>
-        <PackageName Value="FCL"/>
+        <PackageName Value="LCL"/>
       </Item1>
       <Item2>
-        <PackageName Value="pascalscada_utilities"/>
-        <DefaultFilename Value="../utilities/pascalscada_utilities.lpk" Prefer="True"/>
+        <PackageName Value="FCL"/>
       </Item2>
       <Item3>
+        <PackageName Value="pascalscada_utilities"/>
+        <DefaultFilename Value="../utilities/pascalscada_utilities.lpk" Prefer="True"/>
+      </Item3>
+      <Item4>
         <PackageName Value="pascalscada_threads"/>
         <DefaultFilename Value="../threads/pascalscada_threads.lpk" Prefer="True"/>
-      </Item3>
+      </Item4>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

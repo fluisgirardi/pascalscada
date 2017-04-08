@@ -16,12 +16,19 @@ resourcestring
 
 implementation
 
+uses LResources;
+
 procedure Register;
 begin
   RegisterComponents(SPascalSCADA_CommunicationPorts,[TpSCADASerialPort,
                                                       TpSCADATCPSocket,
                                                       TpSCADAUDPSocket]);
 end;
+
+{$IFDEF FPC}
+initialization
+  {$I communication_ports.lrs}
+{$ENDIF}
 
 end.
 
