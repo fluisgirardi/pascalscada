@@ -41,9 +41,24 @@ for pkgfolder in `find ../src/ -maxdepth 1 -mindepth 1 -type d -printf '%f\n'`; 
   echo -n "Looking for PNG ICONS      in src/$pkgfolder: ";
   if [ -d "../src/$pkgfolder/icons" ] ; then
     echo "FOUND! Starting the Lazarus Resource file (.lrs) creation procedure...";
+    if [ ! -d "../src/$pkgfolder/.tmp" ] ; then
+      mkdir "../src/$pkgfolder/.tmp";
+    fi;
+    
+    if [ -f "../src/$pkgfolder/icons/overlay.png" ]; then
+      echo " --> Overlay icon found.";
+      for png in `find ../src/$pkgfolder/icons -maxdepth 1 -mindepth 1 -type f -iname "t*.png" -printf '%f\n'`; do
+        echo " --> Adding overlay icon to src/$pkgfolder/img/$png and saving the result in src/$pkgfolder/.tmp/$png";
+        $convertcmd ../src/$pkgfolder/icons/$png ../src/$pkgfolder/icons/overlay.png +composite ../src/$pkgfolder/.tmp/$png
+      done;      
+    else
+      echo " --> No overlay icon found, copying ../src/$pkgfolder/icons/* => ../src/$pkgfolder/.tmp";
+      cp -rf ../src/$pkgfolder/icons/* ../src/$pkgfolder/.tmp 2> /dev/null
+    fi
+
     linha="";
     CreateLRS=0;
-    for l in `find ../src/$pkgfolder/icons -maxdepth 1 -mindepth 1 -type f -iname "t*.png"`; do
+    for l in `find ../src/$pkgfolder/.tmp -maxdepth 1 -mindepth 1 -type f -iname "t*.png"`; do
       CreateLRS=1;
       linha="$linha $l";
       echo " --> found file $l";
@@ -55,8 +70,14 @@ for pkgfolder in `find ../src/ -maxdepth 1 -mindepth 1 -type d -printf '%f\n'`; 
       else
         echo " --> Creating LRS file in src/$pkgfolder/$pkgfolder.lrs"
       fi
-      ./lazres_linux_x86_64 ../src/$pkgfolder/$pkgfolder.lrs $linha > /dev/null    
+      ./lazres_linux_x86_64 ../src/$pkgfolder/$pkgfolder.lrs $linha > /dev/null
+    else
+      echo " --> No PNG files found!";
     fi
+
+    echo " --> Clean up: rm -rf ../src/$pkgfolder/.tmp";
+    rm -rf ../src/$pkgfolder/.tmp
+    
   else
     echo "NOT FOUND...";
   fi
@@ -65,5 +86,5 @@ for pkgfolder in `find ../src/ -maxdepth 1 -mindepth 1 -type d -printf '%f\n'`; 
     echo "Removing icons folder...";
     rm -rf "../src/$pkgfolder/icons";
   fi
+  echo "";
 done;
-
