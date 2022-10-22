@@ -1,0 +1,21 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: pascalscada.security.security_texts.saccessdenied
+msgid "Access denied!"
+msgstr ""
+
+#: pascalscada.security.security_texts.snouserloggedintoaccessobject
+#, object-pascal-format
+msgid ""
+"Access denied!\n"
+"No user logged in to access object protected by security code \"%s\". Did you forget to do Login?"
+msgstr ""
+
+#: pascalscada.security.security_texts.suserhasnotallowedtoaccessobject
+#, object-pascal-format
+msgid ""
+"Access denied!\n"
+"User \"%s\" isn't allowed to access object protected by security code \"%s\""
+msgstr ""
+
