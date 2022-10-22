@@ -107,8 +107,11 @@ type
     property EditMask;
     property Text;
     property TextHint;
+    // Зависимость от версии Lazarus: в старых были свойства
+    {$IF False}
     property TextHintFontColor;
     property TextHintFontStyle;
+    {$ENDIF}
     property SpaceChar;
   end;
 
