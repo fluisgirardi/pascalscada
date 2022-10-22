@@ -1,0 +1,7 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: pascalscada_scada_utilities_register.spscadautilitiespalette
+msgid "PascalSCADA Utils"
+msgstr ""
+
