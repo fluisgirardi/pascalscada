@@ -39,14 +39,8 @@ var
   {$IFDEF LINUX}
   PortPrefix:array[0..2] of AnsiString = ('tty','ttyUSB','ttyACM');
   {$ENDIF}
-  {$IFDEF FREEBSD}
-  PortPrefix:array[0..0] of AnsiString = ('cuad');
-  {$ENDIF}
-  {$IFDEF NETBSD}
-  PortPrefix:array[0..0] of AnsiString = ('cuad');
-  {$ENDIF}
-  {$IFDEF OPENBSD}
-  PortPrefix:array[0..0] of AnsiString = ('cuad');
+  {$IF defined(freebsd) or defined(darwin) or defined(netbsd) or defined(openbsd)}
+  PortPrefix: array[0..0] of AnsiString = ('cuad');
   {$ENDIF}
   {$ifdef SunOS}
   PortPrefix:array[0..0] of AnsiString = ('tty');
