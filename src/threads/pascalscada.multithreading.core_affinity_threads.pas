@@ -130,14 +130,18 @@ end;
   end;
 {$ELSEIF defined(freebsd) or defined(darwin)}
 var
-  mib: array[0..1] of cint;
+  mib: array [0..1] of cint;
   len: cint;
   t: cint;
 begin
   mib[0] := CTL_HW;
   mib[1] := HW_NCPU;
   len := sizeof(t);
+  {$IF defined(freebsd)}
   fpsysctl(pchar(@mib), 2, @t, @len, Nil, 0);
+  {$ELSEIF defined(darwin)}
+  fpsysctl(pcint(@mib), 2, @t, @len, Nil, 0);
+  {$IFEND}
   Result:=t;
 end;
 {$ELSEIF defined(linux)}
