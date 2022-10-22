@@ -110,8 +110,11 @@ type
     property TabOrder;
     property Text;
     property TextHint;
+    // Зависимость от версии Lazarus: в старых были свойства
+    {$IF False}
     property TextHintFontColor;
     property TextHintFontStyle;
+    {$ENDIF}
     property Visible;
   end;
 
