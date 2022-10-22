@@ -1,0 +1,7 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: pascalscada.secure_actions.texts.saccessdenied
+msgid "Access denied!"
+msgstr ""
+
