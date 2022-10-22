@@ -326,10 +326,14 @@ end;
 function TpSCADAUnixSocket.socket_recv(buf: PByte; len: Cardinal; flags,
   recv_timeout: LongInt): LongInt;
 var
-  sel:tpollfd;
-  mode:LongInt;
+  sel: TPollfd;
+  mode: LongInt;
 begin
-  Result:=fprecv(FSocket, buf, len, flags or msg_nosignal);
+  {$IFDEF darwin}
+  Result := fprecv(FSocket, buf, len, flags or MSG_RCVMORE);
+  {$ELSE}
+  Result := fprecv(FSocket, buf, len, flags or MSG_NOSIGNAL);
+  {$ENDIF}
 
   if  Result < 0 then begin
     if fpGetErrno in [ESysEINTR, ESysEAGAIN] then begin
@@ -360,7 +364,11 @@ var
   sel:tpollfd;
   mode:LongInt;
 begin
-  Result:=fpsend(FSocket, buf, len, flags or msg_nosignal);
+  {$IFDEF darwin}
+  Result := fpsend(FSocket, buf, len, flags or MSG_RCVMORE);
+  {$ELSE}
+  Result := fpsend(FSocket, buf, len, flags or MSG_NOSIGNAL);
+  {$ENDIF}
 
   if Result < 0 then begin
     if fpGetErrno in [ESysEINTR, ESysEAGAIN] then begin
