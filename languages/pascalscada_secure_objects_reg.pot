@@ -1,0 +1,27 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: pascalscada_secure_objects_reg.spascalscada_hcl_db_controls
+msgid "PascalSCADA HCL - DB Controls"
+msgstr ""
+
+#: pascalscada_secure_objects_reg.spascalscada_hcl_std_controls
+msgid "PascalSCADA HCL - Std. Controls"
+msgstr ""
+
+#: pascalscada_secure_objects_reg.spascalscada_secure_form
+msgid "PascalSCADA Secure Form"
+msgstr ""
+
+#: pascalscada_secure_objects_reg.spascalscada_secure_form_desc
+msgid "Create a new unit with a LCL form, with security features."
+msgstr ""
+
+#: pascalscada_secure_objects_reg.spascalscada_secure_frame
+msgid "PascalSCADA Secure Frame"
+msgstr ""
+
+#: pascalscada_secure_objects_reg.spascalscada_secure_frame_desc
+msgid "Create a new unit with a frame, with security features."
+msgstr ""
+
