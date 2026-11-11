@@ -1,6 +1,6 @@
 PascalSCADA 1.0 - A multiplatform SCADA framework for Lazarus
 
-##**WARNING!! this is a unfinished work. The current working version of PascalSCADA is hosted at https://github.com/fluisgirardi/pascalscada_v0**##
+## **WARNING!! this is a unfinished work. The current working version of PascalSCADA is hosted at https://github.com/fluisgirardi/pascalscada_v0 ** ##
 
 These components allow stabilish communications with Modbus RTU, Modbus TCP, Siemens PLC and Mitsubish Melsec devices in a easy way (this means: without write code), through window controls (buttons, sliders, animations), tags, protocol drivers and port drivers, without lose advanced features that you can implement using code.
 
