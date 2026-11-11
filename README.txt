@@ -4,7 +4,7 @@ PascalSCADA 1.0 - A multiplatform SCADA framework for Lazarus
 
 These components allow stabilish communications with Modbus RTU, Modbus TCP, Siemens PLC and Mitsubish Melsec devices in a easy way (this means: without write code), through window controls (buttons, sliders, animations), tags, protocol drivers and port drivers, without lose advanced features that you can implement using code.
 
-This code is a entire rewrite of PascalSCADA hosted at https://sourceforge.net/projects/pascalscada. The main goal of this initiative is:
+This code is a entire rewrite of PascalSCADA hosted at https://github.com/fluisgirardi/pascalscada_v0. The main goal of this initiative is:
 
   1) Fix some design shortcomings of the actual version of PascalSCADA (0.7.3). A example is the low number of tags that can be inserted in a project form in design time. For more then 1000 tags per form or datamodule, you should create tags in runtime, via source code.
   2) Performance, performance and more performance.
